@@ -14,8 +14,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-      >
+      <body className="bg-stone-100 font-texts">
         {children}
       </body>
     </html>
