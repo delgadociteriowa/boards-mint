@@ -17,13 +17,13 @@ const Octoboard = () => {
   );
   return grid;
   });
-  // add grid ids
+  // add grid ids  bg-teal-950 hover:bg-teal-900  bg-teal-800 hover:bg-teal-700
   return (
     <main className="w-[100%] md:w-[80%] my-0 mx-auto">
       <div className="grid w-[90%] rounded-2xl board-areas overflow-hidden mt-2 mb-8 mx-auto landscape:w-[75%]">
       {chessGrid.map((row, rowIndex) => (
         row.map((cellContent, colIndex) => (
-          <div key={`${cellContent?.id}`} className={`${cellContent?.id} aspect-square min-w-6 min-h-6 flex items-center justify-center outline-1`}></div>
+          <div key={cellContent?.id} className={`${cellContent?.id} aspect-square min-w-6 min-h-6 flex items-center justify-center outline-1`}></div>
         ))
       ))}
       </div>
