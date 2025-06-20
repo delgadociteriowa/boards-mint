@@ -1,10 +1,11 @@
 
 'use client';
 import React, { useState, useEffect } from 'react';
+import OctoBoardSquare from './OctoBoardSquare';
 
 type BoardPiece = {
   id: string;
-} | null; 
+}; 
 type BoardGridType = BoardPiece[][];
 
 const Octoboard = () => {
@@ -50,7 +51,7 @@ const Octoboard = () => {
       {chessGrid.map((row, rowIndex) => (
         row.map((cellContent, colIndex) =>{
           let color = setSquareColor(rowIndex, colIndex);
-          return (<div key={cellContent?.id} className={`${cellContent?.id} ${color} ${squareBaseStyle}`}></div>)
+          return (<OctoBoardSquare key={cellContent.id} cellId={cellContent.id} color={color} squareBaseStyle={squareBaseStyle}/>)
         })
       ))}
       </div>
