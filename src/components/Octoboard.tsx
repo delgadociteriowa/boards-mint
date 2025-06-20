@@ -3,12 +3,19 @@
 import React, { useState, useEffect } from 'react';
 import OctoBoardSquare from './OctoBoardSquare';
 
+
+type GameNames = 'chess' | 'checkers';
+
 type BoardPiece = {
   id: string;
 }; 
 type BoardGridType = BoardPiece[][];
 
-const Octoboard = () => {
+interface OctoBoardProps {
+  selectedGame: GameNames;
+};
+
+const Octoboard: React.FC<OctoBoardProps> = ({selectedGame}) => {
   const [chessGrid, setChessGrid] = useState(() => {
     const letters = ['a','b','c','d','e','f','g','h'];
     const grid: BoardGridType = Array(12).fill(null).map((_, rowIndex) =>
@@ -21,25 +28,25 @@ const Octoboard = () => {
   );
 
   const squareBaseStyle = 'aspect-square min-w-6 min-h-6 flex items-center justify-center';
-  
-  const colorDiscard = `bg-teal-800 hover:bg-teal-700`;
-  const colorDiscardDark = `bg-teal-950 hover:bg-teal-900`;
-  const colorSquare = `bg-teal-400 hover:bg-teal-300`;
-  const colorSquareDark = `bg-teal-600 hover:bg-teal-500`;
+
+  const gameColors = {
+    chess: ['bg-teal-800 hover:bg-teal-700', 'bg-teal-950 hover:bg-teal-900', 'bg-teal-400 hover:bg-teal-300', 'bg-teal-600 hover:bg-teal-500'],
+    checkers: ['bg-cyan-800 hover:bg-cyan-700', 'bg-cyan-950 hover:bg-cyan-900', 'bg-cyan-400 hover:bg-cyan-300', 'bg-cyan-600 hover:bg-cyan-500']
+  };
 
   const setSquareColor = (row: number, col: number) :string => {
     let color :string = '';
     if (row === 0 || row === 11) {
-      color = col % 2 === 0 ? colorDiscardDark : colorDiscard;
+      color = col % 2 === 0 ? gameColors[selectedGame][1] : gameColors[selectedGame][0];
     }
     if (row === 1 || row === 10) {
-      color = col % 2 === 0 ? colorDiscard : colorDiscardDark;
+      color = col % 2 === 0 ? gameColors[selectedGame][0]: gameColors[selectedGame][1];
     }
     if (row >= 2 && row <= 9) {
       if (row % 2 === 0) {
-        color = col % 2 === 0 ? colorSquareDark : colorSquare;
+        color = col % 2 === 0 ? gameColors[selectedGame][3] : gameColors[selectedGame][2];
       } else {
-        color = col % 2 === 0 ? colorSquare : colorSquareDark;
+        color = col % 2 === 0 ? gameColors[selectedGame][2] : gameColors[selectedGame][3];
       }
     }
     return color

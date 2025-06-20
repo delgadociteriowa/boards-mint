@@ -2,13 +2,13 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Octoboard from "@/components/Octoboard";
 
-const Chess = () => {
+const Checkers = () => {
   return (
     <>
       <Header/>
-      <Octoboard selectedGame={'chess'}/>
+      <Octoboard selectedGame={'checkers'}/>
       <Footer/>
     </>
   );
 }
-export default Chess;
+export default Checkers;
