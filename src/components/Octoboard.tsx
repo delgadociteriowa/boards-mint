@@ -8,6 +8,8 @@ type GameNames = 'chess' | 'checkers';
 
 type BoardPiece = {
   id: string;
+  piece: string;
+  pieceType: string;
 }; 
 type BoardGridType = BoardPiece[][];
 
@@ -20,7 +22,11 @@ const Octoboard: React.FC<OctoBoardProps> = ({selectedGame}) => {
     const letters = ['a','b','c','d','e','f','g','h'];
     const grid: BoardGridType = Array(12).fill(null).map((_, rowIndex) =>
       Array(8).fill(null).map((_, colIndex) => { 
-        return { id: `s${letters[colIndex]}-${rowIndex + 1}` };
+        return { 
+          id: `s${letters[colIndex]}-${rowIndex + 1}`,
+          piece: '',
+          pieceType: ''
+        };
       })
     );
     return grid;
@@ -52,13 +58,69 @@ const Octoboard: React.FC<OctoBoardProps> = ({selectedGame}) => {
     return color
   }
 
+  const setNewChess = () => {
+    setChessGrid(prevGrid => {
+        const newGrid = prevGrid.map(row => [...row]);
+        const chessPieces = ['♜','♞','♝','♛','♚','♝','♞','♜'];
+        const setCells = (cellsInRow: BoardPiece[], rowIndex: number) => {
+          return cellsInRow.map((cell, index) => {
+            const isPawnRow = (rowIndex === 3 || rowIndex === 8);
+            const isPlayerOneRow = (rowIndex === 2 || rowIndex === 3); 
+            return {
+              ...cell,
+              piece: isPawnRow ? '♟' : chessPieces[index],
+              pieceType: isPlayerOneRow ? 'one' : 'two',
+            };
+          });
+        };
+        newGrid[2] = setCells(newGrid[2], 2);
+        newGrid[3] = setCells(newGrid[3], 3);
+        newGrid[8] = setCells(newGrid[8], 8);
+        newGrid[9] = setCells(newGrid[9], 9);
+        return newGrid;
+      }
+    );
+  };
+  
+  const setNewCheckers = () => {
+    setChessGrid(prevGrid => {
+        const newGrid = prevGrid.map(row => [...row]);
+        const setCells = (cellsInRow: BoardPiece[], rowIndex: number) => {
+          return cellsInRow.map((cell, index) => {
+            const isPlayerOneRow = (rowIndex === 2 || rowIndex === 3 || rowIndex === 4);
+            const isRowIndexEven = (rowIndex === 2 || rowIndex === 4 || rowIndex === 8);
+            const isEven = (index + 1) % 2 === 0;
+            return {
+              ...cell,
+              piece: isRowIndexEven ? (isEven ? 'checker' : '') : (isEven ? '' : 'checker'),
+              pieceType: isRowIndexEven ? (isEven ? (isPlayerOneRow ? 'one' : 'two') : '') : (isEven ? '' : (isPlayerOneRow ? 'one' : 'two')),
+            };
+            
+          });
+        };
+        newGrid[2] = setCells(newGrid[2], 2);
+        newGrid[3] = setCells(newGrid[3], 3);
+        newGrid[4] = setCells(newGrid[4], 4);
+        newGrid[7] = setCells(newGrid[7], 7);
+        newGrid[8] = setCells(newGrid[8], 8);
+        newGrid[9] = setCells(newGrid[9], 9);
+        return newGrid;
+      }
+    );
+  };
+
+  useEffect(() => {
+    if (selectedGame === 'chess') setNewChess();
+    if (selectedGame === 'checkers') setNewCheckers();
+  }, []);
+
   return (
     <main className="w-[100%] md:w-[80%] my-0 mx-auto">
       <div className="grid w-[90%] rounded-2xl board-areas overflow-hidden mt-2 mb-8 mx-auto landscape:w-[75%]">
       {chessGrid.map((row, rowIndex) => (
         row.map((cellContent, colIndex) =>{
           let color = setSquareColor(rowIndex, colIndex);
-          return (<OctoBoardSquare key={cellContent.id} cellId={cellContent.id} color={color} squareBaseStyle={squareBaseStyle}/>)
+          return (<OctoBoardSquare key={cellContent.id} cellContent={cellContent} color={color} squareBaseStyle={squareBaseStyle}/>)
         })
       ))}
       </div>
