@@ -23,7 +23,7 @@ const Octoboard: React.FC<OctoBoardProps> = ({selectedGame}) => {
     const grid: BoardGridType = Array(12).fill(null).map((_, rowIndex) =>
       Array(8).fill(null).map((_, colIndex) => { 
         return { 
-          id: `s${letters[colIndex]}-${rowIndex + 1}`,
+          id: `sqr${colIndex}-${rowIndex}`,
           piece: '',
           pieceType: ''
         };

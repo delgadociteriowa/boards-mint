@@ -56,130 +56,130 @@
   box-shadow: 0px 3px 1px rgba(0,0,0, 0.7);
 }
 
-.sa-1{grid-area: sa-1;}
-.sb-1{grid-area: sb-1;}
-.sc-1{grid-area: sc-1;}
-.sd-1{grid-area: sd-1;}
-.se-1{grid-area: se-1;}
-.sf-1{grid-area: sf-1;}
-.sg-1{grid-area: sg-1;}
-.sh-1{grid-area: sh-1;}
+.sqr0-0{grid-area: sqr0-0;}
+.sqr1-0{grid-area: sqr1-0;}
+.sqr2-0{grid-area: sqr2-0;}
+.sqr3-0{grid-area: sqr3-0;}
+.sqr4-0{grid-area: sqr4-0;}
+.sqr5-0{grid-area: sqr5-0;}
+.sqr6-0{grid-area: sqr6-0;}
+.sqr7-0{grid-area: sqr7-0;}
 
-.sa-2{grid-area: sa-2;}
-.sb-2{grid-area: sb-2;}
-.sc-2{grid-area: sc-2;}
-.sd-2{grid-area: sd-2;}
-.se-2{grid-area: se-2;}
-.sf-2{grid-area: sf-2;}
-.sg-2{grid-area: sg-2;}
-.sh-2{grid-area: sh-2;}
+.sqr0-1{grid-area: sqr0-1;}
+.sqr1-1{grid-area: sqr1-1;}
+.sqr2-1{grid-area: sqr2-1;}
+.sqr3-1{grid-area: sqr3-1;}
+.sqr4-1{grid-area: sqr4-1;}
+.sqr5-1{grid-area: sqr5-1;}
+.sqr6-1{grid-area: sqr6-1;}
+.sqr7-1{grid-area: sqr7-1;}
 
-.sa-3{grid-area: sa-3;}
-.sb-3{grid-area: sb-3;}
-.sc-3{grid-area: sc-3;}
-.sd-3{grid-area: sd-3;}
-.se-3{grid-area: se-3;}
-.sf-3{grid-area: sf-3;}
-.sg-3{grid-area: sg-3;}
-.sh-3{grid-area: sh-3;}
+.sqr0-2{grid-area: sqr0-2;}
+.sqr1-2{grid-area: sqr1-2;}
+.sqr2-2{grid-area: sqr2-2;}
+.sqr3-2{grid-area: sqr3-2;}
+.sqr4-2{grid-area: sqr4-2;}
+.sqr5-2{grid-area: sqr5-2;}
+.sqr6-2{grid-area: sqr6-2;}
+.sqr7-2{grid-area: sqr7-2;}
 
-.sa-4{grid-area: sa-4;}
-.sb-4{grid-area: sb-4;}
-.sc-4{grid-area: sc-4;}
-.sd-4{grid-area: sd-4;}
-.se-4{grid-area: se-4;}
-.sf-4{grid-area: sf-4;}
-.sg-4{grid-area: sg-4;}
-.sh-4{grid-area: sh-4;}
+.sqr0-3{grid-area: sqr0-3;}
+.sqr1-3{grid-area: sqr1-3;}
+.sqr2-3{grid-area: sqr2-3;}
+.sqr3-3{grid-area: sqr3-3;}
+.sqr4-3{grid-area: sqr4-3;}
+.sqr5-3{grid-area: sqr5-3;}
+.sqr6-3{grid-area: sqr6-3;}
+.sqr7-3{grid-area: sqr7-3;}
 
-.sa-5{grid-area: sa-5;}
-.sb-5{grid-area: sb-5;}
-.sc-5{grid-area: sc-5;}
-.sd-5{grid-area: sd-5;}
-.se-5{grid-area: se-5;}
-.sf-5{grid-area: sf-5;}
-.sg-5{grid-area: sg-5;}
-.sh-5{grid-area: sh-5;}
+.sqr0-4{grid-area: sqr0-4;}
+.sqr1-4{grid-area: sqr1-4;}
+.sqr2-4{grid-area: sqr2-4;}
+.sqr3-4{grid-area: sqr3-4;}
+.sqr4-4{grid-area: sqr4-4;}
+.sqr5-4{grid-area: sqr5-4;}
+.sqr6-4{grid-area: sqr6-4;}
+.sqr7-4{grid-area: sqr7-4;}
 
-.sa-6{grid-area: sa-6;}
-.sb-6{grid-area: sb-6;}
-.sc-6{grid-area: sc-6;}
-.sd-6{grid-area: sd-6;}
-.se-6{grid-area: se-6;}
-.sf-6{grid-area: sf-6;}
-.sg-6{grid-area: sg-6;}
-.sh-6{grid-area: sh-6;}
+.sqr0-5{grid-area: sqr0-5;}
+.sqr1-5{grid-area: sqr1-5;}
+.sqr2-5{grid-area: sqr2-5;}
+.sqr3-5{grid-area: sqr3-5;}
+.sqr4-5{grid-area: sqr4-5;}
+.sqr5-5{grid-area: sqr5-5;}
+.sqr6-5{grid-area: sqr6-5;}
+.sqr7-5{grid-area: sqr7-5;}
 
-.sa-7{grid-area: sa-7;}
-.sb-7{grid-area: sb-7;}
-.sc-7{grid-area: sc-7;}
-.sd-7{grid-area: sd-7;}
-.se-7{grid-area: se-7;}
-.sf-7{grid-area: sf-7;}
-.sg-7{grid-area: sg-7;}
-.sh-7{grid-area: sh-7;}
+.sqr0-6{grid-area: sqr0-6;}
+.sqr1-6{grid-area: sqr1-6;}
+.sqr2-6{grid-area: sqr2-6;}
+.sqr3-6{grid-area: sqr3-6;}
+.sqr4-6{grid-area: sqr4-6;}
+.sqr5-6{grid-area: sqr5-6;}
+.sqr6-6{grid-area: sqr6-6;}
+.sqr7-6{grid-area: sqr7-6;}
 
-.sa-8{grid-area: sa-8;}
-.sb-8{grid-area: sb-8;}
-.sc-8{grid-area: sc-8;}
-.sd-8{grid-area: sd-8;}
-.se-8{grid-area: se-8;}
-.sf-8{grid-area: sf-8;}
-.sg-8{grid-area: sg-8;}
-.sh-8{grid-area: sh-8;}
+.sqr0-7{grid-area: sqr0-7;}
+.sqr1-7{grid-area: sqr1-7;}
+.sqr2-7{grid-area: sqr2-7;}
+.sqr3-7{grid-area: sqr3-7;}
+.sqr4-7{grid-area: sqr4-7;}
+.sqr5-7{grid-area: sqr5-7;}
+.sqr6-7{grid-area: sqr6-7;}
+.sqr7-7{grid-area: sqr7-7;}
 
-.sa-9{grid-area: sa-9;}
-.sb-9{grid-area: sb-9;}
-.sc-9{grid-area: sc-9;}
-.sd-9{grid-area: sd-9;}
-.se-9{grid-area: se-9;}
-.sf-9{grid-area: sf-9;}
-.sg-9{grid-area: sg-9;}
-.sh-9{grid-area: sh-9;}
+.sqr0-8{grid-area: sqr0-8;}
+.sqr1-8{grid-area: sqr1-8;}
+.sqr2-8{grid-area: sqr2-8;}
+.sqr3-8{grid-area: sqr3-8;}
+.sqr4-8{grid-area: sqr4-8;}
+.sqr5-8{grid-area: sqr5-8;}
+.sqr6-8{grid-area: sqr6-8;}
+.sqr7-8{grid-area: sqr7-8;}
 
-.sa-10{grid-area: sa-10;}
-.sb-10{grid-area: sb-10;}
-.sc-10{grid-area: sc-10;}
-.sd-10{grid-area: sd-10;}
-.se-10{grid-area: se-10;}
-.sf-10{grid-area: sf-10;}
-.sg-10{grid-area: sg-10;}
-.sh-10{grid-area: sh-10;}
+.sqr0-9{grid-area: sqr0-9;}
+.sqr1-9{grid-area: sqr1-9;}
+.sqr2-9{grid-area: sqr2-9;}
+.sqr3-9{grid-area: sqr3-9;}
+.sqr4-9{grid-area: sqr4-9;}
+.sqr5-9{grid-area: sqr5-9;}
+.sqr6-9{grid-area: sqr6-9;}
+.sqr7-9{grid-area: sqr7-9;}
 
-.sa-11{grid-area: sa-11;}
-.sb-11{grid-area: sb-11;}
-.sc-11{grid-area: sc-11;}
-.sd-11{grid-area: sd-11;}
-.se-11{grid-area: se-11;}
-.sf-11{grid-area: sf-11;}
-.sg-11{grid-area: sg-11;}
-.sh-11{grid-area: sh-11;}
+.sqr0-10{grid-area: sqr0-10;}
+.sqr1-10{grid-area: sqr1-10;}
+.sqr2-10{grid-area: sqr2-10;}
+.sqr3-10{grid-area: sqr3-10;}
+.sqr4-10{grid-area: sqr4-10;}
+.sqr5-10{grid-area: sqr5-10;}
+.sqr6-10{grid-area: sqr6-10;}
+.sqr7-10{grid-area: sqr7-10;}
 
-.sa-12{grid-area: sa-12;}
-.sb-12{grid-area: sb-12;}
-.sc-12{grid-area: sc-12;}
-.sd-12{grid-area: sd-12;}
-.se-12{grid-area: se-12;}
-.sf-12{grid-area: sf-12;}
-.sg-12{grid-area: sg-12;}
-.sh-12{grid-area: sh-12;}
+.sqr0-11{grid-area: sqr0-11;}
+.sqr1-11{grid-area: sqr1-11;}
+.sqr2-11{grid-area: sqr2-11;}
+.sqr3-11{grid-area: sqr3-11;}
+.sqr4-11{grid-area: sqr4-11;}
+.sqr5-11{grid-area: sqr5-11;}
+.sqr6-11{grid-area: sqr6-11;}
+.sqr7-11{grid-area: sqr7-11;}
 
 @media (orientation: portrait) {
   .board-areas {
     grid-template-columns: repeat(8, minmax(1.5rem, 1fr));
     grid-template-areas:
-      "sa-1 sb-1 sc-1 sd-1 se-1 sf-1 sg-1 sh-1" 
-      "sa-2 sb-2 sc-2 sd-2 se-2 sf-2 sg-2 sh-2" 
-      "sa-3 sb-3 sc-3 sd-3 se-3 sf-3 sg-3 sh-3" 
-      "sa-4 sb-4 sc-4 sd-4 se-4 sf-4 sg-4 sh-4" 
-      "sa-5 sb-5 sc-5 sd-5 se-5 sf-5 sg-5 sh-5" 
-      "sa-6 sb-6 sc-6 sd-6 se-6 sf-6 sg-6 sh-6" 
-      "sa-7 sb-7 sc-7 sd-7 se-7 sf-7 sg-7 sh-7" 
-      "sa-8 sb-8 sc-8 sd-8 se-8 sf-8 sg-8 sh-8" 
-      "sa-9 sb-9 sc-9 sd-9 se-9 sf-9 sg-9 sh-9" 
-      "sa-10 sb-10 sc-10 sd-10 se-10 sf-10 sg-10 sh-10" 
-      "sa-11 sb-11 sc-11 sd-11 se-11 sf-11 sg-11 sh-11" 
-      "sa-12 sb-12 sc-12 sd-12 se-12 sf-12 sg-12 sh-12" 
+      "sqr0-0 sqr1-0 sqr2-0 sqr3-0 sqr4-0 sqr5-0 sqr6-0 sqr7-0" 
+      "sqr0-1 sqr1-1 sqr2-1 sqr3-1 sqr4-1 sqr5-1 sqr6-1 sqr7-1" 
+      "sqr0-2 sqr1-2 sqr2-2 sqr3-2 sqr4-2 sqr5-2 sqr6-2 sqr7-2" 
+      "sqr0-3 sqr1-3 sqr2-3 sqr3-3 sqr4-3 sqr5-3 sqr6-3 sqr7-3" 
+      "sqr0-4 sqr1-4 sqr2-4 sqr3-4 sqr4-4 sqr5-4 sqr6-4 sqr7-4" 
+      "sqr0-5 sqr1-5 sqr2-5 sqr3-5 sqr4-5 sqr5-5 sqr6-5 sqr7-5" 
+      "sqr0-6 sqr1-6 sqr2-6 sqr3-6 sqr4-6 sqr5-6 sqr6-6 sqr7-6" 
+      "sqr0-7 sqr1-7 sqr2-7 sqr3-7 sqr4-7 sqr5-7 sqr6-7 sqr7-7" 
+      "sqr0-8 sqr1-8 sqr2-8 sqr3-8 sqr4-8 sqr5-8 sqr6-8 sqr7-8" 
+      "sqr0-9 sqr1-9 sqr2-9 sqr3-9 sqr4-9 sqr5-9 sqr6-9 sqr7-9" 
+      "sqr0-10 sqr1-10 sqr2-10 sqr3-10 sqr4-10 sqr5-10 sqr6-10 sqr7-10" 
+      "sqr0-11 sqr1-11 sqr2-11 sqr3-11 sqr4-11 sqr5-11 sqr6-11 sqr7-11" 
     ;
   }
 }
@@ -188,14 +188,14 @@
   .board-areas {
     grid-template-columns: repeat(12, minmax(1.5rem, 1fr));
     grid-template-areas:
-      "sa-1 sa-2  sa-3 sb-3 sc-3 sd-3 se-3 sf-3 sg-3 sh-3 sa-11 sa-12"
-      "sb-1 sb-2  sa-4 sb-4 sc-4 sd-4 se-4 sf-4 sg-4 sh-4 sb-11 sb-12"
-      "sc-1 sc-2  sa-5 sb-5 sc-5 sd-5 se-5 sf-5 sg-5 sh-5 sc-11 sc-12"
-      "sd-1 sd-2  sa-6 sb-6 sc-6 sd-6 se-6 sf-6 sg-6 sh-6 sd-11 sd-12"
-      "se-1 se-2  sa-7 sb-7 sc-7 sd-7 se-7 sf-7 sg-7 sh-7 se-11 se-12"
-      "sf-1 sf-2  sa-8 sb-8 sc-8 sd-8 se-8 sf-8 sg-8 sh-8 sf-11 sf-12"
-      "sg-1 sg-2  sa-9 sb-9 sc-9 sd-9 se-9 sf-9 sg-9 sh-9 sg-11 sg-12"
-      "sh-1 sh-2  sa-10 sb-10 sc-10 sd-10 se-10 sf-10 sg-10 sh-10 sh-11 sh-12"
+      "sqr0-0 sqr0-1 sqr0-2 sqr1-2 sqr2-2 sqr3-2 sqr4-2 sqr5-2 sqr6-2 sqr7-2 sqr0-10 sqr0-11"
+      "sqr1-0 sqr1-1 sqr0-3 sqr1-3 sqr2-3 sqr3-3 sqr4-3 sqr5-3 sqr6-3 sqr7-3 sqr1-10 sqr1-11"
+      "sqr2-0 sqr2-1 sqr0-4 sqr1-4 sqr2-4 sqr3-4 sqr4-4 sqr5-4 sqr6-4 sqr7-4 sqr2-10 sqr2-11"
+      "sqr3-0 sqr3-1 sqr0-5 sqr1-5 sqr2-5 sqr3-5 sqr4-5 sqr5-5 sqr6-5 sqr7-5 sqr3-10 sqr3-11"
+      "sqr4-0 sqr4-1 sqr0-6 sqr1-6 sqr2-6 sqr3-6 sqr4-6 sqr5-6 sqr6-6 sqr7-6 sqr4-10 sqr4-11"
+      "sqr5-0 sqr5-1 sqr0-7 sqr1-7 sqr2-7 sqr3-7 sqr4-7 sqr5-7 sqr6-7 sqr7-7 sqr5-10 sqr5-11"
+      "sqr6-0 sqr6-1 sqr0-8 sqr1-8 sqr2-8 sqr3-8 sqr4-8 sqr5-8 sqr6-8 sqr7-8 sqr6-10 sqr6-11"
+      "sqr7-0 sqr7-1 sqr0-9 sqr1-9 sqr2-9 sqr3-9 sqr4-9 sqr5-9 sqr6-9 sqr7-9 sqr7-10 sqr7-11"
     ;
   }
 }
