@@ -19,6 +19,9 @@ interface OctoBoardProps {
 };
 
 const Octoboard: React.FC<OctoBoardProps> = ({selectedGame}) => {
+  const [phaseTwo, setPhaseTwo] = useState(false);
+  const [selectedPiece, setSelectedPiece] = useState(false);
+
   const [chessGrid, setChessGrid] = useState(() => {
     const letters = ['a','b','c','d','e','f','g','h'];
     const grid: BoardGridType = Array(12).fill(null).map((_, rowIndex) =>
@@ -127,7 +130,7 @@ const Octoboard: React.FC<OctoBoardProps> = ({selectedGame}) => {
       {chessGrid.map((row, rowIndex) => (
         row.map((cellContent, colIndex) =>{
           let color = setSquareColor(rowIndex, colIndex);
-          return (<OctoBoardSquare key={cellContent.id} cellContent={cellContent} color={color} squareBaseStyle={squareBaseStyle} onClickPiece={onClickPiece}/>)
+          return (<OctoBoardSquare key={cellContent.id} cellContent={cellContent} color={color} squareBaseStyle={squareBaseStyle} onClickPiece={onClickPiece} phaseTwo={phaseTwo}/>)
         })
       ))}
       </div>
