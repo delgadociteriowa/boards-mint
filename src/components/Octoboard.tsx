@@ -95,6 +95,7 @@ const Octoboard: React.FC<OctoBoardProps> = ({selectedGame}) => {
   };
 
   const [gameGrid, setGameGrid] = useState(() => buildGameGrid());
+  const [selectedSqr, setSelectedSqr] = useState('');
 
   const gameColors = {
     chess: ['bg-teal-950','bg-teal-800','bg-teal-600','bg-teal-400'],
@@ -124,10 +125,16 @@ const Octoboard: React.FC<OctoBoardProps> = ({selectedGame}) => {
     return color
   }
 
-  // const onClickPiece = (cell: BoardPiece) => {
-  //   console.log(cell.id);
-  //   console.log(cell.piece);
-  // }
+  const onClickPiece = (cell: string) => {
+    const selectedCell = cell.replace('sqr', '').split('-').map(Number);
+    const col: number = selectedCell[0];
+    const row: number = selectedCell[1];
+    setGameGrid(prevGrid => {
+      const updated = [...prevGrid];
+      updated[row][col] = {...updated[row][col], selected: true}
+      return updated
+    });
+  }
 
   return (
     <main className="w-[100%] md:w-[80%] my-0 mx-auto">
@@ -136,7 +143,7 @@ const Octoboard: React.FC<OctoBoardProps> = ({selectedGame}) => {
         row.map((cellContent, colIndex) =>{
           let color = setSquareColor(rowIndex, colIndex, gameColors);
           let colorHover = setSquareColor(rowIndex, colIndex, gameColorsHover);
-          return (<OctoBoardSquare key={cellContent.id} cellContent={cellContent} color={color} colorHover={colorHover}/>)
+          return (<OctoBoardSquare key={cellContent.id} cellContent={cellContent} color={color} colorHover={colorHover} onClickPiece={onClickPiece}/>)
         })
       ))}
       </div>
