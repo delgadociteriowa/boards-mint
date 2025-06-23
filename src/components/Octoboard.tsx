@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import OctoBoardSquare from './OctoBoardSquare';
 
-
 type GameNames = 'chess' | 'checkers';
 
 type BoardPiece = {
@@ -22,7 +21,7 @@ const Octoboard: React.FC<OctoBoardProps> = ({selectedGame}) => {
   const [phaseTwo, setPhaseTwo] = useState(false);
   const [selectedPiece, setSelectedPiece] = useState(false);
 
-  const [chessGrid, setChessGrid] = useState(() => {
+  const [gameGrid, setGameGrid] = useState(() => {
     const letters = ['a','b','c','d','e','f','g','h'];
     const grid: BoardGridType = Array(12).fill(null).map((_, rowIndex) =>
       Array(8).fill(null).map((_, colIndex) => { 
@@ -37,8 +36,6 @@ const Octoboard: React.FC<OctoBoardProps> = ({selectedGame}) => {
     return grid;
     }
   );
-
-  const squareBaseStyle = 'aspect-square min-w-6 min-h-6 flex items-center justify-center';
 
   const gameColors = {
     chess: ['bg-teal-800 hover:bg-teal-700', 'bg-teal-950 hover:bg-teal-900', 'bg-teal-400 hover:bg-teal-300', 'bg-teal-600 hover:bg-teal-500'],
@@ -64,7 +61,7 @@ const Octoboard: React.FC<OctoBoardProps> = ({selectedGame}) => {
   }
 
   const setNewChess = () => {
-    setChessGrid(prevGrid => {
+    setGameGrid(prevGrid => {
         const newGrid = prevGrid.map(row => [...row]);
         const chessPieces = ['♜','♞','♝','♛','♚','♝','♞','♜'];
         const setCells = (cellsInRow: BoardPiece[], rowIndex: number) => {
@@ -88,7 +85,7 @@ const Octoboard: React.FC<OctoBoardProps> = ({selectedGame}) => {
   };
   
   const setNewCheckers = () => {
-    setChessGrid(prevGrid => {
+    setGameGrid(prevGrid => {
         const newGrid = prevGrid.map(row => [...row]);
         const setCells = (cellsInRow: BoardPiece[], rowIndex: number) => {
           return cellsInRow.map((cell, index) => {
@@ -127,10 +124,10 @@ const Octoboard: React.FC<OctoBoardProps> = ({selectedGame}) => {
   return (
     <main className="w-[100%] md:w-[80%] my-0 mx-auto">
       <div className="grid w-[90%] rounded-2xl board-areas overflow-hidden mt-2 mb-8 mx-auto landscape:w-[75%]">
-      {chessGrid.map((row, rowIndex) => (
+      {gameGrid.map((row, rowIndex) => (
         row.map((cellContent, colIndex) =>{
           let color = setSquareColor(rowIndex, colIndex);
-          return (<OctoBoardSquare key={cellContent.id} cellContent={cellContent} color={color} squareBaseStyle={squareBaseStyle} onClickPiece={onClickPiece} phaseTwo={phaseTwo}/>)
+          return (<OctoBoardSquare key={cellContent.id} cellContent={cellContent} color={color} onClickPiece={onClickPiece} phaseTwo={phaseTwo}/>)
         })
       ))}
       </div>

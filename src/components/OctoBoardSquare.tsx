@@ -8,12 +8,12 @@ interface CellContent {
 interface OctoBoardSquareProps {
   cellContent: CellContent;
   color: string;
-  squareBaseStyle: string;
   onClickPiece: (cell: CellContent) => void;
   phaseTwo: boolean;
 }
 
-const OctoBoardSquare: React.FC<OctoBoardSquareProps> = ({cellContent, color, squareBaseStyle, onClickPiece, phaseTwo}) => {
+const OctoBoardSquare: React.FC<OctoBoardSquareProps> = ({cellContent, color, onClickPiece, phaseTwo}) => {
+  const squareBaseStyle = 'aspect-square min-w-6 min-h-6 flex items-center justify-center';
   const validClickable = (cellContent.piece && !phaseTwo) || phaseTwo;
   return (
     <div className={`${cellContent.id} ${color} ${squareBaseStyle} ${validClickable && 'cursor-pointer'}`} onClick={() => validClickable && onClickPiece(cellContent)}>
