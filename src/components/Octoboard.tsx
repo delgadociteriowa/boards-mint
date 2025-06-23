@@ -10,6 +10,7 @@ type BoardPiece = {
   id: string;
   piece: string;
   pieceType: string;
+  selected: boolean;
 }; 
 type BoardGridType = BoardPiece[][];
 
@@ -25,7 +26,8 @@ const Octoboard: React.FC<OctoBoardProps> = ({selectedGame}) => {
         return { 
           id: `sqr${colIndex}-${rowIndex}`,
           piece: '',
-          pieceType: ''
+          pieceType: '',
+          selected: false
         };
       })
     );
@@ -35,12 +37,9 @@ const Octoboard: React.FC<OctoBoardProps> = ({selectedGame}) => {
 
   const squareBaseStyle = 'aspect-square min-w-6 min-h-6 flex items-center justify-center';
 
-  // chess: ['bg-teal-800 hover:bg-teal-700', 'bg-teal-950 hover:bg-teal-900', 'bg-teal-400 hover:bg-teal-300', 'bg-teal-600 hover:bg-teal-500'],
-  // checkers: ['bg-cyan-800 hover:bg-cyan-700', 'bg-cyan-950 hover:bg-cyan-900', 'bg-cyan-400 hover:bg-cyan-300', 'bg-cyan-600 hover:bg-cyan-500']
-
   const gameColors = {
-    chess: ['bg-teal-800', 'bg-teal-950', 'bg-teal-400', 'bg-teal-600'],
-    checkers: ['bg-cyan-800', 'bg-cyan-950', 'bg-cyan-400', 'bg-cyan-600']
+    chess: ['bg-teal-800 hover:bg-teal-700', 'bg-teal-950 hover:bg-teal-900', 'bg-teal-400 hover:bg-teal-300', 'bg-teal-600 hover:bg-teal-500'],
+    checkers: ['bg-cyan-800 hover:bg-cyan-700', 'bg-cyan-950 hover:bg-cyan-900', 'bg-cyan-400 hover:bg-cyan-300', 'bg-cyan-600 hover:bg-cyan-500']
   };
 
   const setSquareColor = (row: number, col: number) :string => {
@@ -112,6 +111,11 @@ const Octoboard: React.FC<OctoBoardProps> = ({selectedGame}) => {
     );
   };
 
+  const onClickPiece = (cell: BoardPiece) => {
+    console.log(cell.id);
+    console.log(cell.piece);
+  }
+
   useEffect(() => {
     if (selectedGame === 'chess') setNewChess();
     if (selectedGame === 'checkers') setNewCheckers();
@@ -123,7 +127,7 @@ const Octoboard: React.FC<OctoBoardProps> = ({selectedGame}) => {
       {chessGrid.map((row, rowIndex) => (
         row.map((cellContent, colIndex) =>{
           let color = setSquareColor(rowIndex, colIndex);
-          return (<OctoBoardSquare key={cellContent.id} cellContent={cellContent} color={color} squareBaseStyle={squareBaseStyle}/>)
+          return (<OctoBoardSquare key={cellContent.id} cellContent={cellContent} color={color} squareBaseStyle={squareBaseStyle} onClickPiece={onClickPiece}/>)
         })
       ))}
       </div>
