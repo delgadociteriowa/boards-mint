@@ -95,7 +95,8 @@ const Octoboard: React.FC<OctoBoardProps> = ({selectedGame}) => {
   };
 
   const [gameGrid, setGameGrid] = useState(() => buildGameGrid());
-  const [selectedSqr, setSelectedSqr] = useState('');
+  const [selectedSqr, setSelectedSqr] = useState<[number | null, number | null]>([null ,null]);
+  const [phaseTwo, setPhaseTwo] = useState<boolean>(false);
 
   const gameColors = {
     chess: ['bg-teal-950','bg-teal-800','bg-teal-600','bg-teal-400'],
@@ -136,6 +137,7 @@ const Octoboard: React.FC<OctoBoardProps> = ({selectedGame}) => {
   }
 
   const onClickPiece = (cell: string) => {
+    if(!phaseTwo){
     const selectedCell = cell.replace('sqr', '').split('-').map(Number);
     const col: number = selectedCell[0];
     const row: number = selectedCell[1];    
@@ -144,6 +146,11 @@ const Octoboard: React.FC<OctoBoardProps> = ({selectedGame}) => {
       updated[row][col] = {...updated[row][col], selected: true};
       return updated
     });
+    setSelectedSqr([row, col]);
+    setPhaseTwo(true);
+    } else {
+      return undefined;
+    }
   }
 
   return (
