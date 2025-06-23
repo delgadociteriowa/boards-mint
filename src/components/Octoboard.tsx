@@ -107,6 +107,16 @@ const Octoboard: React.FC<OctoBoardProps> = ({selectedGame}) => {
     checkers: ['hover:bg-cyan-900','hover:bg-cyan-700','hover:bg-cyan-500','hover:bg-cyan-300']
   };
 
+  const colorsClicked = {
+    chess: 'bg-cyan-500',
+    checkers: 'bg-teal-500'
+  };
+  
+  const colorsClickedHover = {
+    chess: 'hover:bg-cyan-400',
+    checkers: 'hover:bg-teal-400'
+  };
+
   const setSquareColor = (row: number, col: number, colors: ColorsType) :string => {
     let color :string = '';
     if (row === 0 || row === 11) {
@@ -128,10 +138,10 @@ const Octoboard: React.FC<OctoBoardProps> = ({selectedGame}) => {
   const onClickPiece = (cell: string) => {
     const selectedCell = cell.replace('sqr', '').split('-').map(Number);
     const col: number = selectedCell[0];
-    const row: number = selectedCell[1];
+    const row: number = selectedCell[1];    
     setGameGrid(prevGrid => {
       const updated = [...prevGrid];
-      updated[row][col] = {...updated[row][col], selected: true}
+      updated[row][col] = {...updated[row][col], selected: true};
       return updated
     });
   }
@@ -141,9 +151,13 @@ const Octoboard: React.FC<OctoBoardProps> = ({selectedGame}) => {
       <div className="grid w-[90%] rounded-2xl board-areas overflow-hidden mt-2 mb-8 mx-auto landscape:w-[75%]">
       {gameGrid.map((row, rowIndex) => (
         row.map((cellContent, colIndex) =>{
-          let color = setSquareColor(rowIndex, colIndex, gameColors);
-          let colorHover = setSquareColor(rowIndex, colIndex, gameColorsHover);
-          return (<OctoBoardSquare key={cellContent.id} cellContent={cellContent} color={color} colorHover={colorHover} onClickPiece={onClickPiece}/>)
+          const colors = {
+            color: setSquareColor(rowIndex, colIndex, gameColors),
+            colorHover: setSquareColor(rowIndex, colIndex, gameColorsHover),
+            colorClicked: colorsClicked[selectedGame],
+            colorClickedHover: colorsClickedHover[selectedGame]
+          };
+          return (<OctoBoardSquare key={cellContent.id} cellContent={cellContent} colors={colors} onClickPiece={onClickPiece}/>)
         })
       ))}
       </div>
