@@ -16,11 +16,12 @@ interface OctoBoardSquareProps {
   cellContent: CellContent;
   colors: Colors;
   onClickPiece: (cell: string) => void;
+  phaseTwo: boolean;
 }
 
 // onClickPiece: (cell: CellContent) => void;
 
-const OctoBoardSquare: React.FC<OctoBoardSquareProps> = ({cellContent, colors, onClickPiece}) => {
+const OctoBoardSquare: React.FC<OctoBoardSquareProps> = ({cellContent, colors, onClickPiece, phaseTwo}) => {
   const squareBaseStyle = 'aspect-square min-w-6 min-h-6 flex items-center justify-center';
   const color = colors.color;
   const colorHover = colors.colorHover;
@@ -28,7 +29,7 @@ const OctoBoardSquare: React.FC<OctoBoardSquareProps> = ({cellContent, colors, o
   const colorClickedHover = colors.colorClickedHover;
 
   return (
-    <div className={`${cellContent.id} ${cellContent.selected ? colorClicked : color} ${cellContent.selected ? colorClickedHover : (cellContent.piece && colorHover)} ${squareBaseStyle} ${cellContent.piece && 'cursor-pointer'}`} onClick={() => cellContent.piece && onClickPiece(cellContent.id)}>
+    <div className={`${cellContent.id} ${cellContent.selected ? colorClicked : color} ${!phaseTwo ? (cellContent.selected ? colorClickedHover : (cellContent.piece && colorHover)) : (cellContent.selected ? colorClickedHover : colorHover)} ${squareBaseStyle} ${!phaseTwo ? (cellContent.piece && 'cursor-pointer') : 'cursor-pointer'}`} onClick={() => !phaseTwo ? (cellContent.piece && onClickPiece(cellContent.id)) : onClickPiece(cellContent.id)}>
       {
         cellContent.piece.includes('checker') ?
           <div className={`${cellContent.pieceType.includes('one') ? 'bg-rose-400' : 'bg-stone-600'} relative w-[60%] h-[60%] rounded-full checker-shadow`}></div>

@@ -164,7 +164,7 @@ const Octoboard: React.FC<OctoBoardProps> = ({selectedGame}) => {
             colorClicked: colorsClicked[selectedGame],
             colorClickedHover: colorsClickedHover[selectedGame]
           };
-          return (<OctoBoardSquare key={cellContent.id} cellContent={cellContent} colors={colors} onClickPiece={onClickPiece}/>)
+          return (<OctoBoardSquare key={cellContent.id} cellContent={cellContent} colors={colors} onClickPiece={onClickPiece} phaseTwo={phaseTwo}/>)
         })
       ))}
       </div>
