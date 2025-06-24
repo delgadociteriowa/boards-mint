@@ -137,62 +137,108 @@ const Octoboard: React.FC<OctoBoardProps> = ({selectedGame}) => {
   }
 
   const onClickPiece = (cell: string) => {
+    // Ubicación del elemento clickado
     const selectedCell = cell.replace('sqr', '').split('-').map(Number);
     const col: number = selectedCell[0];
-    const row: number = selectedCell[1]; 
+    const row: number = selectedCell[1];
+    
+    // en selección de pieza
     if(!phaseTwo){
+      // colocar como selecionado al clickado
       setGameGrid(prevGrid => {
         const updated = [...prevGrid];
         updated[row][col] = {...updated[row][col], selected: true};
         return updated
       });
+      // Setearlo en estado aparte selectedSQR
       setSelectedSqr([row, col]);
+
+      // Entrar en la fase de selección de destino
       setPhaseTwo(true);
     } else {
+      // En selección de destino.
+
+
+      // Si el seleccionado y el destino son lo mismo se setea a falso
+      // seleccionado se vacía y se vuelve a fase selección de pieza (abajo del todo)
       if (selectedSqr[0] === row && selectedSqr[1] === col) {
         setGameGrid(prevGrid => {
           const updated = [...prevGrid];
           updated[row][col] = {...updated[row][col], selected: false};
           return updated
         });
+
+        setSelectedSqr([null, null]);
+        setPhaseTwo(false);
+        return undefined;
       }
 
-      const selectedIsEmpty = gameGrid[row][col].piece === '';
+      //verificar si hay pieza en destino
+      const selectedCell = gameGrid[row][col];
 
-      if(selectedIsEmpty) {
-        if (selectedSqr[0] !== null && selectedSqr[1] !== null){
-          const selectedState = gameGrid[selectedSqr[0]][selectedSqr[1]];
+      // si no hay pieza en destino
+      if(selectedCell.piece === '') {
+          // toma el seleccionado
+          const selectedState = gameGrid[selectedSqr[0] || 0][selectedSqr[1] || 0];
+
           setGameGrid(prevGrid => {
             const updated = [...prevGrid];
+            // actualiza a destino con el seleccionado
             updated[row][col] = {
               ...updated[row][col],
               piece: selectedState.piece,
               pieceType: selectedState.pieceType
             };
-            if (selectedSqr[0] !== null && selectedSqr[1] !== null){
-              updated[selectedSqr[0]][selectedSqr[1]] = {
-                ...updated[selectedSqr[0]][selectedSqr[1]],
-                piece: '',
-                pieceType: '',
-                selected: false
-              };
-            }
+            // actualiza a seleccionado para dejarlo vacío
+            updated[selectedSqr[0] || 0][selectedSqr[1] ||0] = {
+              ...updated[selectedSqr[0] || 0][selectedSqr[1] || 0],
+              piece: '',
+              pieceType: '',
+              selected: false
+            };
             return updated
           });
-        }
+      // Si si hay pieza
+      } else {
+         // manda a destino a una banca
+          // los puestos banca dependen de si destino es one o two
+        const isPieceTypeOne = gameGrid[row][col].pieceType === 'one';
+        const discardPlaces = isPieceTypeOne ? [...gameGrid[0], ...gameGrid[1]] : [...gameGrid[10], ...gameGrid[11]]; 
+        const discardPlacesTwo = isPieceTypeOne ? [...gameGrid[10], ...gameGrid[11]] : [...gameGrid[0], ...gameGrid[1]]; 
+          // de dicho array se busca el primero sin piece
+        const discardAvailable = discardPlaces.find(discardPlace => discardPlace.piece === '') ?? discardPlacesTwo.find(discardPlace => discardPlace.piece === '');
+        const discardAvailableCol = discardAvailable?.id.replace('sqr', '').split('-').map(Number)[0];
+        const discardAvailableRow = discardAvailable?.id.replace('sqr', '').split('-').map(Number)[1];
+        const selectedSqrState = gameGrid[selectedSqr[0] || 0][selectedSqr[1] || 0];
+
+        setGameGrid(prevGrid => {
+          const updated = [...prevGrid];
+          // ese primero sin piece Es el que será actualizado con destino
+          updated[discardAvailableRow || 0][discardAvailableCol || 0] = {
+            ...updated[discardAvailableRow || 0][discardAvailableCol || 0],
+            piece: selectedCell.piece,
+            pieceType: selectedCell.pieceType
+          };
+          
+          // actualiza a destino con seleccionado
+          updated[row][col] = {
+            ...updated[row][col],
+            piece: selectedSqrState.piece,
+            pieceType: selectedSqrState.pieceType
+          };
+
+          // actualiza a seleccionado dejandolo vacío
+          updated[selectedSqr[0] || 0][selectedSqr[1] || 0] = {
+            ...updated[selectedSqr[0] || 0][selectedSqr[1] || 0],
+            piece: '',
+            pieceType:'',
+            selected: false
+          };
+
+          return updated
+        });
+        
       }
-      // if selectedCell is empty in the grid
-        // catch the selected state data minus id.
-        // put it in the selected cell piece
-        // update selected state to null null
-
-      // if selectedCell has piece in grid
-        // catch the selectedCell data minus id
-        // put it in a free logical space
-          //if one is full, place it in the other, both are never full
-        // catch the selected state data minus id
-        // place it in the selectedCell space
-
       // update selected state to null
       //setPhaseTwo(false)
       setSelectedSqr([null, null]);
