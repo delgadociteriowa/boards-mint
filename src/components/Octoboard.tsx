@@ -1,16 +1,16 @@
 
 'use client';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import OctoBoardSquare from './OctoBoardSquare';
 
 type GameNames = 'chess' | 'checkers';
 
-type BoardPiece = {
-  id: string;
-  piece: string;
-  pieceType: string;
-  selected: boolean;
-}; 
+// type BoardPiece = {
+//   id: string;
+//   piece: string;
+//   pieceType: string;
+//   selected: boolean;
+// }; 
 
 // type BoardGridType = BoardPiece[][];
 

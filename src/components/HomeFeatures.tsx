@@ -1,4 +1,3 @@
-import Image from "next/image";
 import ChessIcon from "../assets/chess-board-solid.svg";
 import FloppyIcon from "../assets/floppy-disk-regular.svg";
 import MobileIcon from "../assets/mobile-screen-solid.svg";
