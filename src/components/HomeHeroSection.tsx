@@ -13,8 +13,8 @@ const HomeHeroSection = () => (
       </div>
       <h2 className="text-center text-xl w-[80%] my-0 mx-auto mb-4">Classic board games. Anywhere, anytime.</h2>
       <div className="flex flex-wrap justify-center gap-4 w-[100%]">
-        <Link href="#" className="block w-[15rem] shrink bg-stone-200/70 hover:bg-stone-200/90 py-6 rounded-full text-center no-underline text-stone-800 text-xl lowercase tracking-[3px]">Play Now</Link>
-        <Link href="#" className="block w-[15rem] shrink bg-stone-200/70 hover:bg-stone-200/90 py-6 rounded-full text-center no-underline text-stone-800 text-xl lowercase tracking-[3px]">About</Link>
+        <Link href="/chess" className="block w-[15rem] shrink bg-stone-200/70 hover:bg-stone-200/90 py-6 rounded-full text-center no-underline text-stone-800 text-xl lowercase tracking-[3px]">Play Now</Link>
+        <Link href="/soon" className="block w-[15rem] shrink bg-stone-200/70 hover:bg-stone-200/90 py-6 rounded-full text-center no-underline text-stone-800 text-xl lowercase tracking-[3px]">About</Link>
       </div>
     </section>
   </header>
