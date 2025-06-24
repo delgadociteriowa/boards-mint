@@ -21,7 +21,7 @@ const HomeGamesSection =() => (
         title={'backgammon'}
         paragraph={'A board game for two players that combines luck with strategic knowledge.'}/>
     </div>
-    <a href="#" className="block w-[15rem] bg-stone-300 hover:bg-stone-100 py-6 rounded-full text-center no-underline text-stone-800 text-xl lowercase tracking-[3px] mx-auto mt-4 shadow-lg">more games</a>
+    <a href="#" className="block w-[15rem] bg-stone-300 hover:bg-stone-200 py-6 rounded-full text-center no-underline text-stone-800 text-xl lowercase tracking-[3px] mx-auto mt-4 shadow-lg">more games</a>
   </section>
 );
 
