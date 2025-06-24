@@ -19,8 +19,6 @@ interface OctoBoardSquareProps {
   phaseTwo: boolean;
 }
 
-// onClickPiece: (cell: CellContent) => void;
-
 const OctoBoardSquare: React.FC<OctoBoardSquareProps> = ({cellContent, colors, onClickPiece, phaseTwo}) => {
   const squareBaseStyle = 'aspect-square min-w-6 min-h-6 flex items-center justify-center';
   const color = colors.color;

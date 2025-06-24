@@ -2,6 +2,7 @@ import ChessIcon from "../assets/chess-board-solid.svg";
 import FloppyIcon from "../assets/floppy-disk-regular.svg";
 import MobileIcon from "../assets/mobile-screen-solid.svg";
 import FeatureCard from "./FeatureCard";
+
 const HomeFeatures = () => (
     <section className="w-[90%] mx-auto max-w-[1200px] pt-8 pb-14 text-stone-600">
       <h3 className="text-center text-4xl tracking-[2px] mb-8">Boards makes it easy</h3>

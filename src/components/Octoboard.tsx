@@ -1,18 +1,8 @@
-
 'use client';
 import React, { useState } from 'react';
 import OctoBoardSquare from './OctoBoardSquare';
 
 type GameNames = 'chess' | 'checkers';
-
-// type BoardPiece = {
-//   id: string;
-//   piece: string;
-//   pieceType: string;
-//   selected: boolean;
-// }; 
-
-// type BoardGridType = BoardPiece[][];
 
 type ColorsType = {
   chess: string[];
@@ -102,21 +92,12 @@ const Octoboard: React.FC<OctoBoardProps> = ({selectedGame}) => {
     chess: ['bg-teal-950','bg-teal-800','bg-teal-600','bg-teal-400'],
     checkers: ['bg-cyan-950','bg-cyan-800','bg-cyan-600','bg-cyan-400']
   };
-  
   const gameColorsHover = {
     chess: ['hover:bg-teal-900','hover:bg-teal-700','hover:bg-teal-500','hover:bg-teal-300'],
     checkers: ['hover:bg-cyan-900','hover:bg-cyan-700','hover:bg-cyan-500','hover:bg-cyan-300']
   };
-
-  const colorsClicked = {
-    chess: 'bg-cyan-500',
-    checkers: 'bg-teal-500'
-  };
-  
-  const colorsClickedHover = {
-    chess: 'hover:bg-cyan-400',
-    checkers: 'hover:bg-teal-400'
-  };
+  const colorsClicked = {chess: 'bg-cyan-500', checkers: 'bg-teal-500'};
+  const colorsClickedHover = {chess: 'hover:bg-cyan-400', checkers: 'hover:bg-teal-400'};
 
   const setSquareColor = (row: number, col: number, colors: ColorsType) :string => {
     let color :string = '';
@@ -137,75 +118,50 @@ const Octoboard: React.FC<OctoBoardProps> = ({selectedGame}) => {
   }
 
   const onClickPiece = (cell: string) => {
-    // Ubicación del elemento clickado
     const selectedCell = cell.replace('sqr', '').split('-').map(Number);
     const col: number = selectedCell[0];
     const row: number = selectedCell[1];
-    
-    // en selección de pieza
+  
     if(!phaseTwo){
-      // colocar como selecionado al clickado
       setGameGrid(prevGrid => {
         const updated = [...prevGrid];
         updated[row][col] = {...updated[row][col], selected: true};
         return updated
       });
-      // Setearlo en estado aparte selectedSQR
       setSelectedSqr([row, col]);
-
-      // Entrar en la fase de selección de destino
       setPhaseTwo(true);
     } else {
-      // En selección de destino.
-
-
-      // Si el seleccionado y el destino son lo mismo se setea a falso
-      // seleccionado se vacía y se vuelve a fase selección de pieza (abajo del todo)
+      const selectedCellObj = gameGrid[row][col];
       if (selectedSqr[0] === row && selectedSqr[1] === col) {
         setGameGrid(prevGrid => {
           const updated = [...prevGrid];
           updated[row][col] = {...updated[row][col], selected: false};
           return updated
         });
-
         setSelectedSqr([null, null]);
         setPhaseTwo(false);
         return undefined;
-      }
-
-      //verificar si hay pieza en destino
-      const selectedCell = gameGrid[row][col];
-
-      // si no hay pieza en destino
-      if(selectedCell.piece === '') {
-          // toma el seleccionado
-          const selectedState = gameGrid[selectedSqr[0] || 0][selectedSqr[1] || 0];
-
-          setGameGrid(prevGrid => {
-            const updated = [...prevGrid];
-            // actualiza a destino con el seleccionado
-            updated[row][col] = {
-              ...updated[row][col],
-              piece: selectedState.piece,
-              pieceType: selectedState.pieceType
-            };
-            // actualiza a seleccionado para dejarlo vacío
-            updated[selectedSqr[0] || 0][selectedSqr[1] ||0] = {
-              ...updated[selectedSqr[0] || 0][selectedSqr[1] || 0],
-              piece: '',
-              pieceType: '',
-              selected: false
-            };
-            return updated
-          });
-      // Si si hay pieza
+      } else if(selectedCellObj.piece === '') {
+        const selectedState = gameGrid[selectedSqr[0] || 0][selectedSqr[1] || 0];
+        setGameGrid(prevGrid => {
+          const updated = [...prevGrid];
+          updated[row][col] = {
+            ...updated[row][col],
+            piece: selectedState.piece,
+            pieceType: selectedState.pieceType
+          };
+          updated[selectedSqr[0] || 0][selectedSqr[1] ||0] = {
+            ...updated[selectedSqr[0] || 0][selectedSqr[1] || 0],
+            piece: '',
+            pieceType: '',
+            selected: false
+          };
+          return updated
+        });
       } else {
-         // manda a destino a una banca
-          // los puestos banca dependen de si destino es one o two
         const isPieceTypeOne = gameGrid[row][col].pieceType === 'one';
         const discardPlaces = isPieceTypeOne ? [...gameGrid[0], ...gameGrid[1]] : [...gameGrid[10], ...gameGrid[11]]; 
         const discardPlacesTwo = isPieceTypeOne ? [...gameGrid[10], ...gameGrid[11]] : [...gameGrid[0], ...gameGrid[1]]; 
-          // de dicho array se busca el primero sin piece
         const discardAvailable = discardPlaces.find(discardPlace => discardPlace.piece === '') ?? discardPlacesTwo.find(discardPlace => discardPlace.piece === '');
         const discardAvailableCol = discardAvailable?.id.replace('sqr', '').split('-').map(Number)[0];
         const discardAvailableRow = discardAvailable?.id.replace('sqr', '').split('-').map(Number)[1];
@@ -213,34 +169,26 @@ const Octoboard: React.FC<OctoBoardProps> = ({selectedGame}) => {
 
         setGameGrid(prevGrid => {
           const updated = [...prevGrid];
-          // ese primero sin piece Es el que será actualizado con destino
           updated[discardAvailableRow || 0][discardAvailableCol || 0] = {
             ...updated[discardAvailableRow || 0][discardAvailableCol || 0],
-            piece: selectedCell.piece,
-            pieceType: selectedCell.pieceType
+            piece: selectedCellObj.piece,
+            pieceType: selectedCellObj.pieceType
           };
-          
-          // actualiza a destino con seleccionado
           updated[row][col] = {
             ...updated[row][col],
             piece: selectedSqrState.piece,
             pieceType: selectedSqrState.pieceType
           };
-
-          // actualiza a seleccionado dejandolo vacío
           updated[selectedSqr[0] || 0][selectedSqr[1] || 0] = {
             ...updated[selectedSqr[0] || 0][selectedSqr[1] || 0],
             piece: '',
             pieceType:'',
             selected: false
           };
-
           return updated
         });
         
       }
-      // update selected state to null
-      //setPhaseTwo(false)
       setSelectedSqr([null, null]);
       setPhaseTwo(false);
       return undefined;
