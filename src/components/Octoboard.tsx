@@ -156,10 +156,31 @@ const Octoboard: React.FC<OctoBoardProps> = ({selectedGame}) => {
           return updated
         });
       }
-      // if selectedCell && selected are the same
-        // update selected to selected: false in the grid
-        // update selected state to null null
 
+      const selectedIsEmpty = gameGrid[row][col].piece === '';
+
+      if(selectedIsEmpty) {
+        if (selectedSqr[0] !== null && selectedSqr[1] !== null){
+          const selectedState = gameGrid[selectedSqr[0]][selectedSqr[1]];
+          setGameGrid(prevGrid => {
+            const updated = [...prevGrid];
+            updated[row][col] = {
+              ...updated[row][col],
+              piece: selectedState.piece,
+              pieceType: selectedState.pieceType
+            };
+            if (selectedSqr[0] !== null && selectedSqr[1] !== null){
+              updated[selectedSqr[0]][selectedSqr[1]] = {
+                ...updated[selectedSqr[0]][selectedSqr[1]],
+                piece: '',
+                pieceType: '',
+                selected: false
+              };
+            }
+            return updated
+          });
+        }
+      }
       // if selectedCell is empty in the grid
         // catch the selected state data minus id.
         // put it in the selected cell piece
