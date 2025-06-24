@@ -137,18 +137,45 @@ const Octoboard: React.FC<OctoBoardProps> = ({selectedGame}) => {
   }
 
   const onClickPiece = (cell: string) => {
-    if(!phaseTwo){
     const selectedCell = cell.replace('sqr', '').split('-').map(Number);
     const col: number = selectedCell[0];
-    const row: number = selectedCell[1];    
-    setGameGrid(prevGrid => {
-      const updated = [...prevGrid];
-      updated[row][col] = {...updated[row][col], selected: true};
-      return updated
-    });
-    setSelectedSqr([row, col]);
-    setPhaseTwo(true);
+    const row: number = selectedCell[1]; 
+    if(!phaseTwo){
+      setGameGrid(prevGrid => {
+        const updated = [...prevGrid];
+        updated[row][col] = {...updated[row][col], selected: true};
+        return updated
+      });
+      setSelectedSqr([row, col]);
+      setPhaseTwo(true);
     } else {
+      if (selectedSqr[0] === row && selectedSqr[1] === col) {
+        setGameGrid(prevGrid => {
+          const updated = [...prevGrid];
+          updated[row][col] = {...updated[row][col], selected: false};
+          return updated
+        });
+      }
+      // if selectedCell && selected are the same
+        // update selected to selected: false in the grid
+        // update selected state to null null
+
+      // if selectedCell is empty in the grid
+        // catch the selected state data minus id.
+        // put it in the selected cell piece
+        // update selected state to null null
+
+      // if selectedCell has piece in grid
+        // catch the selectedCell data minus id
+        // put it in a free logical space
+          //if one is full, place it in the other, both are never full
+        // catch the selected state data minus id
+        // place it in the selectedCell space
+
+      // update selected state to null
+      //setPhaseTwo(false)
+      setSelectedSqr([null, null]);
+      setPhaseTwo(false);
       return undefined;
     }
   }
