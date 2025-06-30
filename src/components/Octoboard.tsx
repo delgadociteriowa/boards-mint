@@ -25,53 +25,33 @@ interface OctoBoardProps {
 const Octoboard: React.FC<OctoBoardProps> = ({selectedGame}) => {
 
   const buildGameGrid = () => {
-    if (selectedGame === 'checkers') {
-      const checkerPiece = (row: number, col: number): [string, string] => {
-        const isPlayerOne = [2, 3, 4].includes(row);
-        const isPlayerTwo = [7, 8, 9].includes(row);
-        const isEvenCol = (col + 1) % 2 === 0;
-
-        const shouldPlace =
-          (isPlayerOne && ((row === 3 && !isEvenCol) || (row !== 3 && isEvenCol))) ||
-          (isPlayerTwo && ((row === 8 && isEvenCol) || (row !== 8 && !isEvenCol)));
-
-        const piece = shouldPlace ? 'checker' : '';
-        const pieceType = shouldPlace ? (isPlayerOne ? 'one' : 'two') : '';
-                
-        return [piece, pieceType]
-      }
-
-      return Array(12).fill(null).map((_, rowIndex) =>
-        Array(8).fill(null).map((_, colIndex) => { 
-          return { 
-            id: `sqr${colIndex}-${rowIndex}`,
-            piece: checkerPiece(rowIndex, colIndex)[0],
-            pieceType: checkerPiece(rowIndex, colIndex)[1],
-            selected: false
-          };
-        })
-      );
-    }
+    const boardRows = 12;
+    const boardColumns = 8;
 
     const chessPiece = (row: number, col: number): [string, string] => {
+      const playerOnePawnsRow = 3;
+      const playerTwoPawnsRow = 8;
+      const playerOneChessRow = 2;
+      const playerTwoChessRow = 9;
+
       const chessPieces = ['♜', '♞', '♝', '♛', '♚', '♝', '♞', '♜'];
       let piece = '';
       let pieceType = '';
 
       switch (row) {
-        case 2:
+        case playerOneChessRow:
           piece = chessPieces[col] || '';
           pieceType = 'one';
           break;
-        case 3:
+        case playerOnePawnsRow:
           piece = '♟';
           pieceType = 'one';
           break;
-        case 8:
+        case playerTwoPawnsRow:
           piece = '♟';
           pieceType = 'two';
           break;
-        case 9:
+        case playerTwoChessRow:
           piece = chessPieces[col] || '';
           pieceType = 'two';
           break;
@@ -80,16 +60,34 @@ const Octoboard: React.FC<OctoBoardProps> = ({selectedGame}) => {
       }
       return [piece, pieceType];
     };
+    
+    const checkerPiece = (row: number, col: number): [string, string] => {
+      const playerOneRows = [2, 3, 4];
+      const playerTwoRows = [7, 8, 9];
+      const isPlayerOne = playerOneRows.includes(row);
+      const isPlayerTwo = playerTwoRows.includes(row);
+      const isEvenCol = (col + 1) % 2 === 0;
 
-    return Array(12).fill(null).map((_, rowIndex) => 
-      Array(8).fill(null).map((_, colIndex) => {
-          return { 
-            id: `sqr${colIndex}-${rowIndex}`,
-            piece: chessPiece(rowIndex, colIndex)[0],
-            pieceType: chessPiece(rowIndex, colIndex)[1],
-            selected: false
-          };
-        })
+      const shouldPlace =
+        (isPlayerOne && ((row === 3 && !isEvenCol) || (row !== 3 && isEvenCol))) ||
+        (isPlayerTwo && ((row === 8 && isEvenCol) || (row !== 8 && !isEvenCol)));
+
+      const piece = shouldPlace ? 'checker' : '';
+      const pieceType = shouldPlace ? (isPlayerOne ? 'one' : 'two') : '';
+              
+      return [piece, pieceType]
+    }
+
+    return Array(boardRows).fill(null).map((_, rowIndex) =>
+      Array(boardColumns).fill(null).map((_, colIndex) => {
+        const piece = selectedGame === 'chess' ? chessPiece(rowIndex, colIndex) : checkerPiece(rowIndex, colIndex);  
+        return { 
+          id: `sqr${colIndex}-${rowIndex}`,
+          piece: piece[0],
+          pieceType: piece[1],
+          selected: false
+        };
+      })
     );
   };
 
@@ -101,10 +99,12 @@ const Octoboard: React.FC<OctoBoardProps> = ({selectedGame}) => {
     chess: ['bg-teal-950','bg-teal-800','bg-teal-600','bg-teal-400'],
     checkers: ['bg-cyan-950','bg-cyan-800','bg-cyan-600','bg-cyan-400']
   };
+
   const gameColorsHover = {
     chess: ['hover:bg-teal-900','hover:bg-teal-700','hover:bg-teal-500','hover:bg-teal-300'],
     checkers: ['hover:bg-cyan-900','hover:bg-cyan-700','hover:bg-cyan-500','hover:bg-cyan-300']
   };
+
   const colorsClicked = {chess: 'bg-cyan-500', checkers: 'bg-teal-500'};
   const colorsClickedHover = {chess: 'hover:bg-cyan-400', checkers: 'hover:bg-teal-400'};
 
