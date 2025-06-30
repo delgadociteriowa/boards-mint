@@ -1,16 +1,16 @@
-interface CellContent {
+type CellContent = {
   id: string;
   piece: string;
   pieceType: string;
   selected: boolean;
-}
+};
 
-interface Colors {
+type Colors = {
   color: string;
   colorHover: string;
   colorClicked: string;
   colorClickedHover: string;
-}
+};
 
 interface OctoBoardSquareProps {
   cellContent: CellContent;

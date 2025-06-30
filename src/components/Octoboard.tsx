@@ -7,7 +7,7 @@ type GameNames = 'chess' | 'checkers';
 type ColorsType = {
   chess: string[];
   checkers: string[];
-}
+};
 
 interface OctoBoardProps {
   selectedGame: GameNames;
