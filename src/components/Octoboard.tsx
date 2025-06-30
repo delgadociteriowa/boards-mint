@@ -9,9 +9,18 @@ type ColorsType = {
   checkers: string[];
 };
 
+type Square = { 
+  id: string;
+  piece: string;
+  pieceType: string;
+  selected: boolean;
+};
+
+type SelectedSquare = [number | null, number | null];
+
 interface OctoBoardProps {
   selectedGame: GameNames;
-};
+}
 
 const Octoboard: React.FC<OctoBoardProps> = ({selectedGame}) => {
 
@@ -84,8 +93,8 @@ const Octoboard: React.FC<OctoBoardProps> = ({selectedGame}) => {
     );
   };
 
-  const [gameGrid, setGameGrid] = useState(() => buildGameGrid());
-  const [selectedSqr, setSelectedSqr] = useState<[number | null, number | null]>([null ,null]);
+  const [gameGrid, setGameGrid] = useState<Square[][]>(() => buildGameGrid());
+  const [selectedSqr, setSelectedSqr] = useState<SelectedSquare>([null ,null]);
   const [phaseTwo, setPhaseTwo] = useState<boolean>(false);
 
   const gameColors = {
