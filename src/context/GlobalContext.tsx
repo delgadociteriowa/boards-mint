@@ -2,20 +2,20 @@
 import { ReactNode, createContext, useContext, useState } from 'react';
 
 type GlobalContextType = {
-  gameBoard: string;
-  setGameBoard: React.Dispatch<React.SetStateAction<string>>;
+  selectedGame: string;
+  setSelectedGame: React.Dispatch<React.SetStateAction<string>>;
 };
 
 const GlobalContext = createContext<GlobalContextType | null>(null);
 
 export const GlobalProvider = ({ children }: { children: ReactNode }) => {
-  const [gameBoard, setGameBoard] = useState('');
+  const [selectedGame, setSelectedGame] = useState('');
 
   return (
     <GlobalContext.Provider
       value={{
-        gameBoard,
-        setGameBoard,
+        selectedGame,
+        setSelectedGame,
       }}
     >
       {children}
