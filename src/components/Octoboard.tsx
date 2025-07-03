@@ -21,8 +21,7 @@ type SelectedSquare = [number | null, number | null];
 
 const Octoboard: React.FC = () => {
 
-  const context = useGlobalContext();
-  const selectedGame = context?.selectedGame;
+  const {selectedGame, buildGameGrid} = useGlobalContext()!;
 
   const [gameGrid, setGameGrid] = useState<Square[][]>([]);
   const [selectedSqr, setSelectedSqr] = useState<SelectedSquare>([null ,null]);
@@ -140,12 +139,9 @@ const Octoboard: React.FC = () => {
 
   useEffect(() => {
     if (selectedGame === 'chess' || selectedGame === 'checkers') {
-      const grid = context?.buildGameGrid();
+      const grid = buildGameGrid();
       setGameGrid(grid || []);
     }
-    // return () => {
-    //   context?.setSelectedGame('');
-    // };
   }, [selectedGame]);
 
   return (

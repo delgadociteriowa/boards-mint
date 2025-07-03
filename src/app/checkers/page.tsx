@@ -6,14 +6,14 @@ import Octoboard from "@/components/Octoboard";
 import { useGlobalContext } from "@/context/GlobalContext";
 
 const Checkers = () => {
-  const context = useGlobalContext();
+  const { setSelectedGame } = useGlobalContext()!;
 
   useEffect(() => {
-    context?.setSelectedGame('checkers');
+    setSelectedGame('checkers');
     return () => {
-      context?.setSelectedGame('');
+      setSelectedGame('');
     };
-  }, [context?.setSelectedGame]);
+  }, [setSelectedGame]);
   
   return (
     <>
