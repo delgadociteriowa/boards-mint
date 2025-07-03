@@ -7,6 +7,10 @@ interface GlobalContextType {
   buildGameGrid: () => Square[][];
   gameGrid: Square[][];
   setGameGrid: React.Dispatch<React.SetStateAction<Square[][]>>;
+  selectedSqr: SelectedSquare;
+  setSelectedSqr: React.Dispatch<React.SetStateAction<SelectedSquare>>;
+  phaseTwo: boolean;
+  setPhaseTwo: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 type Square = { 
@@ -23,6 +27,8 @@ const GlobalContext = createContext<GlobalContextType | null>(null);
 export const GlobalProvider = ({ children }: { children: ReactNode }) => {
   const [selectedGame, setSelectedGame] = useState<string>('');
   const [gameGrid, setGameGrid] = useState<Square[][]>([]);
+  const [selectedSqr, setSelectedSqr] = useState<SelectedSquare>([null ,null]);
+  const [phaseTwo, setPhaseTwo] = useState<boolean>(false);
 
   const placeChessPiece = (row: number, col: number): [string, string] => {
     const playerOnePawnsRow = 3;
@@ -98,7 +104,11 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
         setSelectedGame,
         buildGameGrid,
         gameGrid,
-        setGameGrid
+        setGameGrid,
+        selectedSqr,
+        setSelectedSqr,
+        phaseTwo,
+        setPhaseTwo
       }}
     >
       {children}

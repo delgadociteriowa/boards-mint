@@ -8,19 +8,18 @@ type ColorsType = {
   checkers: string[];
 };
 
-type SelectedSquare = [number | null, number | null];
-
 const Octoboard: React.FC = () => {
 
   const {
     selectedGame,
     buildGameGrid,
     gameGrid,
-    setGameGrid
+    setGameGrid,
+    selectedSqr,
+    setSelectedSqr,
+    phaseTwo,
+    setPhaseTwo
   } = useGlobalContext()!;
-
-  const [selectedSqr, setSelectedSqr] = useState<SelectedSquare>([null ,null]);
-  const [phaseTwo, setPhaseTwo] = useState<boolean>(false);
 
   const gameColors = {
     chess: ['bg-teal-950','bg-teal-800','bg-teal-600','bg-teal-400'],
