@@ -11,6 +11,7 @@ interface GlobalContextType {
   setSelectedSqr: React.Dispatch<React.SetStateAction<SelectedSquare>>;
   phaseTwo: boolean;
   setPhaseTwo: React.Dispatch<React.SetStateAction<boolean>>;
+  onClickPiece: (cell: string) => undefined;
 };
 
 type Square = { 
@@ -97,6 +98,84 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
     );
   };
 
+  const onClickPiece = (cell: string) => {
+    const selectedCell = cell.replace('sqr', '').split('-').map(Number);
+    const col: number = selectedCell[0];
+    const row: number = selectedCell[1];
+  
+    if(!phaseTwo){
+      setGameGrid(prevGrid => {
+        const updated = [...prevGrid];
+        updated[row][col] = {...updated[row][col], selected: true};
+        return updated
+      });
+      setSelectedSqr([row, col]);
+      setPhaseTwo(true);
+    } else {
+      const selectedCellObj = gameGrid[row][col];
+      if (selectedSqr[0] === row && selectedSqr[1] === col) {
+        setGameGrid(prevGrid => {
+          const updated = [...prevGrid];
+          updated[row][col] = {...updated[row][col], selected: false};
+          return updated
+        });
+        setSelectedSqr([null, null]);
+        setPhaseTwo(false);
+        return undefined;
+      } else if(selectedCellObj.piece === '') {
+        const selectedState = gameGrid[selectedSqr[0] || 0][selectedSqr[1] || 0];
+        setGameGrid(prevGrid => {
+          const updated = [...prevGrid];
+          updated[row][col] = {
+            ...updated[row][col],
+            piece: selectedState.piece,
+            pieceType: selectedState.pieceType
+          };
+          updated[selectedSqr[0] || 0][selectedSqr[1] ||0] = {
+            ...updated[selectedSqr[0] || 0][selectedSqr[1] || 0],
+            piece: '',
+            pieceType: '',
+            selected: false
+          };
+          return updated
+        });
+      } else {
+        const isPieceTypeOne = gameGrid[row][col].pieceType === 'one';
+        const discardPlaces = isPieceTypeOne ? [...gameGrid[0], ...gameGrid[1]] : [...gameGrid[10], ...gameGrid[11]]; 
+        const discardPlacesTwo = isPieceTypeOne ? [...gameGrid[10], ...gameGrid[11]] : [...gameGrid[0], ...gameGrid[1]]; 
+        const discardAvailable = discardPlaces.find(discardPlace => discardPlace.piece === '') ?? discardPlacesTwo.find(discardPlace => discardPlace.piece === '');
+        const discardAvailableCol = discardAvailable?.id.replace('sqr', '').split('-').map(Number)[0];
+        const discardAvailableRow = discardAvailable?.id.replace('sqr', '').split('-').map(Number)[1];
+        const selectedSqrState = gameGrid[selectedSqr[0] || 0][selectedSqr[1] || 0];
+
+        setGameGrid(prevGrid => {
+          const updated = [...prevGrid];
+          updated[discardAvailableRow || 0][discardAvailableCol || 0] = {
+            ...updated[discardAvailableRow || 0][discardAvailableCol || 0],
+            piece: selectedCellObj.piece,
+            pieceType: selectedCellObj.pieceType
+          };
+          updated[row][col] = {
+            ...updated[row][col],
+            piece: selectedSqrState.piece,
+            pieceType: selectedSqrState.pieceType
+          };
+          updated[selectedSqr[0] || 0][selectedSqr[1] || 0] = {
+            ...updated[selectedSqr[0] || 0][selectedSqr[1] || 0],
+            piece: '',
+            pieceType:'',
+            selected: false
+          };
+          return updated
+        });
+        
+      }
+      setSelectedSqr([null, null]);
+      setPhaseTwo(false);
+      return undefined;
+    }
+  }
+
   return (
     <GlobalContext.Provider
       value={{
@@ -108,7 +187,8 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
         selectedSqr,
         setSelectedSqr,
         phaseTwo,
-        setPhaseTwo
+        setPhaseTwo,
+        onClickPiece
       }}
     >
       {children}
