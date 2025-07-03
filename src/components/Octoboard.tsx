@@ -3,27 +3,22 @@ import React, { useState, useEffect } from 'react';
 import OctoBoardSquare from './OctoBoardSquare';
 import { useGlobalContext } from "@/context/GlobalContext";
 
-
 type ColorsType = {
   chess: string[];
   checkers: string[];
 };
 
-type Square = { 
-  id: string;
-  piece: string;
-  pieceType: string;
-  selected: boolean;
-};
-
 type SelectedSquare = [number | null, number | null];
-
 
 const Octoboard: React.FC = () => {
 
-  const {selectedGame, buildGameGrid} = useGlobalContext()!;
+  const {
+    selectedGame,
+    buildGameGrid,
+    gameGrid,
+    setGameGrid
+  } = useGlobalContext()!;
 
-  const [gameGrid, setGameGrid] = useState<Square[][]>([]);
   const [selectedSqr, setSelectedSqr] = useState<SelectedSquare>([null ,null]);
   const [phaseTwo, setPhaseTwo] = useState<boolean>(false);
 

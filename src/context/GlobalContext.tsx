@@ -4,7 +4,9 @@ import { ReactNode, createContext, useContext, useState } from 'react';
 interface GlobalContextType {
   selectedGame: string;
   setSelectedGame: React.Dispatch<React.SetStateAction<string>>;
-  buildGameGrid: () => Square[][]
+  buildGameGrid: () => Square[][];
+  gameGrid: Square[][];
+  setGameGrid: React.Dispatch<React.SetStateAction<Square[][]>>;
 };
 
 type Square = { 
@@ -14,10 +16,13 @@ type Square = {
   selected: boolean;
 };
 
+type SelectedSquare = [number | null, number | null];
+
 const GlobalContext = createContext<GlobalContextType | null>(null);
 
 export const GlobalProvider = ({ children }: { children: ReactNode }) => {
-  const [selectedGame, setSelectedGame] = useState('');
+  const [selectedGame, setSelectedGame] = useState<string>('');
+  const [gameGrid, setGameGrid] = useState<Square[][]>([]);
 
   const placeChessPiece = (row: number, col: number): [string, string] => {
     const playerOnePawnsRow = 3;
@@ -91,7 +96,9 @@ export const GlobalProvider = ({ children }: { children: ReactNode }) => {
       value={{
         selectedGame,
         setSelectedGame,
-        buildGameGrid
+        buildGameGrid,
+        gameGrid,
+        setGameGrid
       }}
     >
       {children}
