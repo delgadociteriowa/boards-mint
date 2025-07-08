@@ -20,17 +20,17 @@ const Octoboard: React.FC = () => {
   } = useGlobalContext()!;
 
   const gameColors = {
-    chess: ['bg-teal-950','bg-teal-800','bg-teal-600','bg-teal-400'],
-    checkers: ['bg-cyan-950','bg-cyan-800','bg-cyan-600','bg-cyan-400']
+    chess: ['bg-teal-900','bg-teal-700','bg-teal-500','bg-teal-300'],
+    checkers: ['bg-cyan-900','bg-cyan-700','bg-cyan-500','bg-cyan-300']
   };
 
   const gameColorsHover = {
-    chess: ['hover:bg-teal-900','hover:bg-teal-700','hover:bg-teal-500','hover:bg-teal-300'],
-    checkers: ['hover:bg-cyan-900','hover:bg-cyan-700','hover:bg-cyan-500','hover:bg-cyan-300']
+    chess: ['hover:bg-teal-800','hover:bg-teal-600','hover:bg-teal-400','hover:bg-teal-200'],
+    checkers: ['hover:bg-cyan-800','hover:bg-cyan-600','hover:bg-cyan-400','hover:bg-cyan-200']
   };
 
-  const colorsClicked: { [key: string]: string } = {chess: 'bg-cyan-500', checkers: 'bg-teal-500'};
-  const colorsClickedHover: { [key: string]: string } = {chess: 'hover:bg-cyan-400', checkers: 'hover:bg-teal-400'};
+  const colorsClicked: { [key: string]: string } = {chess: 'bg-slate-400', checkers: 'bg-slate-400'};
+  const colorsClickedHover: { [key: string]: string } = {chess: 'hover:bg-slate-400', checkers: 'hover:bg-slate-400'};
 
   const setSquareColor = (row: number, col: number, colors: ColorsType) :string => {
     if (selectedGame !== 'chess' && selectedGame !== 'checkers') return '';

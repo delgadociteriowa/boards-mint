@@ -4,7 +4,7 @@ import Navigation from './Navigation';
 const HomeHeroSection = () => (
   <header>
     <Navigation/>
-    <section className="w-[90%] mx-auto max-w-[1200px] h-[85%] py-16 text-stone-200 bg-stone-900 bg-hero-chess bg-center bg-cover rounded-3xl flex flex-col gap-2">
+    <section className="w-[90%] mx-auto max-w-[1200px] h-[85%] py-16 text-stone-200 bg-stone-900 bg-hero-chess bg-center bg-cover rounded-3xl flex flex-col gap-2 shadow-xl/30">
       <h1 className="text-5xl text-center font-brand font-thin tracking-[2px]">BOARDS</h1>
       <div className="flex items-center gap-4 h-16 my-0 mx-auto">
         <div className="w-16 h-0.5 bg-stone-200"></div>
