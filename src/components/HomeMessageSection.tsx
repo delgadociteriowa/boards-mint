@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-const HomeMessageSection = () => (
+const HomeMessageSection: React.FC = () => (
   <section className="py-14 px-10 bg-stone-200 text-stone-600">
     <h3 className="text-center text-4xl tracking-[2px] mb-8">Register Now</h3>
     <p className="text-center text-xl mb-10">To continue your game in other devices and more...</p>

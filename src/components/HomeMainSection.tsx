@@ -1,6 +1,6 @@
 import HomeFeatures from "./HomeFeatures";
 
-const HomeMainSection = () => (
+const HomeMainSection: React.FC = () => (
  <main>
   <HomeFeatures/>
  </main>

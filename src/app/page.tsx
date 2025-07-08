@@ -4,7 +4,7 @@ import HomeMessageSection from "@/components/HomeMessageSection";
 import HomeGamesSection from "@/components/HomeGamesSection";
 import Footer from "@/components/Footer";
 
-const Home = () => {
+const Home: React.FC = () => {
   return (
     <>
       <HomeHeroSection/>

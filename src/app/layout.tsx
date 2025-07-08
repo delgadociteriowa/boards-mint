@@ -7,11 +7,7 @@ export const metadata: Metadata = {
   description: "Play classic board games now",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+const RootLayout = ({ children }: Readonly<{children: React.ReactNode }>) => {
   return (
     <html lang="en">
       <GlobalProvider>
@@ -22,3 +18,5 @@ export default function RootLayout({
     </html>
   );
 }
+
+export default RootLayout;

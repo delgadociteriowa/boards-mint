@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-const Footer = () => (
+const Footer: React.FC = () => (
   <footer className="bg-stone-800 text-stone-300">
     <nav className="w-[90%] mx-auto max-w-[1200px] py-14 flex flex-col gap-8 items-center md:flex-row">
       <Link href="/" className="no-underline hover:text-stone-100 font-brand text-3xl md:mr-auto">♞BOARDS</Link>

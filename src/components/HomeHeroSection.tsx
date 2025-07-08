@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Navigation from './Navigation';
 
-const HomeHeroSection = () => (
+const HomeHeroSection: React.FC = () => (
   <header>
     <Navigation/>
     <section className="w-[90%] mx-auto max-w-[1200px] h-[85%] py-16 text-stone-200 bg-stone-900 bg-hero-chess bg-center bg-cover rounded-3xl flex flex-col gap-2 shadow-xl/30">

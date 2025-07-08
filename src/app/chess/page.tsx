@@ -5,7 +5,7 @@ import Footer from "@/components/Footer";
 import Octoboard from "@/components/Octoboard";
 import { useGlobalContext } from "@/context/GlobalContext";
 
-const Chess = () => {
+const Chess: React.FC = () => {
   const { setSelectedGame } = useGlobalContext()!;
 
   useEffect(() => {
