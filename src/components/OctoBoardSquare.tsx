@@ -21,10 +21,7 @@ interface OctoBoardSquareProps {
 
 const OctoBoardSquare: React.FC<OctoBoardSquareProps> = ({cellContent, colors, onClickPiece, phaseTwo}) => {
   const squareBaseStyle = 'aspect-square min-w-6 min-h-6 flex items-center justify-center';
-  const color = colors.color;
-  const colorHover = colors.colorHover;
-  const colorClicked = colors.colorClicked;
-  const colorClickedHover = colors.colorClickedHover;
+  const { color, colorHover, colorClicked, colorClickedHover } = colors;
 
   return (
     <div className={`${cellContent.id} ${cellContent.selected ? colorClicked : color} ${!phaseTwo ? (cellContent.selected ? colorClickedHover : (cellContent.piece && colorHover)) : (cellContent.selected ? colorClickedHover : colorHover)} ${squareBaseStyle} ${!phaseTwo ? (cellContent.piece && 'cursor-pointer') : 'cursor-pointer'}`} onClick={() => !phaseTwo ? (cellContent.piece && onClickPiece(cellContent.id)) : onClickPiece(cellContent.id)}>

@@ -8,6 +8,11 @@ type ColorsType = {
   checkers: string[];
 };
 
+type ColorsClickedType = {
+  chess: string;
+  checkers: string;
+};
+
 const Octoboard: React.FC = () => {
 
   const {
@@ -19,22 +24,22 @@ const Octoboard: React.FC = () => {
     onClickPiece
   } = useGlobalContext()!;
 
-  const gameColors = {
+  const gameColors: ColorsType = {
     chess: ['bg-teal-900','bg-teal-700','bg-teal-500','bg-teal-300'],
     checkers: ['bg-cyan-900','bg-cyan-700','bg-cyan-500','bg-cyan-300']
   };
 
-  const gameColorsHover = {
+  const gameColorsHover: ColorsType = {
     chess: ['hover:bg-teal-800','hover:bg-teal-600','hover:bg-teal-400','hover:bg-teal-200'],
     checkers: ['hover:bg-cyan-800','hover:bg-cyan-600','hover:bg-cyan-400','hover:bg-cyan-200']
   };
 
-  const colorsClicked: { [key: string]: string } = {chess: 'bg-slate-400', checkers: 'bg-slate-400'};
-  const colorsClickedHover: { [key: string]: string } = {chess: 'hover:bg-slate-400', checkers: 'hover:bg-slate-400'};
+  const colorsClicked: ColorsClickedType = {chess: 'bg-slate-400', checkers: 'bg-slate-400'};
+  const colorsClickedHover: ColorsClickedType = {chess: 'hover:bg-slate-400', checkers: 'hover:bg-slate-400'};
 
   const setSquareColor = (row: number, col: number, colors: ColorsType) :string => {
     if (selectedGame !== 'chess' && selectedGame !== 'checkers') return '';
-    let color :string = '';
+    let color = '';
     if (row === 0 || row === 11) {
       color = col % 2 === 0 ? colors[selectedGame][1] : colors[selectedGame][0];
     }
@@ -65,6 +70,7 @@ const Octoboard: React.FC = () => {
           <div className="grid w-[90%] rounded-2xl board-areas overflow-hidden mt-2 mb-8 mx-auto landscape:w-[75%]">
           {gameGrid.map((row, rowIndex) => (
             row.map((cellContent, colIndex) =>{
+              if (selectedGame !== 'chess' && selectedGame !== 'checkers') return null;
               const colors = {
                 color: setSquareColor(rowIndex, colIndex, gameColors),
                 colorHover: setSquareColor(rowIndex, colIndex, gameColorsHover),
