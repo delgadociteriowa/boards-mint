@@ -6,14 +6,15 @@ import Octoboard from "@/components/Octoboard";
 import { useGlobalContext } from "@/context/GlobalContext";
 
 const Checkers: React.FC = () => {
-  const { setSelectedGame } = useGlobalContext()!;
+  const { setSelectedGame, setGameGrid } = useGlobalContext()!;
 
   useEffect(() => {
     setSelectedGame('checkers');
     return () => {
       setSelectedGame('');
+      setGameGrid([]);
     };
-  }, [setSelectedGame]);
+  }, [setSelectedGame, setGameGrid]);
   
   return (
     <>
