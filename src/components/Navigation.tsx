@@ -15,7 +15,7 @@ const Navigation: React.FC = () => {
           <Link href="/" className="text-stone-600 hover:text-stone-800 no-underline text-2xl lowercase tracking-[3px] ml-2.5 md:text-xl">home</Link>
         </li>
         <li className="list-none">
-          <Link href="/soon" className="text-stone-700 hover:text-stone-800 no-underline text-2xl lowercase tracking-[3px] ml-2.5 md:text-xl">games</Link>
+          <Link href="/games" className="text-stone-700 hover:text-stone-800 no-underline text-2xl lowercase tracking-[3px] ml-2.5 md:text-xl">games</Link>
         </li>
         <li className="list-none">
           <Link href="/soon" className="text-stone-700 hover:text-stone-800 no-underline text-2xl lowercase tracking-[3px] ml-2.5 md:text-xl">about</Link>
