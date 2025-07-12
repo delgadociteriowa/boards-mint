@@ -31,7 +31,7 @@ const Games: React.FC = () => {
                 paragraph={'A board game for two players that combines luck with strategic knowledge.'}
                 gameLink={'soon'}/>
               <GameCard
-                background={'bg-game-chess'}
+                background={'bg-game-ludo'}
                 title={'ludo'}
                 paragraph={'A game where players move tokens home by rolling dice.'}
                 gameLink={'chess'}/>

@@ -12,6 +12,7 @@
   --background-image-game-checkers: linear-gradient(180deg, #535353c1 0%, #0000005f 100%), url(../assets/game_checkers.jpg);
   --background-image-game-go: linear-gradient(180deg, #535353c1 0%, #0000005f 100%), url(../assets/game_go.jpg);
   --background-image-game-backgammon: linear-gradient(180deg, #535353c1 0%, #0000005f 100%), url(../assets/game_backgammon.jpg);
+  --background-image-game-ludo: linear-gradient(180deg, #535353c1 0%, #0000005f 100%), url(../assets/game_ludo.jpg);
 
   --board-cols: repeat(8, minmax(1.5rem, 1fr));
 }
