@@ -36,17 +36,17 @@ const Games: React.FC = () => {
                 paragraph={'A game where players move tokens home by rolling dice.'}
                 gameLink={'chess'}/>
               <GameCard
-                background={'bg-game-checkers'}
+                background={'bg-game-gomoku'}
                 title={'go-moku'}
                 paragraph={'A strategy game where players aim to align five stones in a row.'}
-                gameLink={'checkers'}/>
+                gameLink={'soon'}/>
               <GameCard
-                background={'bg-game-go'}
+                background={'bg-game-morris'}
                 title={'morris'}
                 paragraph={'Nine Men’s Morris is a strategy game forming mills to remove opponent’s pieces.'}
                 gameLink={'soon'}/>
               <GameCard
-                background={'bg-game-backgammon'}
+                background={'bg-game-snake'}
                 title={'S & L'}
                 paragraph={'A luck-based game about climbing ladders and avoiding sliding down snakes.'}
                 gameLink={'soon'}/>

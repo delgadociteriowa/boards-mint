@@ -18,7 +18,7 @@ const HomeGamesSection: React.FC = () => (
       <GameCard
         background={'bg-game-go'}
         title={'go'}
-        paragraph={'An ancient strategy game where players place stones to control the largest area on the board.'}
+        paragraph={'A game where players place stones to control the largest area on the board.'}
         gameLink={'soon'}/>
       <GameCard
         background={'bg-game-backgammon'}
