@@ -1,6 +1,6 @@
 import ChessIcon from "../assets/chess-board-solid.svg";
-import FloppyIcon from "../assets/floppy-disk-regular.svg";
 import MobileIcon from "../assets/mobile-screen-solid.svg";
+import HandHeartIcon from "../assets/hand-holding-heart-solid.svg"
 import FeatureCard from "./FeatureCard";
 
 const HomeFeatures: React.FC = () => (
@@ -13,10 +13,10 @@ const HomeFeatures: React.FC = () => (
           title={'No Restrictions'}
           paragraph={'Place the pieces wherever you want'}/>
         <FeatureCard
-          icon={FloppyIcon}
-          altText={'Floppy icon'}
-          title={'Save Game'}
-          paragraph={'Save your game and continue later'}/>
+          icon={HandHeartIcon}
+          altText={'A hand holding a heart icon'}
+          title={'Totally Free'}
+          paragraph={'No subscriptions, no payments, no ads'}/>
         <FeatureCard
           icon={MobileIcon}
           altText={'Mobile icon'}
