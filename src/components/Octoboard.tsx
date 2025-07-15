@@ -2,6 +2,7 @@
 import React, { useEffect } from 'react';
 import OctoBoardSquare from './OctoBoardSquare';
 import { useGlobalContext } from "@/context/GlobalContext";
+import LoadingComponent from './LoadingComponent';
 
 type ColorsType = {
   chess: string[];
@@ -83,9 +84,7 @@ const Octoboard: React.FC = () => {
           </div>
         </main>
       ) : (
-        <p>
-          Loading...
-        </p>
+        <LoadingComponent />
       )}
     </>
   );
