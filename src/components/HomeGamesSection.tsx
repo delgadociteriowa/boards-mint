@@ -26,7 +26,7 @@ const HomeGamesSection: React.FC = () => (
         paragraph={'A board game for two players that combines luck with strategic knowledge.'}
         gameLink={'soon'}/>
     </div>
-    <Link href="/games" className="block w-[15rem] bg-stone-300 hover:bg-stone-200 py-6 rounded-full text-center no-underline text-stone-800 text-xl lowercase tracking-[3px] mx-auto mt-4 shadow-lg">more games</Link>
+    <Link href="/games" className="block w-[15rem] bg-sky-600 hover:bg-sky-500 py-6 rounded-full text-center no-underline text-stone-100 text-xl lowercase tracking-[3px] mx-auto mt-4 shadow-xl/20">more games</Link>
   </section>
 );
 
