@@ -1,12 +1,15 @@
 'use client';
+import { useContext } from "react";
 import Link from 'next/link';
 import Image from 'next/image';
 import HamburguerIcon from '../assets/icon-hamburger.svg'
 import CloseIcon from '../assets/icon-close.svg'
-import { useGlobalContext } from '@/context/GlobalContext';
+import BoardContext from "@/context/board/boardContext";
 
 const Navigation: React.FC = () => {
-  const { selectedGame } = useGlobalContext()!;
+  const boardContext = useContext(BoardContext)!;
+  const { selectedGame } = boardContext;
+
   return (
     <nav id="nav" className="nav w-[90%] my-0 mx-auto max-w-[1200px] py-5 px-0 grid grid-cols-[max-content_max-content] justify-between">
       <Link href="/" className="mr-auto font-brand text-3xl text-stone-600 no-underline z-40">♞BOARDS <span className="inline font-texts ml-2 uppercase tracking-[2px] text-stone-600 text-[1rem] font-bold">{selectedGame}</span></Link>

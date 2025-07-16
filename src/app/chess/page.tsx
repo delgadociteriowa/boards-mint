@@ -1,12 +1,13 @@
 'use client';
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Octoboard from "@/components/Octoboard";
-import { useGlobalContext } from "@/context/GlobalContext";
+import BoardContext from "@/context/board/boardContext";
 
 const Chess: React.FC = () => {
-  const { setSelectedGame, setGameGrid } = useGlobalContext()!;
+  const boardContext = useContext(BoardContext)!;
+  const { setSelectedGame, setGameGrid } = boardContext;
 
   useEffect(() => {
     setSelectedGame('chess');

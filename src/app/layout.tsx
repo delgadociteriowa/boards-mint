@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { GlobalProvider } from "@/context/GlobalContext";
+import BoardState from "@/context/board/BoardState";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -10,11 +10,11 @@ export const metadata: Metadata = {
 const RootLayout = ({ children }: Readonly<{children: React.ReactNode }>) => {
   return (
     <html lang="en">
-      <GlobalProvider>
-      <body className="bg-stone-100 font-texts">
-        {children}
-      </body>
-      </GlobalProvider>
+      <BoardState>
+        <body className="bg-stone-100 font-texts">
+          {children}
+        </body>
+      </BoardState>
     </html>
   );
 }

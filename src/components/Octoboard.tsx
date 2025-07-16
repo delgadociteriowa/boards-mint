@@ -1,8 +1,8 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import OctoBoardSquare from './OctoBoardSquare';
-import { useGlobalContext } from "@/context/GlobalContext";
 import LoadingComponent from './LoadingComponent';
+import BoardContext from '@/context/board/boardContext';
 
 type ColorsType = {
   chess: string[];
@@ -15,7 +15,7 @@ type ColorsClickedType = {
 };
 
 const Octoboard: React.FC = () => {
-
+  const boardContext = useContext(BoardContext)!;
   const {
     selectedGame,
     buildGameGrid,
@@ -23,7 +23,7 @@ const Octoboard: React.FC = () => {
     setGameGrid,
     phaseTwo,
     onClickPiece
-  } = useGlobalContext()!;
+  } = boardContext;
 
   const gameColors: ColorsType = {
     chess: ['bg-teal-900','bg-teal-700','bg-teal-500','bg-teal-300'],
