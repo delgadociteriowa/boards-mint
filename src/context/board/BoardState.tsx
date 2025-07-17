@@ -116,68 +116,85 @@ const BoardState = ({ children }: { children: ReactNode }) => {
     dispatch({type: ACTIVATE_PHASE_TWO});
   };
 
+  const phaseTwoSameSqr = (col: number, row: number) => {
+    const updateGrid = () => {
+      const updated = [...state.gameGrid];
+      updated[row][col] = {...updated[row][col], selected: false};
+      return updated
+    };
+    dispatch({type: SET_GAME_GRID, payload: updateGrid()});
+    dispatch({type: SET_SELECTED_SQR, payload: [null, null]});
+    dispatch({type: DEACTIVATE_PHASE_TWO});
+  };
+  
+  const phaseTwoEmptySqr = (col: number, row: number) => {
+    const selectedState = state.gameGrid[state.selectedSqr[0] || 0][state.selectedSqr[1] || 0];
+    const updateGrid = () => {
+      const updated = [...state.gameGrid];
+      updated[row][col] = {
+        ...updated[row][col],
+        piece: selectedState.piece,
+        pieceType: selectedState.pieceType
+      };
+      updated[state.selectedSqr[0] || 0][state.selectedSqr[1] ||0] = {
+        ...updated[state.selectedSqr[0] || 0][state.selectedSqr[1] || 0],
+        piece: '',
+        pieceType: '',
+        selected: false
+      };
+      return updated
+    };
+    dispatch({type: SET_GAME_GRID, payload: updateGrid()});
+  };
+  
+  const phaseTwoOccupiedSqr = (col: number, row: number) => {
+    const selectedCellObj = state.gameGrid[row][col];
+    const isPieceTypeOne = state.gameGrid[row][col].pieceType === 'one';
+    const discardPlaces = isPieceTypeOne ? [...state.gameGrid[0], ...state.gameGrid[1]] : [...state.gameGrid[10], ...state.gameGrid[11]]; 
+    const discardPlacesTwo = isPieceTypeOne ? [...state.gameGrid[10], ...state.gameGrid[11]] : [...state.gameGrid[0], ...state.gameGrid[1]]; 
+    const discardAvailable = discardPlaces.find(discardPlace => discardPlace.piece === '') ?? discardPlacesTwo.find(discardPlace => discardPlace.piece === '');
+    const discardAvailableCol = discardAvailable?.id.replace('sqr', '').split('-').map(Number)[0];
+    const discardAvailableRow = discardAvailable?.id.replace('sqr', '').split('-').map(Number)[1];
+    const selectedSqrState = state.gameGrid[state.selectedSqr[0] || 0][state.selectedSqr[1] || 0];
+
+    const updateGrid = () => {
+      const updated = [...state.gameGrid];
+      updated[discardAvailableRow || 0][discardAvailableCol || 0] = {
+        ...updated[discardAvailableRow || 0][discardAvailableCol || 0],
+        piece: selectedCellObj.piece,
+        pieceType: selectedCellObj.pieceType
+      };
+      updated[row][col] = {
+        ...updated[row][col],
+        piece: selectedSqrState.piece,
+        pieceType: selectedSqrState.pieceType
+      };
+      updated[state.selectedSqr[0] || 0][state.selectedSqr[1] || 0] = {
+        ...updated[state.selectedSqr[0] || 0][state.selectedSqr[1] || 0],
+        piece: '',
+        pieceType:'',
+        selected: false
+      };
+      return updated
+    };
+    dispatch({type: SET_GAME_GRID, payload: updateGrid()});
+  };
+
   const phaseTwoAction = (col: number, row: number) => {
     const selectedCellObj = state.gameGrid[row][col];
-      if (state.selectedSqr[0] === row && state.selectedSqr[1] === col) {
-        const updateGrid = () => {
-          const updated = [...state.gameGrid];
-          updated[row][col] = {...updated[row][col], selected: false};
-          return updated
-        };
-        dispatch({type: SET_GAME_GRID, payload: updateGrid()});
-        dispatch({type: SET_SELECTED_SQR, payload: [null, null]});
-        dispatch({type: DEACTIVATE_PHASE_TWO});
-      } else if(selectedCellObj.piece === '') {
-        const selectedState = state.gameGrid[state.selectedSqr[0] || 0][state.selectedSqr[1] || 0];
-        const updateGrid = () => {
-          const updated = [...state.gameGrid];
-          updated[row][col] = {
-            ...updated[row][col],
-            piece: selectedState.piece,
-            pieceType: selectedState.pieceType
-          };
-          updated[state.selectedSqr[0] || 0][state.selectedSqr[1] ||0] = {
-            ...updated[state.selectedSqr[0] || 0][state.selectedSqr[1] || 0],
-            piece: '',
-            pieceType: '',
-            selected: false
-          };
-          return updated
-        };
-        dispatch({type: SET_GAME_GRID, payload: updateGrid()});
-      } else {
-        const isPieceTypeOne = state.gameGrid[row][col].pieceType === 'one';
-        const discardPlaces = isPieceTypeOne ? [...state.gameGrid[0], ...state.gameGrid[1]] : [...state.gameGrid[10], ...state.gameGrid[11]]; 
-        const discardPlacesTwo = isPieceTypeOne ? [...state.gameGrid[10], ...state.gameGrid[11]] : [...state.gameGrid[0], ...state.gameGrid[1]]; 
-        const discardAvailable = discardPlaces.find(discardPlace => discardPlace.piece === '') ?? discardPlacesTwo.find(discardPlace => discardPlace.piece === '');
-        const discardAvailableCol = discardAvailable?.id.replace('sqr', '').split('-').map(Number)[0];
-        const discardAvailableRow = discardAvailable?.id.replace('sqr', '').split('-').map(Number)[1];
-        const selectedSqrState = state.gameGrid[state.selectedSqr[0] || 0][state.selectedSqr[1] || 0];
+    const sameSqr = state.selectedSqr[0] === row && state.selectedSqr[1] === col;
+    const emptySqr = selectedCellObj.piece === '';  
 
-        const updateGrid = () => {
-          const updated = [...state.gameGrid];
-          updated[discardAvailableRow || 0][discardAvailableCol || 0] = {
-            ...updated[discardAvailableRow || 0][discardAvailableCol || 0],
-            piece: selectedCellObj.piece,
-            pieceType: selectedCellObj.pieceType
-          };
-          updated[row][col] = {
-            ...updated[row][col],
-            piece: selectedSqrState.piece,
-            pieceType: selectedSqrState.pieceType
-          };
-          updated[state.selectedSqr[0] || 0][state.selectedSqr[1] || 0] = {
-            ...updated[state.selectedSqr[0] || 0][state.selectedSqr[1] || 0],
-            piece: '',
-            pieceType:'',
-            selected: false
-          };
-          return updated
-        };
-        dispatch({type: SET_GAME_GRID, payload: updateGrid()});
-      }
-      dispatch({type: SET_SELECTED_SQR, payload: [null, null]});
-      dispatch({type: DEACTIVATE_PHASE_TWO});
+    if (sameSqr) {
+      phaseTwoSameSqr(col, row);
+    } else if(emptySqr) {
+      phaseTwoEmptySqr(col, row);
+    } else {
+      phaseTwoOccupiedSqr(col, row);
+    }
+    
+    dispatch({type: SET_SELECTED_SQR, payload: [null, null]});
+    dispatch({type: DEACTIVATE_PHASE_TWO});
   };
 
   const onClickPiece = (cell: string): undefined => {
