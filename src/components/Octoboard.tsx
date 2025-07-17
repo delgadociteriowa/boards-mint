@@ -20,7 +20,7 @@ const Octoboard: React.FC = () => {
     selectedGame,
     buildGameGrid,
     gameGrid,
-    setGameGrid,
+    setGrid,
     phaseTwo,
     onClickPiece
   } = boardContext;
@@ -58,11 +58,14 @@ const Octoboard: React.FC = () => {
   }
 
   useEffect(() => {
-    if (selectedGame === 'chess' || selectedGame === 'checkers') {
+    if (
+      (selectedGame === 'chess' || selectedGame === 'checkers') &&
+      gameGrid.length === 0
+    ) {
       const grid = buildGameGrid();
-      setGameGrid(grid || []);
+      setGrid(grid || []);
     }
-  }, [selectedGame]);
+  }, [selectedGame, gameGrid]);
 
   return (
     <>
