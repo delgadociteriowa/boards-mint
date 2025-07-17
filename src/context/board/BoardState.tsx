@@ -116,15 +116,8 @@ const BoardState = ({ children }: { children: ReactNode }) => {
     dispatch({type: ACTIVATE_PHASE_TWO});
   };
 
-  const onClickPiece = (cell: string): undefined => {
-    const selectedCell = cell.replace('sqr', '').split('-').map(Number);
-    const col: number = selectedCell[0];
-    const row: number = selectedCell[1];
-  
-    if(!state.phaseTwo){
-      phaseOneAction(col, row);
-    } else {
-      const selectedCellObj = state.gameGrid[row][col];
+  const phaseTwoAction = (col: number, row: number) => {
+    const selectedCellObj = state.gameGrid[row][col];
       if (state.selectedSqr[0] === row && state.selectedSqr[1] === col) {
         const updateGrid = () => {
           const updated = [...state.gameGrid];
@@ -185,6 +178,17 @@ const BoardState = ({ children }: { children: ReactNode }) => {
       }
       dispatch({type: SET_SELECTED_SQR, payload: [null, null]});
       dispatch({type: DEACTIVATE_PHASE_TWO});
+  };
+
+  const onClickPiece = (cell: string): undefined => {
+    const selectedCell = cell.replace('sqr', '').split('-').map(Number);
+    const col: number = selectedCell[0];
+    const row: number = selectedCell[1];
+  
+    if(!state.phaseTwo){
+      phaseOneAction(col, row);
+    } else {
+      phaseTwoAction(col, row);
     }
   }
 
