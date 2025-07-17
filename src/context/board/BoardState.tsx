@@ -92,6 +92,7 @@ const BoardState = ({ children }: { children: ReactNode }) => {
   
   const selectGame = (game: string) => {
     dispatch({type: SET_GAME, payload: game});
+    dispatch({ type: SET_GAME_GRID, payload: [] });
   }
   
   const setGrid = (grid: Grid) => {

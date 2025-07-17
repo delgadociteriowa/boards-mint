@@ -11,7 +11,7 @@ const Checkers: React.FC = () => {
 
   useEffect(() => {
     selectGame('checkers');
-  }, [selectGame]);
+  }, []);
   
   return (
     <>

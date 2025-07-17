@@ -11,7 +11,7 @@ const Chess: React.FC = () => {
 
   useEffect(() => {
     selectGame('chess');
-  }, [selectGame]);
+  }, []);
 
   return (
     <>
