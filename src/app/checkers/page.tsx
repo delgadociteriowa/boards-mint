@@ -12,6 +12,7 @@ const Checkers: React.FC = () => {
   useEffect(() => {
     selectGame('checkers');
     return () => emptyGame();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   
   return (

@@ -65,6 +65,7 @@ const Octoboard: React.FC = () => {
       const grid = buildGameGrid();
       setGrid(grid || []);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedGame, gameGrid]);
 
   return (

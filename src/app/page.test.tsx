@@ -1,14 +1,16 @@
 import { render, screen } from '@testing-library/react';
 import Home from '@/app/page';
 import BoardContext from '@/context/board/boardContext';
+import { BoardContextType } from '@/context/board/boardTypes';
 
 describe('Home Page', () => {
   it('Displays BOARDS title', () => {
-    const mockContext = {
+    const mockContext: BoardContextType = {
       selectedGame: '',
       gameGrid: [],
-      selectedSqr: [],
+      selectedSqr: [null, null],
       phaseTwo: false,
+      buildGameGrid: jest.fn(),
       selectGame: jest.fn(),
       setGrid: jest.fn(),
       emptyGame: jest.fn(),
@@ -16,7 +18,7 @@ describe('Home Page', () => {
     };
 
     render(
-      <BoardContext.Provider value={mockContext as any}>
+      <BoardContext.Provider value={mockContext}>
         <Home />
       </BoardContext.Provider>
     );

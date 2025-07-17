@@ -12,6 +12,7 @@ const Chess: React.FC = () => {
   useEffect(() => {
     selectGame('chess');
     return () => emptyGame();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
