@@ -6,28 +6,9 @@ import {
   DEACTIVATE_PHASE_TWO
 } from '../types'
 
-type BoardState = {
-  selectedGame: string;
-  gameGrid: Square[][];
-  selectedSqr: [number | null, number | null];
-  phaseTwo: boolean;
-};
+import { BoardStateType, BoardAction } from './boardTypes';
 
-type BoardAction =
-  | { type: typeof SET_GAME; payload: string }
-  | { type: typeof SET_GAME_GRID; payload: Square[][] }
-  | { type: typeof SET_SELECTED_SQR; payload: [number | null, number | null] }
-  | { type: typeof ACTIVATE_PHASE_TWO }
-  | { type: typeof DEACTIVATE_PHASE_TWO };
-
-type Square = { 
-  id: string;
-  piece: string;
-  pieceType: string;
-  selected: boolean;
-};
-
-const boardReducer = (state: BoardState, action: BoardAction) => {
+const boardReducer = (state: BoardStateType, action: BoardAction) => {
   switch(action.type) {
     case SET_GAME:
       return {

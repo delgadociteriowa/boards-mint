@@ -9,28 +9,11 @@ import {
   ACTIVATE_PHASE_TWO,
   DEACTIVATE_PHASE_TWO
 } from '../types';
-
-type Square = { 
-  id: string;
-  piece: string;
-  pieceType: string;
-  selected: boolean;
-};
-
-type Grid = Square[][];
-
-type BoardState = {
-  selectedGame: string;
-  gameGrid: Square[][];
-  selectedSqr: [number | null, number | null]; // ← tupla, no arreglo
-  phaseTwo: boolean;
-};
-
-// type SelectedSquare = [number | null, number | null];
+import { BoardStateType, Square, Grid } from './boardTypes';
 
 const BoardState = ({ children }: { children: ReactNode }) => {
 
-  const initialState: BoardState = {
+  const initialState: BoardStateType = {
     selectedGame: '',
     gameGrid: [],
     selectedSqr: [null, null],
@@ -39,8 +22,7 @@ const BoardState = ({ children }: { children: ReactNode }) => {
 
   const [state, dispatch] = useReducer(BoardReducer, initialState);
   
-
-  // functions
+  
   const placeChessPiece = (row: number, col: number): [string, string] => {
     const playerOnePawnsRow = 3;
     const playerTwoPawnsRow = 8;
@@ -107,11 +89,6 @@ const BoardState = ({ children }: { children: ReactNode }) => {
       })
     );
   };
-
-  const emptyGame = () => {
-    dispatch({type: SET_GAME, payload: ''});
-    dispatch({type: SET_GAME_GRID, payload: []});
-  }
   
   const selectGame = (game: string) => {
     dispatch({type: SET_GAME, payload: game});
@@ -210,7 +187,6 @@ const BoardState = ({ children }: { children: ReactNode }) => {
         buildGameGrid,
         selectGame,
         setGrid,
-        emptyGame,
         onClickPiece
       }}
     >

@@ -7,14 +7,11 @@ import BoardContext from "@/context/board/boardContext";
 
 const Checkers: React.FC = () => {
   const boardContext = useContext(BoardContext)!;
-  const { selectGame, emptyGame } = boardContext;
+  const { selectGame } = boardContext;
 
   useEffect(() => {
     selectGame('checkers');
-    return () => {
-      emptyGame();
-    };
-  }, [selectGame, emptyGame]);
+  }, [selectGame]);
   
   return (
     <>
