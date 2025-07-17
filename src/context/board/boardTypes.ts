@@ -14,6 +14,7 @@ export interface BoardContextType {
   buildGameGrid: () => Square[][];
   selectGame: (game: string) => void;
   setGrid: (grid: Grid) => void; 
+  emptyGame: () => void; 
   onClickPiece: (cell: string) => undefined;
 };
 

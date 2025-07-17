@@ -90,14 +90,31 @@ const BoardState = ({ children }: { children: ReactNode }) => {
     );
   };
   
+  
   const selectGame = (game: string) => {
     dispatch({type: SET_GAME, payload: game});
     dispatch({ type: SET_GAME_GRID, payload: [] });
-  }
+  };
   
   const setGrid = (grid: Grid) => {
     dispatch({type: SET_GAME_GRID, payload: grid});
-  }
+  };
+
+  const emptyGame = () => {
+    dispatch({type: SET_GAME, payload: ''});
+    dispatch({ type: SET_GAME_GRID, payload: [] });
+  }; 
+
+  const phaseOneAction = (col: number, row: number) => {
+    const updateGrid = () => {
+      const updated = [...state.gameGrid];
+      updated[row][col] = {...updated[row][col], selected: true};
+      return updated
+    }; 
+    dispatch({type: SET_GAME_GRID, payload: updateGrid()});
+    dispatch({type: SET_SELECTED_SQR, payload: [row, col]});
+    dispatch({type: ACTIVATE_PHASE_TWO});
+  };
 
   const onClickPiece = (cell: string): undefined => {
     const selectedCell = cell.replace('sqr', '').split('-').map(Number);
@@ -105,14 +122,7 @@ const BoardState = ({ children }: { children: ReactNode }) => {
     const row: number = selectedCell[1];
   
     if(!state.phaseTwo){
-      const updateGrid = () => {
-        const updated = [...state.gameGrid];
-        updated[row][col] = {...updated[row][col], selected: true};
-        return updated
-      }; 
-      dispatch({type: SET_GAME_GRID, payload: updateGrid()});
-      dispatch({type: SET_SELECTED_SQR, payload: [row, col]});
-      dispatch({type: ACTIVATE_PHASE_TWO});
+      phaseOneAction(col, row);
     } else {
       const selectedCellObj = state.gameGrid[row][col];
       if (state.selectedSqr[0] === row && state.selectedSqr[1] === col) {
@@ -188,6 +198,7 @@ const BoardState = ({ children }: { children: ReactNode }) => {
         buildGameGrid,
         selectGame,
         setGrid,
+        emptyGame,
         onClickPiece
       }}
     >

@@ -7,10 +7,11 @@ import BoardContext from "@/context/board/boardContext";
 
 const Chess: React.FC = () => {
   const boardContext = useContext(BoardContext)!;
-  const { selectGame } = boardContext;
+  const { selectGame, emptyGame } = boardContext;
 
   useEffect(() => {
     selectGame('chess');
+    return () => emptyGame();
   }, []);
 
   return (
