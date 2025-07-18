@@ -4,8 +4,10 @@ import BoardContext from '@/context/board/boardContext';
 import { BoardContextType } from '@/context/board/boardTypes';
 
 describe('Home Page', () => {
-  it('Displays BOARDS title', () => {
-    const mockContext: BoardContextType = {
+  let mockContext: BoardContextType;
+
+  beforeEach(() => {
+    mockContext = {
       selectedGame: '',
       gameGrid: [],
       selectedSqr: [null, null],
@@ -22,7 +24,9 @@ describe('Home Page', () => {
         <Home />
       </BoardContext.Provider>
     );
-    
+  });
+
+  it('Displays BOARDS title', () => {
     const heading = screen.getByRole('heading', {
       name: /boards/i,
       level: 1,
