@@ -85,13 +85,34 @@ const BoardState = ({ children }: { children: ReactNode }) => {
     };
     dispatch({type: SET_GAME_GRID, payload: updateGrid()});
   };
+
+  const benchesFilled = () => {
+    const updateGrid = () => {
+      const updated = [...state.gameGrid];
+      const row = state.selectedSqr[0] || 0;
+      const col = state.selectedSqr[1] || 0; 
+      updated[row][col] = {...updated[row][col], selected: false};
+      return updated
+    };
+    dispatch({type: SET_GAME_GRID, payload: updateGrid()});
+  };
+
+  const benchesAreFilled = (): boolean => {
+    const benchRows = [0, 1, 10, 11];
+
+    return benchRows.every(rowIndex =>
+      state.gameGrid[rowIndex].every(square => square.piece !== "")
+    );
+  };
   
   const phaseTwoAction = (col: number, row: number) => {
     const selectedCellObj = state.gameGrid[row][col];
     const sameSqr = state.selectedSqr[0] === row && state.selectedSqr[1] === col;
-    const emptySqr = selectedCellObj.piece === '';  
+    const emptySqr = selectedCellObj.piece === '';
 
-    if (sameSqr) {
+    if (benchesAreFilled() && selectedCellObj.piece){
+      benchesFilled();
+    } else if (sameSqr) {
       phaseTwoSameSqr(col, row);
     } else if(emptySqr) {
       phaseTwoEmptySqr(col, row);
