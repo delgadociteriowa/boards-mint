@@ -24,7 +24,7 @@ const OctoBoardSquare: React.FC<OctoBoardSquareProps> = ({cellContent, colors, o
   const { color, colorHover, colorClicked, colorClickedHover } = colors;
 
   return (
-    <div className={`${cellContent.id} ${cellContent.selected ? colorClicked : color} ${!phaseTwo ? (cellContent.selected ? colorClickedHover : (cellContent.piece && colorHover)) : (cellContent.selected ? colorClickedHover : colorHover)} ${squareBaseStyle} ${!phaseTwo ? (cellContent.piece && 'cursor-pointer') : 'cursor-pointer'}`} onClick={() => !phaseTwo ? (cellContent.piece && onClickPiece(cellContent.id)) : onClickPiece(cellContent.id)}>
+    <div data-testid={cellContent.id} className={`${cellContent.id} ${cellContent.selected ? colorClicked : color} ${!phaseTwo ? (cellContent.selected ? colorClickedHover : (cellContent.piece && colorHover)) : (cellContent.selected ? colorClickedHover : colorHover)} ${squareBaseStyle} ${!phaseTwo ? (cellContent.piece && 'cursor-pointer') : 'cursor-pointer'}`} onClick={() => !phaseTwo ? (cellContent.piece && onClickPiece(cellContent.id)) : onClickPiece(cellContent.id)}>
       {
         cellContent.piece.includes('checker') ?
           <div className={`${cellContent.pieceType.includes('one') ? 'bg-rose-400' : 'bg-stone-600'} relative w-[60%] h-[60%] rounded-full checker-shadow`}></div>
