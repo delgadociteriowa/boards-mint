@@ -15,7 +15,8 @@ const Soon: React.FC = () => {
           <section className="mx-auto max-w-[1200px] flex flex-wrap mb-10 mt-4">
             <div className="bg-teal-500 mx-5 px-14 py-16 rounded-3xl shadow-xl/30 my-10 w-[700px] grow">
               <h4 className="text-left text-5xl text-stone-50 mb-4">Welcome</h4>
-              <p className="text-left text-xl text-stone-50 tracking-[2px] leading-relaxed">Boards is an easy and free platform with your favorite board games. No hassle, no sign-ups, just pick a game and let the fun begin.</p>
+              <p className="text-left text-xl text-stone-50 tracking-[2px] leading-relaxed">Boards is an easy and free platform with your favorite board games in a virtual version.</p>
+              <p className="text-left text-xl text-stone-50 tracking-[2px] leading-relaxed">No hassle, no sign-ups. Just pick a game and let the fun begin.</p>
             </div>
             <div className="px-14 py-16 w-[400px] flex justify-center items-center grow">
               <Image src={AboutTop} alt="A chess board made of cristal" className="block h-[100%] mx-auto my-0 rounded-full shadow-xl/30" width={350} height={350}/>
@@ -34,6 +35,7 @@ const Soon: React.FC = () => {
             <div className="px-14 py-16 w-[400px] flex justify-center items-center grow">
               <Image src={AboutBottom} alt="A robotic hand holding a chess piece" className="block h-[100%] mx-auto my-0 rounded-full shadow-xl/30" width={350} height={350}/>
             </div>
+            <p className="text-right text-xl text-stone-600 tracking-[2px] leading-relaxed w-[100%] mt-10">Boards v1.0.0</p>
           </section>
         </main>
       <Footer/>
