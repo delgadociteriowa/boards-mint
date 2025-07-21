@@ -71,7 +71,7 @@ const Octoboard: React.FC = () => {
   return (
     <>
       {selectedGame && gameGrid.length > 0 ? (
-        <main className="w-[100%] md:w-[90%] my-0 mx-auto">
+        <main className="w-[100%] md:w-[90%] lg:w-[80%] my-0 mx-auto">
           <div className="grid w-[90%] rounded-2xl board-areas overflow-hidden mt-2 mb-16 mx-auto landscape:w-[75%] shadow-xl/20">
           {gameGrid.map((row, rowIndex) => (
             row.map((cellContent, colIndex) =>{
