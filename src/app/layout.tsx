@@ -5,6 +5,9 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "BOARDS",
   description: "Play classic board games now",
+  icons: {
+    icon: '/chess.svg',
+  }
 };
 
 const RootLayout = ({ children }: Readonly<{children: React.ReactNode }>) => {
