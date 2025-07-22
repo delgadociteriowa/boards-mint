@@ -27,6 +27,8 @@ const HomeGamesSection: React.FC = () => (
         gameLink={'soon'}/>
     </div>
     <Link href="/games" className="block w-[15rem] bg-sky-600 hover:bg-sky-500 py-6 rounded-full text-center no-underline text-stone-100 text-xl lowercase tracking-[3px] mx-auto mt-4 shadow-xl/20">more games</Link>
+    <p className="text-left text-stone-600 leading-relaxed w-[100%] mt-10 px-6">Boards is a totally free virtual board game app and a passion project. It is not affiliated with or endorsed by any trademark.</p>
+    <p className="text-left text-stone-600 leading-relaxed w-[100%] mt-1 px-6">This site uses <a className="text-blue-600 hover:text-blue-500" href="https://vercel.com/docs/analytics/privacy-policy" target="_blank" rel="noopener noreferrer">Vercel Web Analytics</a> to anonymously measure visits. No cookies are set, users are not identified or tracked. More information in <Link href="/privacy" className="text-blue-600 hover:text-blue-500 font-bold">privacy</Link>.</p>
   </section>
 );
 

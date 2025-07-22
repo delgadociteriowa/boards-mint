@@ -7,6 +7,7 @@ const Footer: React.FC = () => (
       <Link href="/" className="no-underline hover:text-stone-100 text-xl font-thin lowercase tracking-[3px]">home</Link>
       <Link href="/games" className="no-underline hover:text-stone-100 text-xl font-thin lowercase tracking-[3px]">games</Link>
       <Link href="/about" className="no-underline hover:text-stone-100 text-xl font-thin lowercase tracking-[3px]">about</Link>
+      <Link href="/privacy" className="no-underline hover:text-stone-100 text-xl font-thin lowercase">Privacy Policy</Link>
       <Link href="https://delgadociteriowa.github.io/main/" target="_blank" className="no-underline hover:text-stone-100 text-xl font-thin tracking-[2px]">Carlos Delgado 2025</Link>
     </nav>
   </footer>

@@ -4,6 +4,7 @@ import Image from "next/image";
 import AboutTop from "../../assets/about_1.jpg";
 import AboutCenter from "../../assets/about_2.jpg";
 import AboutBottom from "../../assets/about_3.jpg";
+import Link from "next/link";
 
 
 const Soon: React.FC = () => {
@@ -35,6 +36,8 @@ const Soon: React.FC = () => {
             <div className="px-14 py-16 w-[400px] flex justify-center items-center grow">
               <Image src={AboutBottom} alt="A robotic hand holding a chess piece" className="block h-[100%] mx-auto my-0 rounded-full shadow-xl/30" width={350} height={350}/>
             </div>
+            <p className="text-left text-stone-600 leading-relaxed w-[100%] mt-10 mx-6">Boards is a totally free virtual board game app and a passion project. It is not affiliated with or endorsed by any trademark.</p>
+            <p className="text-left text-stone-600 leading-relaxed w-[100%] mt- mx-6">This site uses <a className="text-blue-600 hover:text-blue-500" href="https://vercel.com/docs/analytics/privacy-policy" target="_blank" rel="noopener noreferrer">Vercel Web Analytics</a> to anonymously measure visits. No cookies are set, users are not identified or tracked. More information in <Link href="/privacy" className="text-blue-600 hover:text-blue-500 font-bold">privacy</Link>.</p>
             <p className="text-center text-xl text-stone-600 tracking-[2px] leading-relaxed w-[100%] mt-10">Boards v1.0.0</p>
           </section>
         </main>
