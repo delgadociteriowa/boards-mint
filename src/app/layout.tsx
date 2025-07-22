@@ -4,11 +4,26 @@ import "./globals.css";
 import { Analytics } from '@vercel/analytics/next';
 
 export const metadata: Metadata = {
-  title: "BOARDS",
+  title: "BOARDS | Virtual board games online",
   description: "Play classic board games now",
   icons: {
     icon: '/chess.svg',
-  }
+  },
+  keywords: [
+    "classic games",
+    "online chess",
+    "online checkers",
+    "virtual board games",
+    "play chess",
+    "play checkers",
+    "free board games",
+    "multiplayer chess",
+    "chess app",
+    "checkers app",
+    "chess",
+    "checkes"
+  ],
+  authors: [{ name: "Carlos Delgado", url: "https://delgadociteriowa.github.io/main/" }]
 };
 
 const RootLayout = ({ children }: Readonly<{children: React.ReactNode }>) => {
