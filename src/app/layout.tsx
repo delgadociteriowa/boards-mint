@@ -34,7 +34,7 @@ const RootLayout = () => {
         <body className="bg-stone-100 font-texts">
           {/* {children}
           <Analytics /> */}
-          <h1>we'll be back soon</h1>
+          <h1>we&apos;ll be back soon</h1>
         </body>
       </BoardState>
     </html>
