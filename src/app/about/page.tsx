@@ -35,7 +35,7 @@ const Soon: React.FC = () => {
             <div className="px-14 py-16 w-[400px] flex justify-center items-center grow">
               <Image src={AboutBottom} alt="A robotic hand holding a chess piece" className="block h-[100%] mx-auto my-0 rounded-full shadow-xl/30" width={350} height={350}/>
             </div>
-            <p className="text-right text-xl text-stone-600 tracking-[2px] leading-relaxed w-[100%] mt-10">Boards v1.0.0</p>
+            <p className="text-center text-xl text-stone-600 tracking-[2px] leading-relaxed w-[100%] mt-10">Boards v1.0.0</p>
           </section>
         </main>
       <Footer/>
