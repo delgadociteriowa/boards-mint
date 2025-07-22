@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import BoardState from "@/context/board/BoardState";
 import "./globals.css";
-import { Analytics } from '@vercel/analytics/next';
+// import { Analytics } from '@vercel/analytics/next';
 
 export const metadata: Metadata = {
   title: "BOARDS | Virtual board games online",
@@ -26,13 +26,15 @@ export const metadata: Metadata = {
   authors: [{ name: "Carlos Delgado", url: "https://delgadociteriowa.github.io/main/" }]
 };
 
-const RootLayout = ({ children }: Readonly<{children: React.ReactNode }>) => {
+// const RootLayout = ({ children }: Readonly<{children: React.ReactNode }>) => {
+const RootLayout = () => {
   return (
     <html lang="en">
       <BoardState>
         <body className="bg-stone-100 font-texts">
-          {children}
-          <Analytics />
+          {/* {children}
+          <Analytics /> */}
+          <h1>we'll be back soon</h1>
         </body>
       </BoardState>
     </html>
