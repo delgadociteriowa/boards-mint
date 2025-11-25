@@ -5,7 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 const Login: React.FC = () => {
-  const [login, setLogin] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   return (
@@ -19,12 +19,12 @@ const Login: React.FC = () => {
           <div className="flex flex-col gap-8">
             <div className="flex flex-col gap-2">
               <label className="text-stone-600 tracking-[1px] text-sm">
-                email
+                e-mail
               </label>
               <input
                 type="text"
-                value={login}
-                onChange={(e) => setLogin(e.target.value)}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="border border-stone-300 rounded-xl py-4 px-4 text-stone-700 focus:outline-none focus:ring-2 focus:ring-sky-500"
               />
             </div>
