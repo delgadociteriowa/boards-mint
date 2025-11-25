@@ -1,0 +1,129 @@
+"use client";
+
+import { useState } from "react";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+
+const Account = () => {
+  const [firstName, setFirstName] = useState("John");
+  const [lastName, setLastName] = useState("Doe");
+  const [email, setEmail] = useState("john@example.com");
+  const [password, setPassword] = useState("123456");
+
+  const [editingFirst, setEditingFirst] = useState(false);
+  const [editingLast, setEditingLast] = useState(false);
+  const [editingEmail, setEditingEmail] = useState(false);
+  const [editingPassword, setEditingPassword] = useState(false);
+
+  return (
+    <>
+      <Header />
+      <main>
+        <h3 className="text-center text-stone-600 text-5xl tracking-[2px] mt-10 mb-4">
+          Account
+        </h3>
+
+        <section className="w-[90%] mx-auto max-w-[500px] py-20 text-stone-700 flex flex-col gap-10">
+          {/* First Name */}
+          <div className="flex flex-col gap-2">
+            <label className="text-stone-600 tracking-[1px] text-sm">First Name</label>
+            <div className="flex items-center justify-between">
+              {editingFirst ? (
+                <input
+                  className="border border-stone-300 rounded-xl py-3 px-4 text-stone-700 focus:outline-none focus:ring-2 focus:ring-sky-500 w-full"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                />
+              ) : (
+                <p className="text-stone-700 text-lg">{firstName}</p>
+              )}
+              <button
+                className="bg-sky-600 hover:bg-sky-500 text-stone-100 px-5 py-2 rounded-xl ml-4"
+                onClick={() => setEditingFirst(!editingFirst)}
+              >
+                {editingFirst ? "Save" : "Edit"}
+              </button>
+            </div>
+          </div>
+
+          <div className="w-full h-px bg-stone-300"></div>
+          
+          {/* Last Name */}
+          <div className="flex flex-col gap-2">
+            <label className="text-stone-600 tracking-[1px] text-sm">Last Name</label>
+            <div className="flex items-center justify-between">
+              {editingLast ? (
+                <input
+                  className="border border-stone-300 rounded-xl py-3 px-4 text-stone-700 focus:outline-none focus:ring-2 focus:ring-sky-500 w-full"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                />
+              ) : (
+                <p className="text-stone-700 text-lg">{lastName}</p>
+              )}
+              <button
+                className="bg-sky-600 hover:bg-sky-500 text-stone-100 px-5 py-2 rounded-xl ml-4"
+                onClick={() => setEditingLast(!editingLast)}
+              >
+                {editingLast ? "Save" : "Edit"}
+              </button>
+            </div>
+          </div>
+
+          <div className="w-full h-px bg-stone-300"></div>
+
+          {/* Email */}
+          <div className="flex flex-col gap-2">
+            <label className="text-stone-600 tracking-[1px] text-sm">E-mail</label>
+            <div className="flex items-center justify-between">
+              {editingEmail ? (
+                <input
+                  className="border border-stone-300 rounded-xl py-3 px-4 text-stone-700 focus:outline-none focus:ring-2 focus:ring-sky-500 w-full"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              ) : (
+                <p className="text-stone-700 text-lg">{email}</p>
+              )}
+              <button
+                className="bg-sky-600 hover:bg-sky-500 text-stone-100 px-5 py-2 rounded-xl ml-4"
+                onClick={() => setEditingEmail(!editingEmail)}
+              >
+                {editingEmail ? "Save" : "Edit"}
+              </button>
+            </div>
+          </div>
+
+          <div className="w-full h-px bg-stone-300"></div>
+          
+          {/* Password */}
+          <div className="flex flex-col gap-2">
+            <label className="text-stone-600 tracking-[1px] text-sm">Password</label>
+            <div className="flex items-center justify-between">
+              {editingPassword ? (
+                <input
+                  className="border border-stone-300 rounded-xl py-3 px-4 text-stone-700 focus:outline-none focus:ring-2 focus:ring-sky-500 w-full"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              ) : (
+                <p className="text-stone-700 text-lg">{"*".repeat(password.length)}</p>
+              )}
+              <button
+                className="bg-sky-600 hover:bg-sky-500 text-stone-100 px-5 py-2 rounded-xl ml-4"
+                onClick={() => setEditingPassword(!editingPassword)}
+              >
+                {editingPassword ? "Save" : "Edit"}
+              </button>
+            </div>
+          </div>
+
+
+        </section>
+      </main>
+      <Footer />
+    </>
+  );
+};
+
+export default Account;
