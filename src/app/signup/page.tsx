@@ -7,7 +7,7 @@ import Footer from "@/components/Footer";
 const Login: React.FC = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
+  const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
 
@@ -44,12 +44,12 @@ const Login: React.FC = () => {
             </div>
             <div className="flex flex-col gap-2">
               <label className="text-stone-600 tracking-[1px] text-sm">
-                e-mail
+                username
               </label>
               <input
                 type="text"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
                 className="border border-stone-300 rounded-xl py-4 px-4 text-stone-700 focus:outline-none focus:ring-2 focus:ring-sky-500"
               />
             </div>
@@ -78,7 +78,7 @@ const Login: React.FC = () => {
             <button
               className="bg-sky-600 hover:bg-sky-500 py-5 rounded-full text-center text-stone-100 text-lg tracking-[2px] mt-4 shadow-xl/20"
             >
-              Sign Up
+              sign up
             </button>
           </div>
         </section>
