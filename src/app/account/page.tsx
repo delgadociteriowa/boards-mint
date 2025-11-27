@@ -7,12 +7,12 @@ import Footer from "@/components/Footer";
 const Account = () => {
   const [firstName, setFirstName] = useState("John");
   const [lastName, setLastName] = useState("Doe");
-  const [email, setEmail] = useState("john@example.com");
+  const [userName, setUserName] = useState("johnboards");
   const [password, setPassword] = useState("123456");
 
   const [editingFirst, setEditingFirst] = useState(false);
   const [editingLast, setEditingLast] = useState(false);
-  const [editingEmail, setEditingEmail] = useState(false);
+  const [editingUserName, setEditingUserName] = useState(false);
   const [editingPassword, setEditingPassword] = useState(false);
 
   return (
@@ -76,20 +76,20 @@ const Account = () => {
           <div className="flex flex-col gap-2">
             <label className="text-stone-600 tracking-[1px] text-sm">E-mail</label>
             <div className="flex items-center justify-between">
-              {editingEmail ? (
+              {editingUserName ? (
                 <input
                   className="border border-stone-300 rounded-xl py-3 px-4 text-stone-700 focus:outline-none focus:ring-2 focus:ring-sky-500 w-full"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
                 />
               ) : (
-                <p className="text-stone-700 text-lg">{email}</p>
+                <p className="text-stone-700 text-lg">{userName}</p>
               )}
               <button
                 className="bg-sky-600 hover:bg-sky-500 text-stone-100 px-5 py-2 rounded-xl ml-4"
-                onClick={() => setEditingEmail(!editingEmail)}
+                onClick={() => setEditingUserName(!editingUserName)}
               >
-                {editingEmail ? "Save" : "Edit"}
+                {editingUserName ? "Save" : "Edit"}
               </button>
             </div>
           </div>
