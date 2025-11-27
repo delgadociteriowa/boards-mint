@@ -26,7 +26,7 @@ const Account = () => {
         <section className="w-[90%] mx-auto max-w-[500px] py-20 text-stone-700 flex flex-col gap-10">
           {/* First Name */}
           <div className="flex flex-col gap-2">
-            <label className="text-stone-600 tracking-[1px] text-sm">First Name</label>
+            <label className="text-stone-600 tracking-[1px] text-sm">first name</label>
             <div className="flex items-center justify-between">
               {editingFirst ? (
                 <input
@@ -41,7 +41,7 @@ const Account = () => {
                 className="bg-sky-600 hover:bg-sky-500 text-stone-100 px-5 py-2 rounded-xl ml-4"
                 onClick={() => setEditingFirst(!editingFirst)}
               >
-                {editingFirst ? "Save" : "Edit"}
+                {editingFirst ? "save" : "edit"}
               </button>
             </div>
           </div>
@@ -50,7 +50,7 @@ const Account = () => {
           
           {/* Last Name */}
           <div className="flex flex-col gap-2">
-            <label className="text-stone-600 tracking-[1px] text-sm">Last Name</label>
+            <label className="text-stone-600 tracking-[1px] text-sm">last name</label>
             <div className="flex items-center justify-between">
               {editingLast ? (
                 <input
@@ -65,16 +65,16 @@ const Account = () => {
                 className="bg-sky-600 hover:bg-sky-500 text-stone-100 px-5 py-2 rounded-xl ml-4"
                 onClick={() => setEditingLast(!editingLast)}
               >
-                {editingLast ? "Save" : "Edit"}
+                {editingLast ? "save" : "edit"}
               </button>
             </div>
           </div>
 
           <div className="w-full h-px bg-stone-300"></div>
 
-          {/* Email */}
+          {/* Username */}
           <div className="flex flex-col gap-2">
-            <label className="text-stone-600 tracking-[1px] text-sm">E-mail</label>
+            <label className="text-stone-600 tracking-[1px] text-sm">username</label>
             <div className="flex items-center justify-between">
               {editingUserName ? (
                 <input
@@ -89,7 +89,7 @@ const Account = () => {
                 className="bg-sky-600 hover:bg-sky-500 text-stone-100 px-5 py-2 rounded-xl ml-4"
                 onClick={() => setEditingUserName(!editingUserName)}
               >
-                {editingUserName ? "Save" : "Edit"}
+                {editingUserName ? "save" : "edit"}
               </button>
             </div>
           </div>
@@ -98,7 +98,7 @@ const Account = () => {
           
           {/* Password */}
           <div className="flex flex-col gap-2">
-            <label className="text-stone-600 tracking-[1px] text-sm">Password</label>
+            <label className="text-stone-600 tracking-[1px] text-sm">password</label>
             <div className="flex items-center justify-between">
               {editingPassword ? (
                 <input
@@ -113,7 +113,7 @@ const Account = () => {
                 className="bg-sky-600 hover:bg-sky-500 text-stone-100 px-5 py-2 rounded-xl ml-4"
                 onClick={() => setEditingPassword(!editingPassword)}
               >
-                {editingPassword ? "Save" : "Edit"}
+                {editingPassword ? "save" : "edit"}
               </button>
             </div>
           </div>
