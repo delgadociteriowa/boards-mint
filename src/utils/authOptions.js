@@ -43,6 +43,22 @@ export const authOptions = {
     strategy: 'jwt',
   },
 
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.firstname = user.firstname;
+        token.lastname = user.lastname;
+      }
+      return token;
+    },
+
+    async session({ session, token }) {
+      session.user.firstname = token.firstname;
+      session.user.lastname = token.lastname;
+      return session;
+    },
+  },
+
   pages: {
     signIn: '/login', // custom form
   },
