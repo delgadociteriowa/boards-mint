@@ -1,13 +1,33 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 const Login: React.FC = () => {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const { data: session } = useSession();
+  const router = useRouter();
 
+  useEffect(() => {
+    if (session) {
+      router.push("/account");
+    }
+  }, [session, router]);
+
+  const handleLogin = async () => {
+     const res = await signIn("credentials", {
+      username: userName,
+      password: password,
+      redirect: false,
+    });
+
+    if (res?.ok) router.push("/account");
+  };
+  
   return (
     <>
       <Header />
@@ -40,6 +60,7 @@ const Login: React.FC = () => {
               />
             </div>
             <button
+              onClick={handleLogin}
               className="bg-sky-600 hover:bg-sky-500 py-5 rounded-full text-center text-stone-100 text-lg tracking-[2px] mt-4 shadow-xl/20"
             >
               login
