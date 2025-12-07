@@ -1,14 +1,26 @@
 'use client';
 import { useContext } from "react";
+import { useSession } from "next-auth/react";
 import Link from 'next/link';
 import Image from 'next/image';
 import HamburguerIcon from '../assets/icon-hamburger.svg'
 import CloseIcon from '../assets/icon-close.svg'
 import BoardContext from "@/context/board/boardContext";
 
+interface UserAccount {
+  username?: string;
+}
+
+interface SessionAccount {
+  user?: UserAccount;
+}
+
 const Navigation: React.FC = () => {
   const boardContext = useContext(BoardContext)!;
   const { selectedGame } = boardContext;
+
+  const { data: session } = useSession();
+  const s = session as SessionAccount;
 
   return (
     <nav id="nav" className="nav w-[90%] my-0 mx-auto max-w-[1200px] py-5 px-0 grid grid-cols-[max-content_max-content] justify-between">
@@ -23,6 +35,16 @@ const Navigation: React.FC = () => {
         <li className="list-none">
           <Link href="/about" className="text-stone-700 hover:text-stone-800 no-underline text-2xl lowercase tracking-[3px] ml-2.5 md:text-xl">about</Link>
         </li>
+        {!session ? 
+          <li className="list-none">
+            <Link href="/login" className="text-sky-600 hover:text-sky-500 no-underline text-2xl lowercase tracking-[3px] ml-2.5 md:text-xl">login</Link>
+          </li>
+          :
+          <li className="list-none">
+            <Link href="/account" className="text-sky-600 hover:text-sky-500 no-underline text-2xl lowercase tracking-[3px] ml-2.5 md:text-xl">{s.user?.username}</Link>
+          </li>
+        }
+        
       </ul>
       <a href="#" className="nav__close place-self-center cursor-pointer z-40">
         <Image src={CloseIcon} alt="Close icon" width={20} height={20} className="block w-5 h-5" /> 
