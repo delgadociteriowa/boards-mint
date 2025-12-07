@@ -33,8 +33,6 @@ export const authOptions = {
         return {
           id: user._id.toString(),
           username: user.username,
-          firstname: user.firstname,
-          lastname: user.lastname,
         };
       },
     }),
@@ -46,17 +44,21 @@ export const authOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
+        token.id = user.id;
         token.username = user.username;
-        token.firstname = user.firstname;
-        token.lastname = user.lastname;
       }
       return token;
     },
 
     async session({ session, token }) {
+      await connectDB();
+      const user = await User.findById(token.id);
+
+      session.user.id = token.id;
       session.user.username = token.username;
-      session.user.firstname = token.firstname;
-      session.user.lastname = token.lastname;
+      session.user.firstname = user.firstname;
+      session.user.lastname = user.lastname;
+
       return session;
     },
   },
