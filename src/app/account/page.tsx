@@ -24,13 +24,8 @@ const Account = () => {
   const [editingFirst, setEditingFirst] = useState(false);
   const [editingLast, setEditingLast] = useState(false);
 
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
   const router = useRouter();
-
-  const handleLogout = async () => {
-    await signOut({ redirect: false });
-    router.push("/login");
-  };
 
   useEffect(() => {
     if (!session) {
@@ -47,6 +42,33 @@ const Account = () => {
       setLastName(s.user.lastname || "");
     }
   }, [session]);
+
+  const handleLogout = async () => {
+    await signOut({ redirect: false });
+    router.push("/login");
+  };
+
+  const handleSaveFirst = async () => {
+    await fetch("/api/account/update", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ firstname: firstName }),
+    });
+
+    await update();
+    setEditingFirst(false);
+  };
+
+  const handleSaveLast = async () => {
+    await fetch("/api/account/update", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ lastname: lastName }),
+    });
+
+    await update();
+    setEditingLast(false);
+  };
 
   return (
     <>
@@ -67,7 +89,9 @@ const Account = () => {
             </div>
             <div className="w-full h-px bg-stone-300"></div>
             <div className="flex flex-col gap-2">
-              <label className="text-stone-600 tracking-[1px] text-sm">first name</label>
+              <label className="text-stone-600 tracking-[1px] text-sm">
+                first name
+              </label>
               <div className="flex items-center justify-between">
                 {editingFirst ? (
                   <input
@@ -78,9 +102,12 @@ const Account = () => {
                 ) : (
                   <p className="text-stone-700 text-lg">{firstName}</p>
                 )}
+
                 <button
                   className="bg-sky-600 hover:bg-sky-500 text-stone-100 px-5 py-2 rounded-xl ml-4"
-                  onClick={() => setEditingFirst(!editingFirst)}
+                  onClick={() =>
+                    editingFirst ? handleSaveFirst() : setEditingFirst(true)
+                  }
                 >
                   {editingFirst ? "save" : "edit"}
                 </button>
@@ -88,7 +115,9 @@ const Account = () => {
             </div>
             <div className="w-full h-px bg-stone-300"></div>
             <div className="flex flex-col gap-2">
-              <label className="text-stone-600 tracking-[1px] text-sm">last name</label>
+              <label className="text-stone-600 tracking-[1px] text-sm">
+                last name
+              </label>
               <div className="flex items-center justify-between">
                 {editingLast ? (
                   <input
@@ -99,9 +128,12 @@ const Account = () => {
                 ) : (
                   <p className="text-stone-700 text-lg">{lastName}</p>
                 )}
+
                 <button
                   className="bg-sky-600 hover:bg-sky-500 text-stone-100 px-5 py-2 rounded-xl ml-4"
-                  onClick={() => setEditingLast(!editingLast)}
+                  onClick={() =>
+                    editingLast ? handleSaveLast() : setEditingLast(true)
+                  }
                 >
                   {editingLast ? "save" : "edit"}
                 </button>
