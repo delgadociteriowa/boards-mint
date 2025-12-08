@@ -7,6 +7,10 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import LoadingComponent from "@/components/LoadingComponent";
 
+type UserPayload =
+  | { firstname: string }
+  | { lastname: string };
+
 interface UserAccount {
   username?: string;
   firstname?: string;
@@ -48,26 +52,25 @@ const Account = () => {
     router.push("/login");
   };
 
-  const handleSaveFirst = async () => {
+  const handleSave = async (field: "firstname" | "lastname") => {
+    let payload: UserPayload;
+
+    if (field === "firstname") {
+      payload = { firstname: firstName };
+    } else {
+      payload = { lastname: lastName };
+    }
+
     await fetch("/api/account/update", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ firstname: firstName }),
+      body: JSON.stringify(payload),
     });
 
     await update();
-    setEditingFirst(false);
-  };
 
-  const handleSaveLast = async () => {
-    await fetch("/api/account/update", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ lastname: lastName }),
-    });
-
-    await update();
-    setEditingLast(false);
+    if (field === "firstname") setEditingFirst(false);
+    if (field === "lastname") setEditingLast(false);
   };
 
   return (
@@ -106,7 +109,7 @@ const Account = () => {
                 <button
                   className="bg-sky-600 hover:bg-sky-500 text-stone-100 px-5 py-2 rounded-xl ml-4"
                   onClick={() =>
-                    editingFirst ? handleSaveFirst() : setEditingFirst(true)
+                    editingFirst ? handleSave('firstname') : setEditingFirst(true)
                   }
                 >
                   {editingFirst ? "save" : "edit"}
@@ -132,7 +135,7 @@ const Account = () => {
                 <button
                   className="bg-sky-600 hover:bg-sky-500 text-stone-100 px-5 py-2 rounded-xl ml-4"
                   onClick={() =>
-                    editingLast ? handleSaveLast() : setEditingLast(true)
+                    editingLast ? handleSave('lastname') : setEditingLast(true)
                   }
                 >
                   {editingLast ? "save" : "edit"}
