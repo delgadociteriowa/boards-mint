@@ -19,7 +19,7 @@ interface OctoBoardSquareProps {
   phaseTwo: boolean;
 }
 
-const OctoBoardSquare: React.FC<OctoBoardSquareProps> = ({cellContent, colors, onClickPiece, phaseTwo}) => {
+const OctoBoardSquare = ({cellContent, colors, onClickPiece, phaseTwo} : OctoBoardSquareProps) => {
   const squareBaseStyle = 'aspect-square min-w-6 min-h-6 flex items-center justify-center';
   const { color, colorHover, colorClicked, colorClickedHover } = colors;
 

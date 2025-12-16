@@ -7,7 +7,7 @@ interface FeatureCardProps {
   paragraph: string;
 }
 
-const FeatureCard: React.FC<FeatureCardProps> = ({icon, altText, title, paragraph}) => (
+const FeatureCard = ({icon, altText, title, paragraph}: FeatureCardProps) => (
   <div className="flex flex-col items-center justify-center">
     <figure className="mx-0 my-auto bg-teal-700 rounded-full shadow-xl/20 w-[170px] h-[170px]">
       <Image src={icon} alt={altText} className="block h-[100%] mx-auto my-0" width={80} height={80}/>

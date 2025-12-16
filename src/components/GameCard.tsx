@@ -7,7 +7,7 @@ interface GameCardProps {
   gameLink: string;
 }
 
-const GameCard: React.FC<GameCardProps> = ({background, title, paragraph, gameLink}) => (
+const GameCard = ({background, title, paragraph, gameLink} : GameCardProps) => (
   <div className={`${background} h-[300px] p-6 bg-stone-900 rounded-3xl bg-center bg-cover flex flex-col w-[250px] grow shadow-xl/30`}>
     <h4 className="uppercase text-stone-200 tracking-[2px] text-2xl mb-4">{title}</h4>
     <p className="text-stone-200 text-xl">{paragraph}</p>
