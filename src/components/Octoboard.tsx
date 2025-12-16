@@ -14,7 +14,7 @@ type ColorsClickedType = {
   checkers: string;
 };
 
-const Octoboard: React.FC = () => {
+const Octoboard = () => {
   const boardContext = useContext(BoardContext)!;
   const {
     selectedGame,

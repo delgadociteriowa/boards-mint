@@ -2,7 +2,7 @@
 import Image from "next/image";
 import Loading from "../assets/loading.svg";
 
-const LoadingComponent: React.FC = () => (
+const LoadingComponent = () => (
   <main className="h-[800px]">
     <section className="py-10 px-10 text-stone-600">
       <h3 className="text-center text-4xl tracking-[2px] mt-10 mb-8">Loading</h3>

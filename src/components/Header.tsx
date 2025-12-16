@@ -1,6 +1,6 @@
 import Navigation from "./Navigation";
 
-const Header: React.FC = () => (
+const Header = () => (
   <header>
     <Navigation/>
   </header>

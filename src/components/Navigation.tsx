@@ -15,7 +15,7 @@ interface SessionAccount {
   user?: UserAccount;
 }
 
-const Navigation: React.FC = () => {
+const Navigation = () => {
   const boardContext = useContext(BoardContext)!;
   const { selectedGame } = boardContext;
 
