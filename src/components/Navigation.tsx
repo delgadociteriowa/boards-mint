@@ -7,20 +7,13 @@ import HamburguerIcon from '../assets/icon-hamburger.svg'
 import CloseIcon from '../assets/icon-close.svg'
 import BoardContext from "@/context/board/boardContext";
 
-interface UserAccount {
-  username?: string;
-}
+const Navigation = () => {
+  // Type improvements required
+  const boardContext = useContext(BoardContext);
+  if (!boardContext) return null;
 
-interface SessionAccount {
-  user?: UserAccount;
-}
-
-const Navigation: React.FC = () => {
-  const boardContext = useContext(BoardContext)!;
   const { selectedGame } = boardContext;
-
   const { data: session } = useSession();
-  const s = session as SessionAccount;
 
   return (
     <nav id="nav" className="nav w-[90%] my-0 mx-auto max-w-[1200px] py-5 px-0 grid grid-cols-[max-content_max-content] justify-between">
@@ -41,7 +34,7 @@ const Navigation: React.FC = () => {
           </li>
           :
           <li className="list-none">
-            <Link href="/account" className="text-sky-600 hover:text-sky-500 no-underline text-2xl lowercase tracking-[3px] ml-2.5 md:text-xl">{s.user?.username}</Link>
+            <Link href="/account" className="text-sky-600 hover:text-sky-500 no-underline text-2xl lowercase tracking-[3px] ml-2.5 md:text-xl">{session.user.username}</Link>
           </li>
         }
         
@@ -53,6 +46,7 @@ const Navigation: React.FC = () => {
         <Image src={HamburguerIcon} alt="Menu icon" width={20} height={20} className="block w-5 h-5" /> 
       </a>
     </nav>
-)};
+  );
+};
 
 export default Navigation;

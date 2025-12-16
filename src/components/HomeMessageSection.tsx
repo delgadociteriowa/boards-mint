@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-const HomeMessageSection: React.FC = () => (
+const HomeMessageSection = () => (
   <section className="py-14 px-10 bg-stone-200 text-stone-600">
     <h3 className="text-center text-4xl tracking-[2px] mb-8">Available to Everyone</h3>
     <p className="text-center text-xl mb-10">No registration required. Select a board and have fun.</p>

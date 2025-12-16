@@ -3,7 +3,7 @@ import MobileIcon from "../assets/mobile-screen-solid.svg";
 import HandHeartIcon from "../assets/hand-holding-heart-solid.svg"
 import FeatureCard from "./FeatureCard";
 
-const HomeFeatures: React.FC = () => (
+const HomeFeatures = () => (
     <section className="w-[90%] mt-8 mx-auto max-w-[1200px] pt-8 pb-14 text-stone-600 appear__main__element">
       <h3 className="text-center text-4xl tracking-[2px] mb-8">Boards Makes it Easy</h3>
       <div className="py-5 flex flex-wrap justify-center gap-16">

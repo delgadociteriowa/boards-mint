@@ -1,7 +1,7 @@
 import GameCard from "./GameCard";
 import Link from "next/link";
 
-const HomeGamesSection: React.FC = () => (
+const HomeGamesSection = () => (
   <section className="w-[90%] mx-auto max-w-[1200px] py-14 text-stone-600">
     <h3 className="text-center text-4xl tracking-[2px] mb-8">Play Endless Classics</h3>
     <div className="py-5 flex flex-wrap justify-start gap-10 w-[100%] mb-8">
