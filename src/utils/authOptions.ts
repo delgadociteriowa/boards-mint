@@ -1,9 +1,10 @@
 import Credentials from 'next-auth/providers/credentials';
+import type { NextAuthOptions } from "next-auth";
 import bcrypt from 'bcryptjs';
 import connectDB from '@/config/database';
 import User from '@/models/User';
 
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
   providers: [
     Credentials({
       name: 'Credentials',
@@ -53,6 +54,8 @@ export const authOptions = {
     async session({ session, token }) {
       await connectDB();
       const user = await User.findById(token.id);
+
+      if (!user) return session;
 
       session.user.id = token.id;
       session.user.username = token.username;
