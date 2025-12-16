@@ -4,18 +4,21 @@ import OctoBoardSquare from './OctoBoardSquare';
 import LoadingComponent from './LoadingComponent';
 import BoardContext from '@/context/board/boardContext';
 
-type ColorsType = {
+interface ColorsType {
   chess: string[];
   checkers: string[];
 };
 
-type ColorsClickedType = {
+interface ColorsClickedType {
   chess: string;
   checkers: string;
 };
 
 const Octoboard = () => {
-  const boardContext = useContext(BoardContext)!;
+  // Type improvements required
+  const boardContext = useContext(BoardContext);
+  if (!boardContext) return null;
+
   const {
     selectedGame,
     buildGameGrid,

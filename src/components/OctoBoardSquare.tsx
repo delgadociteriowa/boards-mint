@@ -1,11 +1,11 @@
-type CellContent = {
+interface CellContent {
   id: string;
   piece: string;
   pieceType: string;
   selected: boolean;
 };
 
-type Colors = {
+interface Colors {
   color: string;
   colorHover: string;
   colorClicked: string;
