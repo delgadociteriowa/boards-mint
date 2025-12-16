@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 let connected = false;
 
-const connectDB = async () => {
+const connectDB = async (): Promise<void> => {
   // only fields specified in schema would be saved
   mongoose.set('strictQuery', true);
 
@@ -12,9 +12,15 @@ const connectDB = async () => {
     return;
   }
 
+  const mongoUri = process.env.MONGODB_URI;
+
+  if (!mongoUri) {
+    throw new Error('MONGODB_URI is not defined in environment variables');
+  }
+
   // Connect to db
   try {
-    await mongoose.connect(process.env.MONGODB_URI);
+    await mongoose.connect(mongoUri);
     connected = true;
   } catch (error) {
     console.log(error);
