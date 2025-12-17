@@ -3,7 +3,6 @@ export type Piece = '♟' |'♜' | '♞' | '♝' | '♛' | '♚' | 'checker' | '
 export type SelectedGame = 'chess' | 'checkers' | '';
 export type Grid = Square[][];
 export type SelectedSquare = [number | null, number | null];
-export type Cell = `sqr${number}-${number}`;
 
 export interface Square { 
   id: string;
@@ -21,7 +20,7 @@ export interface BoardContextType {
   selectGame: (game: SelectedGame) => void;
   setGrid: (grid: Grid) => void; 
   emptyGame: () => void; 
-  onClickPiece: (cell: Cell) => void;
+  onClickPiece: (cell: string) => void;
 };
 
 export type BoardAction =

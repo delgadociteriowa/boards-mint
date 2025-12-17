@@ -15,8 +15,7 @@ import {
   Grid,
   Piece,
   PieceType,
-  SelectedGame,
-  Cell } from './boardTypes';
+  SelectedGame } from './boardTypes';
 
 const BoardState = ({ children }: { children: ReactNode }) => {
 
@@ -223,7 +222,7 @@ const BoardState = ({ children }: { children: ReactNode }) => {
     dispatch({ type: SET_GAME_GRID, payload: [] });
   }; 
 
-  const onClickPiece = (cell: Cell): void => {
+  const onClickPiece = (cell: string): void => {
     const [col, row] = cell.replace('sqr', '').split('-').map(n => Number(n));
   
     if(!state.phaseTwo){
