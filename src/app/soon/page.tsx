@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import Construction from "../../assets/construction.svg";
 import Link from "next/link";
 
-const Soon: React.FC = () => {
+const Soon = () => {
   return (
     <>
       <Header/>

@@ -7,7 +7,7 @@ import AboutBottom from "../../assets/about_3.jpg";
 import Link from "next/link";
 
 
-const Soon: React.FC = () => {
+const Soon = () => {
   return (
     <>
       <Header/>
