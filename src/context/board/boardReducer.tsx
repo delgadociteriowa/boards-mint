@@ -8,13 +8,12 @@ import {
 
 import { BoardStateType, BoardAction } from './boardTypes';
 
-const boardReducer = (state: BoardStateType, action: BoardAction) => {
+const boardReducer = (state: BoardStateType, action: BoardAction): BoardStateType => {
   switch(action.type) {
     case SET_GAME:
       return {
         ...state,
-        selectedGame: action.payload,
-        
+        selectedGame: action.payload, 
       }    
     case SET_GAME_GRID:
       return {
