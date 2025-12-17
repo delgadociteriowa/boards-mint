@@ -2,7 +2,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import GameCard from "@/components/GameCard";
 
-const Games: React.FC = () => {
+const Games = () => {
   return (
     <>
       <Header/>

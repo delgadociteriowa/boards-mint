@@ -7,24 +7,15 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import LoadingComponent from "@/components/LoadingComponent";
 
-type UserPayload =
-  | { firstname: string }
-  | { lastname: string };
-
-interface UserAccount {
-  username?: string;
-  firstname?: string;
-  lastname?: string;
-}
-
-interface SessionAccount {
-  user?: UserAccount;
-}
+type UserPayload = Partial<{
+  firstname: string;
+  lastname: string;
+}>;
 
 const Account = () => {
-  const [userName, setUserName] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [userName, setUserName] = useState<string | null>(null);
+  const [firstName, setFirstName] = useState<string | null>(null);
+  const [lastName, setLastName] = useState<string | null>(null);
   const [editingFirst, setEditingFirst] = useState(false);
   const [editingLast, setEditingLast] = useState(false);
 
@@ -32,20 +23,17 @@ const Account = () => {
   const router = useRouter();
 
   useEffect(() => {
-    if (!session) {
-      router.push("/login");
+    const syncSessionToState = () => {
+      if (!session) {
+        router.push("/login");
+        return
+      }
+      setUserName(session.user.username);
+      setFirstName(session.user.firstname);
+      setLastName(session.user.lastname);
     }
+    syncSessionToState();
   }, [session, router]);
-
-  useEffect(() => {
-    const s = session as SessionAccount;
-
-    if (s?.user) {
-      setUserName(s.user.username || "");
-      setFirstName(s.user.firstname || "");
-      setLastName(s.user.lastname || "");
-    }
-  }, [session]);
 
   const handleLogout = async () => {
     await signOut({ redirect: false });
@@ -53,13 +41,9 @@ const Account = () => {
   };
 
   const handleSave = async (field: "firstname" | "lastname") => {
-    let payload: UserPayload;
-
-    if (field === "firstname") {
-      payload = { firstname: firstName };
-    } else {
-      payload = { lastname: lastName };
-    }
+    const payload: UserPayload = {
+      [field]: field === "firstname" ? firstName : lastName,
+    };
 
     await fetch("/api/account/update", {
       method: "POST",
@@ -69,8 +53,9 @@ const Account = () => {
 
     await update();
 
-    if (field === "firstname") setEditingFirst(false);
-    if (field === "lastname") setEditingLast(false);
+    field === "firstname"
+      ? setEditingFirst(false)
+      : setEditingLast(false);
   };
 
   return (
@@ -87,7 +72,7 @@ const Account = () => {
             <div className="flex flex-col gap-2">
               <label className="text-stone-600 tracking-[1px] text-sm">user name</label>
               <div className="flex items-center justify-between">
-                <p className="text-stone-700 text-lg">{userName}</p>
+                <p className="text-stone-700 text-lg">{userName ?? "-"}</p>
               </div>
             </div>
             <div className="w-full h-px bg-stone-300"></div>
@@ -99,11 +84,11 @@ const Account = () => {
                 {editingFirst ? (
                   <input
                     className="border border-stone-300 rounded-xl py-3 px-4 text-stone-700 focus:outline-none focus:ring-2 focus:ring-sky-500 w-full"
-                    value={firstName}
+                    value={firstName ??  "-"}
                     onChange={(e) => setFirstName(e.target.value)}
                   />
                 ) : (
-                  <p className="text-stone-700 text-lg">{firstName}</p>
+                  <p className="text-stone-700 text-lg">{firstName ??  "-"}</p>
                 )}
 
                 <button
@@ -125,11 +110,13 @@ const Account = () => {
                 {editingLast ? (
                   <input
                     className="border border-stone-300 rounded-xl py-3 px-4 text-stone-700 focus:outline-none focus:ring-2 focus:ring-sky-500 w-full"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
+                    value={lastName ?? "-"}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      setFirstName(e.target.value)
+                    }
                   />
                 ) : (
-                  <p className="text-stone-700 text-lg">{lastName}</p>
+                  <p className="text-stone-700 text-lg">{lastName ?? "-"}</p>
                 )}
 
                 <button
