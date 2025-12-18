@@ -27,7 +27,93 @@ const BoardState = ({ children }: { children: ReactNode }) => {
   }
 
   const [state, dispatch] = useReducer(BoardReducer, initialState);
+
+  // Build game grid
+
+  const placeChessPiece = (row: number, col: number): [Piece, PieceType] => { 
+    const playerOnePawnsRow = 3;
+    const playerTwoPawnsRow = 8;
+    const playerOneChessRow = 2;
+    const playerTwoChessRow = 9;
+    const chessPieces: Piece[] = ['♜', '♞', '♝', '♛', '♚', '♝', '♞', '♜'];
+    let piece: Piece = '';
+    let pieceType: PieceType = ''; 
+    
+    switch (row) { 
+      case playerOneChessRow: 
+        piece = chessPieces[col] || '';
+        pieceType = 'one';
+        break;
+      case playerOnePawnsRow:
+        piece = '♟';
+        pieceType = 'one';
+        break;
+      case playerTwoPawnsRow:
+        piece = '♟';
+        pieceType = 'two';
+        break;
+      case playerTwoChessRow:
+        piece = chessPieces[col] || '';
+        pieceType = 'two';
+        break;
+      default:
+        break;
+      } 
+        
+      return [piece, pieceType];
+  };
+
+  const placeCheckerPiece = (row: number, col: number): [Piece, PieceType] => {
+    const playerOneRows = [2, 3, 4];
+    const playerTwoRows = [7, 8, 9];
+    const isPlayerOne = playerOneRows.includes(row);
+    const isPlayerTwo = playerTwoRows.includes(row);
+    const isEvenCol = (col + 1) % 2 === 0;
+
+    const shouldPlace =
+      (isPlayerOne && ((row === 3 && !isEvenCol) || (row !== 3 && isEvenCol))) ||
+      (isPlayerTwo && ((row === 8 && isEvenCol) || (row !== 8 && !isEvenCol)));
+
+    const piece: Piece = shouldPlace ? 'checker' : '';
+    const pieceType: PieceType = shouldPlace ? (isPlayerOne ? 'one' : 'two') : '';
+            
+    return [piece, pieceType]
+  }
   
+  // Phase-one action
+  
+  const phaseOneAction = (col: number, row: number): void => {
+    const updateGrid = () => {
+      const updated = [...state.gameGrid];
+      updated[row][col] = {...updated[row][col], selected: true};
+      return updated
+    }; 
+    dispatch({type: SET_GAME_GRID, payload: updateGrid()});
+    dispatch({type: SET_SELECTED_SQR, payload: [row, col]});
+    dispatch({type: ACTIVATE_PHASE_TWO});
+  };
+  
+  // Phase-two action
+
+  const benchesAreFilled = (): boolean => {
+    const benchRows = [0, 1, 10, 11];
+
+    return benchRows.every(rowIndex =>
+      state.gameGrid[rowIndex].every(square => square.piece !== "")
+    );
+  };
+
+  const benchesFilled = (): void => {
+    const updateGrid = () => {
+      const updated = [...state.gameGrid];
+      const row = state.selectedSqr[0] || 0;
+      const col = state.selectedSqr[1] || 0; 
+      updated[row][col] = {...updated[row][col], selected: false};
+      return updated
+    };
+    dispatch({type: SET_GAME_GRID, payload: updateGrid()});
+  };
+
   const phaseTwoSameSqr = (col: number, row: number): void => {
     const updateGrid = () => {
       const updated = [...state.gameGrid];
@@ -38,7 +124,7 @@ const BoardState = ({ children }: { children: ReactNode }) => {
     dispatch({type: SET_SELECTED_SQR, payload: [null, null]});
     dispatch({type: DEACTIVATE_PHASE_TWO});
   };
-  
+
   const phaseTwoEmptySqr = (col: number, row: number): void => {
     const selectedState = state.gameGrid[state.selectedSqr[0] || 0][state.selectedSqr[1] || 0];
     const updateGrid = () => {
@@ -58,7 +144,7 @@ const BoardState = ({ children }: { children: ReactNode }) => {
     };
     dispatch({type: SET_GAME_GRID, payload: updateGrid()});
   };
-  
+
   const phaseTwoOccupiedSqr = (col: number, row: number): void => {
     const selectedCellObj = state.gameGrid[row][col];
     const isPieceTypeOne = state.gameGrid[row][col].pieceType === 'one';
@@ -91,25 +177,6 @@ const BoardState = ({ children }: { children: ReactNode }) => {
     };
     dispatch({type: SET_GAME_GRID, payload: updateGrid()});
   };
-
-  const benchesFilled = (): void => {
-    const updateGrid = () => {
-      const updated = [...state.gameGrid];
-      const row = state.selectedSqr[0] || 0;
-      const col = state.selectedSqr[1] || 0; 
-      updated[row][col] = {...updated[row][col], selected: false};
-      return updated
-    };
-    dispatch({type: SET_GAME_GRID, payload: updateGrid()});
-  };
-
-  const benchesAreFilled = (): boolean => {
-    const benchRows = [0, 1, 10, 11];
-
-    return benchRows.every(rowIndex =>
-      state.gameGrid[rowIndex].every(square => square.piece !== "")
-    );
-  };
   
   const phaseTwoAction = (col: number, row: number): void => {
     const selectedCellObj = state.gameGrid[row][col];
@@ -130,83 +197,7 @@ const BoardState = ({ children }: { children: ReactNode }) => {
     dispatch({type: DEACTIVATE_PHASE_TWO});
   };
 
-  const phaseOneAction = (col: number, row: number): void => {
-    const updateGrid = () => {
-      const updated = [...state.gameGrid];
-      updated[row][col] = {...updated[row][col], selected: true};
-      return updated
-    }; 
-    dispatch({type: SET_GAME_GRID, payload: updateGrid()});
-    dispatch({type: SET_SELECTED_SQR, payload: [row, col]});
-    dispatch({type: ACTIVATE_PHASE_TWO});
-  };
-
-  const placeChessPiece = (row: number, col: number): [Piece, PieceType] => {
-    const playerOnePawnsRow = 3;
-    const playerTwoPawnsRow = 8;
-    const playerOneChessRow = 2;
-    const playerTwoChessRow = 9;
-
-    const chessPieces: Piece[] = ['♜', '♞', '♝', '♛', '♚', '♝', '♞', '♜'];
-    let piece: Piece = '';
-    let pieceType: PieceType = '';
-
-    switch (row) {
-      case playerOneChessRow:
-        piece = chessPieces[col] || '';
-        pieceType = 'one';
-        break;
-      case playerOnePawnsRow:
-        piece = '♟';
-        pieceType = 'one';
-        break;
-      case playerTwoPawnsRow:
-        piece = '♟';
-        pieceType = 'two';
-        break;
-      case playerTwoChessRow:
-        piece = chessPieces[col] || '';
-        pieceType = 'two';
-        break;
-      default:
-        break;
-    }
-    return [piece, pieceType];
-  };
-
-  const placeCheckerPiece = (row: number, col: number): [Piece, PieceType] => {
-    const playerOneRows = [2, 3, 4];
-    const playerTwoRows = [7, 8, 9];
-    const isPlayerOne = playerOneRows.includes(row);
-    const isPlayerTwo = playerTwoRows.includes(row);
-    const isEvenCol = (col + 1) % 2 === 0;
-
-    const shouldPlace =
-      (isPlayerOne && ((row === 3 && !isEvenCol) || (row !== 3 && isEvenCol))) ||
-      (isPlayerTwo && ((row === 8 && isEvenCol) || (row !== 8 && !isEvenCol)));
-
-    const piece: Piece = shouldPlace ? 'checker' : '';
-    const pieceType: PieceType = shouldPlace ? (isPlayerOne ? 'one' : 'two') : '';
-            
-    return [piece, pieceType]
-  }
-
-  const buildGameGrid = () :Square[][] => {
-    const boardRows = 12;
-    const boardColumns = 8;
-
-    return Array(boardRows).fill(null).map((_, rowIndex) =>
-      Array(boardColumns).fill(null).map((_, colIndex) => {
-        const piece = state.selectedGame === 'chess' ? placeChessPiece(rowIndex, colIndex) : placeCheckerPiece(rowIndex, colIndex);  
-        return { 
-          id: `sqr${colIndex}-${rowIndex}`,
-          piece: piece[0],
-          pieceType: piece[1],
-          selected: false
-        };
-      })
-    );
-  };
+  // Context
 
   const selectGame = (game: SelectedGame): void => {
     dispatch({type: SET_GAME, payload: game});
@@ -217,10 +208,23 @@ const BoardState = ({ children }: { children: ReactNode }) => {
     dispatch({type: SET_GAME_GRID, payload: grid});
   };
 
-  const emptyGame = (): void => {
-    dispatch({type: SET_GAME, payload: ''});
-    dispatch({ type: SET_GAME_GRID, payload: [] });
-  }; 
+  const buildGameGrid = () :Square[][] => {
+    const boardRows = 12;
+    const boardColumns = 8;
+
+    return Array(boardRows).fill(null).map((_, rowIndex) =>
+      Array(boardColumns).fill(null).map((_, colIndex) => {
+        const piece = state.selectedGame === 'chess' ? placeChessPiece(rowIndex, colIndex) : placeCheckerPiece(rowIndex, colIndex);
+
+        return { 
+          id: `sqr${colIndex}-${rowIndex}`,
+          piece: piece[0],
+          pieceType: piece[1],
+          selected: false
+        };
+      })
+    );
+  };
 
   const onClickPiece = (cell: string): void => {
     const [col, row] = cell.replace('sqr', '').split('-').map(n => Number(n));
@@ -232,6 +236,11 @@ const BoardState = ({ children }: { children: ReactNode }) => {
     }
   }
 
+  const emptyGame = (): void => {
+    dispatch({type: SET_GAME, payload: ''});
+    dispatch({ type: SET_GAME_GRID, payload: [] });
+  }; 
+
   return (
     <boardContext.Provider
       value={{
@@ -239,11 +248,11 @@ const BoardState = ({ children }: { children: ReactNode }) => {
         gameGrid: state.gameGrid,
         selectedSqr: state.selectedSqr,
         phaseTwo: state.phaseTwo,
-        buildGameGrid,
         selectGame,
         setGrid,
-        emptyGame,
-        onClickPiece
+        buildGameGrid,
+        onClickPiece,
+        emptyGame
       }}
     >
       {children}
