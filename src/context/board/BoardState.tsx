@@ -148,55 +148,90 @@ const BoardState = ({ children }: { children: ReactNode }) => {
   };
 
   const phaseTwoOccupiedSqr = (col: number, row: number): void => {
-    const selectedCellObj = state.gameGrid[row][col];
-    const isPieceTypeOne = state.gameGrid[row][col].pieceType === 'one';
-    const discardPlaces = isPieceTypeOne ? [...state.gameGrid[0], ...state.gameGrid[1]] : [...state.gameGrid[10], ...state.gameGrid[11]]; 
-    const discardPlacesTwo = isPieceTypeOne ? [...state.gameGrid[10], ...state.gameGrid[11]] : [...state.gameGrid[0], ...state.gameGrid[1]]; 
-    const discardAvailable = discardPlaces.find(discardPlace => discardPlace.piece === '') ?? discardPlacesTwo.find(discardPlace => discardPlace.piece === '');
-    const discardAvailableCol = discardAvailable?.id.replace('sqr', '').split('-').map(Number)[0];
-    const discardAvailableRow = discardAvailable?.id.replace('sqr', '').split('-').map(Number)[1];
-    const selectedSqrState = state.gameGrid[state.selectedSqr[0] || 0][state.selectedSqr[1] || 0];
+    const [ stepOneRow, stepOneCol] = state.selectedSqr; //step one piece
+    if (stepOneRow == null || stepOneCol == null) return;
 
-    const updateGrid = () => {
-      const updated = [...state.gameGrid];
-      updated[discardAvailableRow || 0][discardAvailableCol || 0] = {
-        ...updated[discardAvailableRow || 0][discardAvailableCol || 0],
-        piece: selectedCellObj.piece,
-        pieceType: selectedCellObj.pieceType
-      };
-      updated[row][col] = {
-        ...updated[row][col],
-        piece: selectedSqrState.piece,
-        pieceType: selectedSqrState.pieceType
-      };
-      updated[state.selectedSqr[0] || 0][state.selectedSqr[1] || 0] = {
-        ...updated[state.selectedSqr[0] || 0][state.selectedSqr[1] || 0],
-        piece: '',
-        pieceType:'',
-        selected: false
-      };
-      return updated
-    };
-    dispatch({type: SET_GAME_GRID, payload: updateGrid()});
+    const stepOneCell = state.gameGrid[stepOneRow][stepOneCol]; //step one cell
+    const targetCell = state.gameGrid[row][col]; //step two cell
+    
+    const isPieceTypeOne = targetCell.pieceType === 'one'; // checks p1 or p2 piece
+
+    const primaryDiscardRows = isPieceTypeOne ? [0, 1] : [10, 11]; // discard set 1 p1: rows 0 1 - p2: rows 10 11
+    const secondaryDiscardRows = isPieceTypeOne ? [10, 11] : [0, 1]; // discard set 2 p1: rows 10 11 - p2: rows 0 1
+
+    const findEmptyDiscard = (rows: number[]) =>
+      rows.flatMap(r => state.gameGrid[r])
+          .find(cell => cell.piece === ''); // find first available discard cell function
+
+    const discardCell =
+      findEmptyDiscard(primaryDiscardRows) ??
+      findEmptyDiscard(secondaryDiscardRows); // discard cell, p1 0,1 -> 10,11. p2 10, 11 -> 0, 1.
+
+    if (!discardCell) return; 
+
+    const updatedGrid: Square[][] = state.gameGrid.map((gridRow, gridRowIndex) => // map first lvl 
+      gridRow.map((cell, cellIndex) => { //map second lvl
+        // finds discard and place target
+        if (cell === discardCell) {
+          return {
+            ...cell,
+            piece: targetCell.piece,
+            pieceType: targetCell.pieceType,
+          };
+        }
+
+        // finds destiny and places step one
+        if (gridRowIndex === row && cellIndex === col) {
+          return {
+            ...cell,
+            piece: stepOneCell.piece,
+            pieceType: stepOneCell.pieceType,
+          };
+        }
+
+        // empties step one origin
+        if (gridRowIndex === stepOneRow && cellIndex === stepOneCol) {
+          return {
+            ...cell,
+            piece: '',
+            pieceType: '',
+            selected: false,
+          };
+        }
+
+        return cell;
+      })
+    );
+    dispatch({ type: SET_GAME_GRID, payload: updatedGrid });
   };
   
   const phaseTwoAction = (col: number, row: number): void => {
     const selectedCellObj = state.gameGrid[row][col];
-    const sameSqr = state.selectedSqr[0] === row && state.selectedSqr[1] === col;
-    const emptySqr = selectedCellObj.piece === '';
+    function endPhaseTwo(){
+      dispatch({type: SET_SELECTED_SQR, payload: [null, null]});
+      dispatch({type: DEACTIVATE_PHASE_TWO});
+    }
 
+    // benches filled
     if (benchesAreFilled() && selectedCellObj.piece){
       benchesFilled();
-    } else if (sameSqr) {
-      phaseTwoSameSqr(col, row);
-    } else if(emptySqr) {
-      phaseTwoEmptySqr(col, row);
-    } else {
-      phaseTwoOccupiedSqr(col, row);
+      return endPhaseTwo()
     }
     
-    dispatch({type: SET_SELECTED_SQR, payload: [null, null]});
-    dispatch({type: DEACTIVATE_PHASE_TWO});
+    // same cell
+    if (state.selectedSqr[0] === row && state.selectedSqr[1] === col) {
+      phaseTwoSameSqr(col, row);
+      return endPhaseTwo()
+    }
+    
+    // empty cell
+    if(selectedCellObj.piece === '') {
+      phaseTwoEmptySqr(col, row);
+      return endPhaseTwo()
+    }
+
+    phaseTwoOccupiedSqr(col, row);
+    return endPhaseTwo()    
   };
 
   // Context
