@@ -7,7 +7,8 @@ import {
   SET_GAME_GRID,
   SET_SELECTED_SQR,
   ACTIVATE_PHASE_TWO,
-  DEACTIVATE_PHASE_TWO
+  DEACTIVATE_PHASE_TWO,
+  SELECTED_GAME
 } from '../types';
 import {
   BoardStateType,
@@ -279,7 +280,9 @@ const BoardState = ({ children }: { children: ReactNode }) => {
   };
 
 
-  // const handleGameSelection() {}
+  const handleGameSelection = (game: SelectedGame) : void => {
+    dispatch({ type: SELECTED_GAME, payload: game});
+  }
   // const handleClickSqr() {}
   // const handleExitGame() {}
 
@@ -294,7 +297,8 @@ const BoardState = ({ children }: { children: ReactNode }) => {
         setGrid,
         buildGameGrid,
         onClickPiece,
-        emptyGame
+        emptyGame,
+        handleGameSelection
       }}
     >
       {children}

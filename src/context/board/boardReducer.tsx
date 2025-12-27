@@ -14,6 +14,8 @@ import {
 
 import { BoardStateType, BoardAction } from './boardTypes';
 
+import { buildGameGrid } from './boardSetup';
+
 const boardReducer = (state: BoardStateType, action: BoardAction): BoardStateType => {
   switch(action.type) {
     case SET_GAME:
@@ -42,8 +44,11 @@ const boardReducer = (state: BoardStateType, action: BoardAction): BoardStateTyp
         phaseTwo: false,
       }
     case SELECTED_GAME:
+      const newGrid = buildGameGrid(action.payload);
       return {
         ...state,
+        selectedGame: action.payload,
+        gameGrid: newGrid
       }
     case SELECTED_PIECE:
       return {

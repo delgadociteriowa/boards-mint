@@ -13,7 +13,7 @@ export interface Square {
 
 export interface BoardStateType {
   selectedGame: SelectedGame;
-  gameGrid: Square[][];
+  gameGrid: Grid;
   selectedSqr: SelectedSquare;
   phaseTwo: boolean;
 };
@@ -23,7 +23,8 @@ export interface BoardContextType extends BoardStateType {
   setGrid: (grid: Grid) => void; 
   buildGameGrid: () => Square[][];
   onClickPiece: (cell: string) => void;
-  emptyGame: () => void; 
+  emptyGame: () => void;
+  handleGameSelection: (game: SelectedGame) => void;
 };
 
 export type BoardAction =
@@ -32,7 +33,7 @@ export type BoardAction =
   | { type: 'SET_SELECTED_SQR'; payload: SelectedSquare }
   | { type: 'ACTIVATE_PHASE_TWO' }
   | { type: 'DEACTIVATE_PHASE_TWO' }
-  | { type: 'SELECTED_GAME' }
+  | { type: 'SELECTED_GAME'; payload: SelectedGame }
   | { type: 'SELECTED_PIECE' }
   | { type: 'TARGETED_SELF' }
   | { type: 'TARGETED_EMPTY' }
