@@ -3,7 +3,13 @@ import {
   SET_GAME_GRID,
   SET_SELECTED_SQR,
   ACTIVATE_PHASE_TWO,
-  DEACTIVATE_PHASE_TWO
+  DEACTIVATE_PHASE_TWO,
+  SELECTED_GAME,
+  SELECTED_PIECE,
+  TARGETED_SELF,
+  TARGETED_EMPTY,
+  TARGETED_PIECE,
+  CLOSED_GAME,
 } from '../types'
 
 import { BoardStateType, BoardAction } from './boardTypes';
@@ -34,6 +40,30 @@ const boardReducer = (state: BoardStateType, action: BoardAction): BoardStateTyp
       return {
         ...state,
         phaseTwo: false,
+      }
+    case SELECTED_GAME:
+      return {
+        ...state,
+      }
+    case SELECTED_PIECE:
+      return {
+        ...state,
+      }
+    case TARGETED_SELF:
+      return {
+        ...state,
+      }
+    case TARGETED_EMPTY:
+      return {
+        ...state,
+      }
+    case TARGETED_PIECE:
+      return {
+        ...state,
+      }
+    case CLOSED_GAME:
+      return {
+        ...state,
       }
     default:
       return state;

@@ -31,4 +31,10 @@ export type BoardAction =
   | { type: 'SET_GAME_GRID'; payload: Square[][] }
   | { type: 'SET_SELECTED_SQR'; payload: SelectedSquare }
   | { type: 'ACTIVATE_PHASE_TWO' }
-  | { type: 'DEACTIVATE_PHASE_TWO' };
+  | { type: 'DEACTIVATE_PHASE_TWO' }
+  | { type: 'SELECTED_GAME' }
+  | { type: 'SELECTED_PIECE' }
+  | { type: 'TARGETED_SELF' }
+  | { type: 'TARGETED_EMPTY' }
+  | { type: 'TARGETED_PIECE' }
+  | { type: 'CLOSED_GAME' };

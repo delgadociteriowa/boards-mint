@@ -276,7 +276,12 @@ const BoardState = ({ children }: { children: ReactNode }) => {
   const emptyGame = (): void => {
     dispatch({type: SET_GAME, payload: ''});
     dispatch({ type: SET_GAME_GRID, payload: [] });
-  }; 
+  };
+
+
+  // const handleGameSelection() {}
+  // const handleClickSqr() {}
+  // const handleExitGame() {}
 
   return (
     <boardContext.Provider
