@@ -34,7 +34,7 @@ export type BoardAction =
   | { type: 'ACTIVATE_PHASE_TWO' }
   | { type: 'DEACTIVATE_PHASE_TWO' }
   | { type: 'SELECTED_GAME'; payload: SelectedGame }
-  | { type: 'SELECTED_PIECE' }
+  | { type: 'SELECTED_PIECE'; payload: string }
   | { type: 'TARGETED_SELF' }
   | { type: 'TARGETED_EMPTY' }
   | { type: 'TARGETED_PIECE' }

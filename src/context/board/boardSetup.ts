@@ -1,4 +1,4 @@
-import { SelectedGame, Grid, Piece, PieceType } from "./boardTypes";
+import { SelectedGame, Grid, Piece, PieceType, SelectedSquare } from "./boardTypes";
 
 const buildChessGrid = (): Grid => {
   const rows = 12;
@@ -21,7 +21,7 @@ const buildChessGrid = (): Grid => {
       const piece = placePiece(rowIndex, colIndex);
 
       return { 
-        id: `sqr${colIndex}-${rowIndex}`,
+        id: `sqr${rowIndex}-${colIndex}`,
         piece: piece[0],
         pieceType: piece[1],
         selected: false
@@ -56,7 +56,7 @@ const buildCheCkersGrid = (): Grid => {
       const piece = placePiece(rowIndex, colIndex);
 
       return { 
-        id: `sqr${colIndex}-${rowIndex}`,
+        id: `sqr${rowIndex}-${colIndex}`,
         piece: piece[0],
         pieceType: piece[1],
         selected: false
@@ -75,7 +75,17 @@ const buildGameGrid = (selectedGame: SelectedGame): Grid => {
   return []
 };
 
-const selectSqrGrid = () => {};
+const selectSqrGrid = (selectedSqr: SelectedSquare, currentGrid: Grid): Grid => {
+  const [row, col] = selectedSqr;
+  return currentGrid.map((r, rIdx) => 
+    rIdx === row
+    ? r.map((c, cIdx) => 
+        cIdx === col ?  { ...c, selected: true } : c
+      )
+    : r
+  )
+};
+
 const targetedSelfGrid = () => {};
 const targetedEmptyGrid = () => {};
 const targetedPieceGrid = () => {};

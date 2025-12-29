@@ -12,9 +12,9 @@ import {
   CLOSED_GAME,
 } from '../types'
 
-import { BoardStateType, BoardAction } from './boardTypes';
+import { BoardStateType, BoardAction, SelectedSquare } from './boardTypes';
 
-import { buildGameGrid } from './boardSetup';
+import { buildGameGrid, selectSqrGrid } from './boardSetup';
 
 const boardReducer = (state: BoardStateType, action: BoardAction): BoardStateType => {
   switch(action.type) {
@@ -51,8 +51,14 @@ const boardReducer = (state: BoardStateType, action: BoardAction): BoardStateTyp
         gameGrid: newGrid
       }
     case SELECTED_PIECE:
+      const [row, col] = action.payload.replace('sqr', '').split('-').map(n => Number(n));
+      const selectedPiece: SelectedSquare = [row, col];
+      const selectedSqrGrid = selectSqrGrid(selectedPiece, state.gameGrid);
       return {
         ...state,
+        gameGrid: selectedSqrGrid,
+        selectedSqr: selectedPiece,
+        phaseTwo: true,
       }
     case TARGETED_SELF:
       return {
