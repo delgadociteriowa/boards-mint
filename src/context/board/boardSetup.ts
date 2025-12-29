@@ -86,7 +86,20 @@ const selectSqrGrid = (selectedSqr: SelectedSquare, currentGrid: Grid): Grid => 
   )
 };
 
-const targetedSelfGrid = () => {};
+const targetedSelfGrid = (currentSelectedSqr: SelectedSquare, currentGrid: Grid): Grid => {
+  const [row, col] = currentSelectedSqr;
+  return currentGrid.map((r, rIdx) => 
+    rIdx === row
+      ? r.map((c, cIdx) => 
+          cIdx === col ?  { ...c, selected: false } : c
+        )
+      : r
+    )
+};
+
+
+
+
 const targetedEmptyGrid = () => {};
 const targetedPieceGrid = () => {};
 

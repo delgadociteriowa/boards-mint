@@ -9,12 +9,13 @@ import {
   TARGETED_SELF,
   TARGETED_EMPTY,
   TARGETED_PIECE,
+  FILLED_BENCHES,
   CLOSED_GAME,
 } from '../types'
 
 import { BoardStateType, BoardAction, SelectedSquare } from './boardTypes';
 
-import { buildGameGrid, selectSqrGrid } from './boardSetup';
+import { buildGameGrid, selectSqrGrid, targetedSelfGrid } from './boardSetup';
 
 const boardReducer = (state: BoardStateType, action: BoardAction): BoardStateType => {
   switch(action.type) {
@@ -61,14 +62,22 @@ const boardReducer = (state: BoardStateType, action: BoardAction): BoardStateTyp
         phaseTwo: true,
       }
     case TARGETED_SELF:
+      const selectedSelfGrid = targetedSelfGrid(state.selectedSqr, state.gameGrid);
       return {
         ...state,
+        gameGrid: selectedSelfGrid,
+        selectedSqr: [null, null],
+        phaseTwo: true,
       }
     case TARGETED_EMPTY:
       return {
         ...state,
       }
     case TARGETED_PIECE:
+      return {
+        ...state,
+      }
+    case FILLED_BENCHES:
       return {
         ...state,
       }
