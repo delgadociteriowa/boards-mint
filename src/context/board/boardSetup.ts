@@ -1,4 +1,4 @@
-import { SelectedGame, Grid, Piece, PieceType, SelectedSquare } from "./boardTypes";
+import { SelectedGame, Grid, Piece, PieceType, SelectedSquare, Square } from "./boardTypes";
 
 const buildChessGrid = (): Grid => {
   const rows = 12;
@@ -94,13 +94,34 @@ const targetedSelfGrid = (currentSelectedSqr: SelectedSquare, currentGrid: Grid)
           cIdx === col ?  { ...c, selected: false } : c
         )
       : r
-    )
+  )
+};
+
+const targetedEmptyGrid = (selectedEmptySqr: SelectedSquare, currentSelected: SelectedSquare,  currentGrid: Grid): Grid => {
+  const [emptyRow, emptyCol] = selectedEmptySqr;
+  const [currentRow, currentCol] = currentSelected;
+  if (currentRow === null || currentCol === null) return currentGrid;
+  
+  const currentPieceSelected: Square = currentGrid[currentRow][currentCol];
+
+  return currentGrid.map((r, rIdx) => {
+      if(rIdx === emptyRow) {
+        return r.map((c, cIdx) => 
+          cIdx === emptyCol ? {...c, piece: currentPieceSelected.piece, pieceType: currentPieceSelected.pieceType} : c    
+        ) 
+      }
+      if(rIdx === currentRow) {
+        return r.map((c, cIdx) => 
+          cIdx === currentCol ? {...c, piece: '', pieceType: '', selected: false} : c    
+        ) 
+      }
+      return r
+    }
+  )
 };
 
 
 
-
-const targetedEmptyGrid = () => {};
 const targetedPieceGrid = () => {};
 
 export {

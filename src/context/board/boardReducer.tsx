@@ -15,7 +15,7 @@ import {
 
 import { BoardStateType, BoardAction, SelectedSquare } from './boardTypes';
 
-import { buildGameGrid, selectSqrGrid, targetedSelfGrid } from './boardSetup';
+import { buildGameGrid, selectSqrGrid, targetedSelfGrid, targetedEmptyGrid } from './boardSetup';
 
 const boardReducer = (state: BoardStateType, action: BoardAction): BoardStateType => {
   switch(action.type) {
@@ -67,11 +67,17 @@ const boardReducer = (state: BoardStateType, action: BoardAction): BoardStateTyp
         ...state,
         gameGrid: selectedSelfGrid,
         selectedSqr: [null, null],
-        phaseTwo: true,
+        phaseTwo: false,
       }
     case TARGETED_EMPTY:
+      const [targetEmptyRow, targetEmptyCol] = action.payload.replace('sqr', '').split('-').map(n => Number(n));
+      const emptySqr: SelectedSquare = [targetEmptyRow, targetEmptyCol];
+      const selectedEmptyGrid = targetedEmptyGrid(emptySqr, state.selectedSqr, state.gameGrid);
       return {
         ...state,
+        gameGrid: selectedEmptyGrid,
+        selectedSqr: [null, null],
+        phaseTwo: false,
       }
     case TARGETED_PIECE:
       return {
