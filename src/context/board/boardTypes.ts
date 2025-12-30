@@ -37,6 +37,6 @@ export type BoardAction =
   | { type: 'SELECTED_PIECE'; payload: string }
   | { type: 'TARGETED_SELF'} // does not need payload
   | { type: 'TARGETED_EMPTY'; payload: string}
-  | { type: 'TARGETED_PIECE' }
+  | { type: 'TARGETED_PIECE'; payload: string }
   | { type: 'FILLED_BENCHES' }
   | { type: 'CLOSED_GAME' };

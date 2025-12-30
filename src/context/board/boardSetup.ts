@@ -101,7 +101,7 @@ const targetedEmptyGrid = (selectedEmptySqr: SelectedSquare, currentSelected: Se
   const [emptyRow, emptyCol] = selectedEmptySqr;
   const [currentRow, currentCol] = currentSelected;
   if (currentRow === null || currentCol === null) return currentGrid;
-  
+
   const currentPieceSelected: Square = currentGrid[currentRow][currentCol];
 
   return currentGrid.map((r, rIdx) => {
@@ -122,7 +122,57 @@ const targetedEmptyGrid = (selectedEmptySqr: SelectedSquare, currentSelected: Se
 
 
 
-const targetedPieceGrid = () => {};
+const targetedPieceGrid = (selectedFilledSqr: SelectedSquare, currentSelected: SelectedSquare,  currentGrid: Grid): Grid  => {
+  // bech one
+  const benchOneFree = currentGrid[0].concat(currentGrid[1]).find(cell => cell.piece === '');
+  if (benchOneFree === undefined) return currentGrid;
+  const [benchOneRow, benchOneCol] = benchOneFree.id.replace('sqr', '').split('-').map(n => Number(n));
+
+  // bench two
+  const benchTwoFree = currentGrid[10].concat(currentGrid[11]).find(cell => cell.piece === '');
+  if (benchTwoFree === undefined) return currentGrid;
+  const [benchTwoRow, benchTwoCol] = benchOneFree.id.replace('sqr', '').split('-').map(n => Number(n));
+
+  // target piece
+  const [filledRow, filledCol] = selectedFilledSqr;
+  if (filledRow === null || filledCol === null) return currentGrid;
+  const pieceTargeted: Square = currentGrid[filledRow][filledCol];
+
+  // to-move piece
+  const [currentRow, currentCol] = currentSelected;
+  if (currentRow === null || currentCol === null) return currentGrid;
+  const currentPieceSelected: Square = currentGrid[currentRow][currentCol];  
+
+
+  return currentGrid.map((r, rIdx) => {
+      //discard piece one
+      if (pieceTargeted.pieceType === 'one' && rIdx === benchOneRow) {
+        return r.map((c, cIdx) =>
+          cIdx === benchOneCol ? {...c, piece:  pieceTargeted.piece, pieceType:  pieceTargeted.pieceType } : c
+        )
+      }
+      //discard piece two
+      if (pieceTargeted.pieceType === 'two' && rIdx === benchTwoRow) {
+        return r.map((c, cIdx) =>
+          cIdx === benchTwoCol ? {...c, piece:  pieceTargeted.piece, pieceType:  pieceTargeted.pieceType } : c
+        )
+      }
+      // place current on target
+      if (rIdx === filledRow) {
+        return r.map((c, cIdx) =>
+          cIdx === filledCol ? {...c, piece:  currentPieceSelected.piece, pieceType:  currentPieceSelected.pieceType } : c
+        )
+      }
+      // empty target
+      if (rIdx === currentRow) {
+        return r.map((c, cIdx) =>
+          cIdx === currentCol ? {...c, piece: '', pieceType: '', selected: false } : c
+        )
+      }
+      return r
+    }
+  )
+};
 
 export {
   buildGameGrid,
