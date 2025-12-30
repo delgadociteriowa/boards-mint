@@ -8,11 +8,11 @@ import BoardContext from "@/context/board/boardContext";
 const Checkers = () => {
   //Type context
   const boardContext = useContext(BoardContext)!;
-  const { selectGame, emptyGame } = boardContext;
+  const { handleGameSelection, handleExitGame } = boardContext;
 
   useEffect(() => {
-    selectGame('checkers');
-    return () => emptyGame();
+    handleGameSelection('checkers');
+    return () => handleExitGame();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   

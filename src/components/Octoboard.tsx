@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import OctoBoardSquare from './OctoBoardSquare';
 import LoadingComponent from './LoadingComponent';
 import BoardContext from '@/context/board/boardContext';
@@ -21,11 +21,9 @@ const Octoboard = () => {
 
   const {
     selectedGame,
-    buildGameGrid,
     gameGrid,
-    setGrid,
     phaseTwo,
-    onClickPiece
+    handleClickSqr
   } = boardContext;
 
   const gameColors: ColorsType = {
@@ -60,17 +58,6 @@ const Octoboard = () => {
     return color
   }
 
-  useEffect(() => {
-    if (
-      (selectedGame === 'chess' || selectedGame === 'checkers') &&
-      gameGrid.length === 0
-    ) {
-      const grid = buildGameGrid();
-      setGrid(grid || []);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedGame, gameGrid]);
-
   return (
     <>
       {selectedGame && gameGrid.length > 0 ? (
@@ -85,7 +72,7 @@ const Octoboard = () => {
                 colorClicked: colorsClicked[selectedGame],
                 colorClickedHover: colorsClickedHover[selectedGame]
               };
-              return (<OctoBoardSquare key={cellContent.id} cellContent={cellContent} colors={colors} onClickPiece={onClickPiece} phaseTwo={phaseTwo}/>)
+              return (<OctoBoardSquare key={cellContent.id} cellContent={cellContent} colors={colors} onClickPiece={handleClickSqr} phaseTwo={phaseTwo}/>)
             })
           ))}
           </div>
