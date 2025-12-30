@@ -9,7 +9,6 @@ import {
   TARGETED_SELF,
   TARGETED_EMPTY,
   TARGETED_PIECE,
-  FILLED_BENCHES,
   CLOSED_GAME,
 } from '../types'
 
@@ -95,13 +94,13 @@ const boardReducer = (state: BoardStateType, action: BoardAction): BoardStateTyp
         selectedSqr: [null, null],
         phaseTwo: false,
       }
-    case FILLED_BENCHES:
-      return {
-        ...state,
-      }
     case CLOSED_GAME:
       return {
         ...state,
+        selectedGame: '',
+        gameGrid: [],
+        selectedSqr: [null, null],
+        phaseTwo: false
       }
     default:
       return state;

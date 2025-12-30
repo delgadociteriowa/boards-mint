@@ -38,5 +38,4 @@ export type BoardAction =
   | { type: 'TARGETED_SELF'} // does not need payload
   | { type: 'TARGETED_EMPTY'; payload: string}
   | { type: 'TARGETED_PIECE'; payload: string }
-  | { type: 'FILLED_BENCHES' }
   | { type: 'CLOSED_GAME' };
