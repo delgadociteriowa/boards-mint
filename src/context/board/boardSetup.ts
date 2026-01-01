@@ -76,6 +76,7 @@ const buildGameGrid = (selectedGame: SelectedGame): Grid => {
 };
 
 const selectSqrGrid = (selectedSqr: SelectedSquare, currentGrid: Grid): Grid => {
+  console.log('selectSqrGrid');
   const [row, col] = selectedSqr;
   return currentGrid.map((r, rIdx) => 
     rIdx === row
@@ -87,6 +88,7 @@ const selectSqrGrid = (selectedSqr: SelectedSquare, currentGrid: Grid): Grid => 
 };
 
 const targetedSelfGrid = (currentSelectedSqr: SelectedSquare, currentGrid: Grid): Grid => {
+  console.log('targetedSelfGrid');
   const [row, col] = currentSelectedSqr;
   return currentGrid.map((r, rIdx) => 
     rIdx === row
@@ -98,24 +100,40 @@ const targetedSelfGrid = (currentSelectedSqr: SelectedSquare, currentGrid: Grid)
 };
 
 const targetedEmptyGrid = (selectedEmptySqr: SelectedSquare, currentSelected: SelectedSquare,  currentGrid: Grid): Grid => {
-  const [emptyRow, emptyCol] = selectedEmptySqr;
-  const [currentRow, currentCol] = currentSelected;
-  if (currentRow === null || currentCol === null) return currentGrid;
+  const [emptyRow, emptyCell] = selectedEmptySqr;
+  const [currentRow, currentCell] = currentSelected;
 
-  const currentPieceSelected: Square = currentGrid[currentRow][currentCol];
+  if (currentRow === null || currentCell === null) return currentGrid;
+
+  const currentPieceSelected: Square = currentGrid[currentRow][currentCell];
 
   return currentGrid.map((r, rIdx) => {
-      if(rIdx === emptyRow) {
-        return r.map((c, cIdx) => 
-          cIdx === emptyCol ? {...c, piece: currentPieceSelected.piece, pieceType: currentPieceSelected.pieceType} : c    
-        ) 
+    // not target or origin
+    if (rIdx !== emptyRow && rIdx !== currentRow) return r;
+
+    return r.map((cell, cIdx) => {
+      // target
+      if (rIdx === emptyRow && cIdx === emptyCell) {
+        return {
+          ...cell,
+          piece: currentPieceSelected.piece,
+          pieceType: currentPieceSelected.pieceType,
+          selected: false,
+        };
       }
-      if(rIdx === currentRow) {
-        return r.map((c, cIdx) => 
-          cIdx === currentCol ? {...c, piece: '', pieceType: '', selected: false} : c    
-        ) 
+
+      // origin
+      if (rIdx === currentRow && cIdx === currentCell) {
+        return {
+          ...cell,
+          piece: '',
+          pieceType: '',
+          selected: false,
+        };
       }
-      return r
+
+      return cell;
+    });
     }
   )
 };
@@ -123,6 +141,7 @@ const targetedEmptyGrid = (selectedEmptySqr: SelectedSquare, currentSelected: Se
 
 
 const targetedPieceGrid = (selectedFilledSqr: SelectedSquare, currentSelected: SelectedSquare,  currentGrid: Grid): Grid  => {
+  console.log('targetedPieceGrid');
   // bech one
   const benchOneFree = currentGrid[0].concat(currentGrid[1]).find(cell => cell.piece === '');
   if (benchOneFree === undefined) return currentGrid;
