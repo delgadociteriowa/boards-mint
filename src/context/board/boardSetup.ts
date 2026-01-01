@@ -143,12 +143,12 @@ const targetedEmptyGrid = (selectedEmptySqr: SelectedSquare, currentSelected: Se
 const targetedPieceGrid = (selectedFilledSqr: SelectedSquare, currentSelected: SelectedSquare,  currentGrid: Grid): Grid  => {
   console.log('targetedPieceGrid');
   // bench one
-  const benchOneFree = currentGrid[0].concat(currentGrid[1]).find(cell => cell.piece === '');
+  const benchOneFree = currentGrid[0].concat([...currentGrid[1], ...currentGrid[10], ...currentGrid[11]]).find(cell => cell.piece === '');
   if (benchOneFree === undefined) return currentGrid;
   const [benchOneRow, benchOneCol] = benchOneFree.id.replace('sqr', '').split('-').map(Number);
 
   // bench two
-  const benchTwoFree = currentGrid[10].concat(currentGrid[11]).find(cell => cell.piece === '');
+  const benchTwoFree = currentGrid[10].concat([...currentGrid[11], ...currentGrid[0], ...currentGrid[1]]).find(cell => cell.piece === '');
   if (benchTwoFree === undefined) return currentGrid;
   const [benchTwoRow, benchTwoCol] = benchTwoFree.id.replace('sqr', '').split('-').map(Number);
 
@@ -173,7 +173,7 @@ const targetedPieceGrid = (selectedFilledSqr: SelectedSquare, currentSelected: S
 
     return r.map((cell, cIdx) => {
 
-      // descarte
+      // discard
       if (
         pieceTargeted.pieceType === 'one' &&
         rIdx === benchOneRow &&
@@ -190,12 +190,12 @@ const targetedPieceGrid = (selectedFilledSqr: SelectedSquare, currentSelected: S
         return { ...cell, piece: pieceTargeted.piece, pieceType: pieceTargeted.pieceType };
       }
 
-      // mover pieza actual al target
+      // move to target
       if (rIdx === filledRow && cIdx === filledCol) {
         return { ...cell, piece: currentPieceSelected.piece, pieceType: currentPieceSelected.pieceType };
       }
 
-      // vaciar origen
+      // empty origin
       if (rIdx === currentRow && cIdx === currentCol) {
         return { ...cell, piece: '', pieceType: '', selected: false };
       }
@@ -206,10 +206,19 @@ const targetedPieceGrid = (selectedFilledSqr: SelectedSquare, currentSelected: S
   )
 };
 
+const benchesAreFilled = (grid: Grid): boolean => {
+  const benchRows = [0, 1, 10, 11];
+
+  return benchRows.every(rowIndex =>
+    grid[rowIndex].every(square => square.piece !== "")
+  );
+};
+
 export {
   buildGameGrid,
   selectSqrGrid,
   targetedSelfGrid,
   targetedEmptyGrid,
-  targetedPieceGrid
+  targetedPieceGrid,
+  benchesAreFilled
 }

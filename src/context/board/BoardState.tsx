@@ -23,14 +23,6 @@ const BoardState = ({ children }: { children: ReactNode }) => {
 
   const [state, dispatch] = useReducer(BoardReducer, initialState);
 
-  const benchesAreFilled = (): boolean => {
-    const benchRows = [0, 1, 10, 11];
-
-    return benchRows.every(rowIndex =>
-      state.gameGrid[rowIndex].every(square => square.piece !== "")
-    );
-  };
-
   const handleGameSelection = (game: SelectedGame) : void => {
     dispatch({ type: SELECTED_GAME, payload: game});
   }
@@ -41,11 +33,6 @@ const BoardState = ({ children }: { children: ReactNode }) => {
     // select piece 
     if(!state.phaseTwo) {
       dispatch({type: SELECTED_PIECE, payload: clickedSqr});
-      return
-    }
-    // benches filled
-    if (state.phaseTwo && benchesAreFilled()){
-      dispatch({type: TARGETED_SELF});
       return
     }
 

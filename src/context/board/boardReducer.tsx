@@ -14,7 +14,8 @@ import {
   selectSqrGrid,
   targetedSelfGrid,
   targetedEmptyGrid,
-  targetedPieceGrid
+  targetedPieceGrid,
+  benchesAreFilled,
 } from './boardSetup';
 
 const boardReducer = (state: BoardStateType, action: BoardAction): BoardStateType => {
@@ -58,6 +59,16 @@ const boardReducer = (state: BoardStateType, action: BoardAction): BoardStateTyp
       const [targetSqrRow, targetSqrCol] = action.payload.replace('sqr', '').split('-').map(n => Number(n));
       const selectedFilledSqr: SelectedSquare = [targetSqrRow, targetSqrCol];
       const selectedFilledGrid = targetedPieceGrid(selectedFilledSqr, state.selectedSqr, state.gameGrid);
+
+      if (benchesAreFilled(state.gameGrid)) {
+        const unSelectGrid = targetedSelfGrid(state.selectedSqr, state.gameGrid);
+        return {
+          ...state,
+          gameGrid: unSelectGrid,
+          selectedSqr: [null, null],
+          phaseTwo: false,
+        }
+      }
       return {
         ...state,
         gameGrid: selectedFilledGrid,
