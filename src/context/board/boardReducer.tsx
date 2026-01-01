@@ -1,39 +1,87 @@
 import {
-  SET_GAME,
-  SET_GAME_GRID,
-  SET_SELECTED_SQR,
-  ACTIVATE_PHASE_TWO,
-  DEACTIVATE_PHASE_TWO
+  SELECTED_GAME,
+  SELECTED_PIECE,
+  TARGETED_SELF,
+  TARGETED_EMPTY,
+  TARGETED_PIECE,
+  CLOSED_GAME,
 } from '../types'
 
-import { BoardStateType, BoardAction } from './boardTypes';
+import { BoardStateType, BoardAction, SelectedSquare } from './boardTypes';
+
+import {
+  buildGameGrid,
+  selectSqrGrid,
+  targetedSelfGrid,
+  targetedEmptyGrid,
+  targetedPieceGrid,
+  benchesAreFilled,
+} from './boardSetup';
 
 const boardReducer = (state: BoardStateType, action: BoardAction): BoardStateType => {
   switch(action.type) {
-    case SET_GAME:
+    case SELECTED_GAME:
+      const newGrid = buildGameGrid(action.payload);
       return {
         ...state,
-        selectedGame: action.payload, 
-      }    
-    case SET_GAME_GRID:
-      return {
-        ...state,
-        gameGrid: action.payload,
+        selectedGame: action.payload,
+        gameGrid: newGrid
       }
-    case SET_SELECTED_SQR:
+    case SELECTED_PIECE:
+      const [row, col] = action.payload.replace('sqr', '').split('-').map(n => Number(n));
+      const selectedPiece: SelectedSquare = [row, col];
+      const selectedSqrGrid = selectSqrGrid(selectedPiece, state.gameGrid);
       return {
         ...state,
-        selectedSqr: action.payload,
-      }
-    case ACTIVATE_PHASE_TWO:
-      return {
-        ...state,
+        gameGrid: selectedSqrGrid,
+        selectedSqr: selectedPiece,
         phaseTwo: true,
       }
-    case DEACTIVATE_PHASE_TWO:
+    case TARGETED_SELF:
+      const selectedSelfGrid = targetedSelfGrid(state.selectedSqr, state.gameGrid);
       return {
         ...state,
+        gameGrid: selectedSelfGrid,
+        selectedSqr: [null, null],
         phaseTwo: false,
+      }
+    case TARGETED_EMPTY:
+      const [targetEmptyRow, targetEmptyCol] = action.payload.replace('sqr', '').split('-').map(n => Number(n));
+      const emptySqr: SelectedSquare = [targetEmptyRow, targetEmptyCol];
+      const selectedEmptyGrid = targetedEmptyGrid(emptySqr, state.selectedSqr, state.gameGrid);
+      return {
+        ...state,
+        gameGrid: selectedEmptyGrid,
+        selectedSqr: [null, null],
+        phaseTwo: false,
+      }
+    case TARGETED_PIECE:
+      const [targetSqrRow, targetSqrCol] = action.payload.replace('sqr', '').split('-').map(n => Number(n));
+      const selectedFilledSqr: SelectedSquare = [targetSqrRow, targetSqrCol];
+      const selectedFilledGrid = targetedPieceGrid(selectedFilledSqr, state.selectedSqr, state.gameGrid);
+
+      if (benchesAreFilled(state.gameGrid)) {
+        const unSelectGrid = targetedSelfGrid(state.selectedSqr, state.gameGrid);
+        return {
+          ...state,
+          gameGrid: unSelectGrid,
+          selectedSqr: [null, null],
+          phaseTwo: false,
+        }
+      }
+      return {
+        ...state,
+        gameGrid: selectedFilledGrid,
+        selectedSqr: [null, null],
+        phaseTwo: false,
+      }
+    case CLOSED_GAME:
+      return {
+        ...state,
+        selectedGame: '',
+        gameGrid: [],
+        selectedSqr: [null, null],
+        phaseTwo: false
       }
     default:
       return state;
