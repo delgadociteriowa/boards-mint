@@ -142,15 +142,15 @@ const targetedEmptyGrid = (selectedEmptySqr: SelectedSquare, currentSelected: Se
 
 const targetedPieceGrid = (selectedFilledSqr: SelectedSquare, currentSelected: SelectedSquare,  currentGrid: Grid): Grid  => {
   console.log('targetedPieceGrid');
-  // bech one
+  // bench one
   const benchOneFree = currentGrid[0].concat(currentGrid[1]).find(cell => cell.piece === '');
   if (benchOneFree === undefined) return currentGrid;
-  const [benchOneRow, benchOneCol] = benchOneFree.id.replace('sqr', '').split('-').map(n => Number(n));
+  const [benchOneRow, benchOneCol] = benchOneFree.id.replace('sqr', '').split('-').map(Number);
 
   // bench two
   const benchTwoFree = currentGrid[10].concat(currentGrid[11]).find(cell => cell.piece === '');
   if (benchTwoFree === undefined) return currentGrid;
-  const [benchTwoRow, benchTwoCol] = benchOneFree.id.replace('sqr', '').split('-').map(n => Number(n));
+  const [benchTwoRow, benchTwoCol] = benchTwoFree.id.replace('sqr', '').split('-').map(Number);
 
   // target piece
   const [filledRow, filledCol] = selectedFilledSqr;
@@ -164,31 +164,44 @@ const targetedPieceGrid = (selectedFilledSqr: SelectedSquare, currentSelected: S
 
 
   return currentGrid.map((r, rIdx) => {
-      //discard piece one
-      if (pieceTargeted.pieceType === 'one' && rIdx === benchOneRow) {
-        return r.map((c, cIdx) =>
-          cIdx === benchOneCol ? {...c, piece:  pieceTargeted.piece, pieceType:  pieceTargeted.pieceType } : c
-        )
+    if (
+      rIdx !== filledRow &&
+      rIdx !== currentRow &&
+      rIdx !== benchOneRow &&
+      rIdx !== benchTwoRow
+    ) return r;
+
+    return r.map((cell, cIdx) => {
+
+      // descarte
+      if (
+        pieceTargeted.pieceType === 'one' &&
+        rIdx === benchOneRow &&
+        cIdx === benchOneCol
+      ) {
+        return { ...cell, piece: pieceTargeted.piece, pieceType: pieceTargeted.pieceType };
       }
-      //discard piece two
-      if (pieceTargeted.pieceType === 'two' && rIdx === benchTwoRow) {
-        return r.map((c, cIdx) =>
-          cIdx === benchTwoCol ? {...c, piece:  pieceTargeted.piece, pieceType:  pieceTargeted.pieceType } : c
-        )
+
+      if (
+        pieceTargeted.pieceType === 'two' &&
+        rIdx === benchTwoRow &&
+        cIdx === benchTwoCol
+      ) {
+        return { ...cell, piece: pieceTargeted.piece, pieceType: pieceTargeted.pieceType };
       }
-      // place current on target
-      if (rIdx === filledRow) {
-        return r.map((c, cIdx) =>
-          cIdx === filledCol ? {...c, piece:  currentPieceSelected.piece, pieceType:  currentPieceSelected.pieceType } : c
-        )
+
+      // mover pieza actual al target
+      if (rIdx === filledRow && cIdx === filledCol) {
+        return { ...cell, piece: currentPieceSelected.piece, pieceType: currentPieceSelected.pieceType };
       }
-      // empty target
-      if (rIdx === currentRow) {
-        return r.map((c, cIdx) =>
-          cIdx === currentCol ? {...c, piece: '', pieceType: '', selected: false } : c
-        )
+
+      // vaciar origen
+      if (rIdx === currentRow && cIdx === currentCol) {
+        return { ...cell, piece: '', pieceType: '', selected: false };
       }
-      return r
+
+      return cell;
+    });
     }
   )
 };
