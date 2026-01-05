@@ -1,18 +1,13 @@
 'use client';
-import { useContext } from "react";
 import { useSession } from "next-auth/react";
+import { useAppSelector } from '@/redux/hooks';
 import Link from 'next/link';
 import Image from 'next/image';
 import HamburguerIcon from '../assets/icon-hamburger.svg'
 import CloseIcon from '../assets/icon-close.svg'
-import BoardContext from "@/context/board/boardContext";
 
 const Navigation = () => {
-  // Type improvements required
-  const boardContext = useContext(BoardContext);
-  if (!boardContext) return null;
-
-  const { selectedGame } = boardContext;
+  const selectedGame = useAppSelector(state => state.board.selectedGame);
   const { data: session } = useSession();
 
   return (

@@ -51,7 +51,7 @@ const boardReducer = (state: BoardStateType = initialState, action: BoardAction)
           }
         }
       
-        if (benchesAreFilled(state.gameGrid) || isSameSqr) {
+        if (isSameSqr) {
           return {
             ...state,
             gameGrid: targetedSelfGrid(state.selectedSqr, state.gameGrid), 
@@ -70,6 +70,15 @@ const boardReducer = (state: BoardStateType = initialState, action: BoardAction)
         }
         
         if (state.gameGrid[row][col].piece.length) {
+          if (benchesAreFilled(state.gameGrid)) {
+            return {
+              ...state,
+              gameGrid: targetedSelfGrid(state.selectedSqr, state.gameGrid), 
+              selectedSqr: emptySqr,
+              phaseTwo: false
+            }
+          }
+
           return {
             ...state,
             gameGrid: targetedPieceGrid(selectedPiece, state.selectedSqr, state.gameGrid),
