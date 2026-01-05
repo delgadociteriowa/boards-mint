@@ -1,58 +1,33 @@
 import {
-  SELECTED_GAME,
-  SELECTED_PIECE,
-  TARGETED_SELF,
-  TARGETED_EMPTY,
-  TARGETED_PIECE,
-  CLOSED_GAME
+  SELECT_GAME,
+  SELECT_PIECE,
+  CLOSE_GAME
 } from './boardTypes';
 
 import { SelectedGame } from './boardTs';
 
-const selectedGame = (game: SelectedGame) => {
+const selectGame = (game: SelectedGame) => {
   return {
-    type: SELECTED_GAME,
+    type: SELECT_GAME,
     payload: game
   }
 }
 
-const selectedPiece = () => {
+const selectPiece = (id: string) => {
   return {
-    type: SELECTED_PIECE
-  };
-};
-
-const targetedSelf = () => {
-  return {
-    type: TARGETED_SELF
-  };
-};
-
-const targetedEmpty = (id: string) => {
-  return {
-    type: TARGETED_EMPTY,
+    type: SELECT_PIECE,
     payload: id
   };
 };
 
-const targetedPiece = (id: string) => {
+const closeGame = () => {
   return {
-    type: TARGETED_PIECE,
-    payload: id
-  };
-};
-
-const closedGame = () => {
-  return {
-    type: CLOSED_GAME
+    type: CLOSE_GAME
   };
 };
 
 export {
-  selectedGame,
-  selectedPiece,
-  targetedSelf,
-  targetedEmpty,
-  targetedPiece,
-  closedGame
+  selectGame,
+  selectPiece,
+  closeGame
 };

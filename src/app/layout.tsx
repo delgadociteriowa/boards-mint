@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import BoardState from "@/context/board/BoardState";
 import "./globals.css";
-import { Analytics } from '@vercel/analytics/next';
+import { Analytics } from "@vercel/analytics/next";
 import AuthProvider from "@/components/AuthProvider";
 
-import { Provider } from "react-redux";
+import  Providers from "./providers";
 import store from "@/redux/store";
 
 export const metadata: Metadata = {
@@ -34,14 +34,14 @@ const RootLayout = ({ children }: Readonly<{children: React.ReactNode }>) => {
   return (
     <AuthProvider>
       <html lang="en">
-        <Provider store={store}>
+        <Providers>
         <BoardState>
           <body className="bg-stone-100 font-texts">
             {children}
             <Analytics />
           </body>
         </BoardState>
-        </Provider>
+        </Providers>
       </html>
     </AuthProvider>
   );

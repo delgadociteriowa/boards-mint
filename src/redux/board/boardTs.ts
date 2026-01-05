@@ -2,7 +2,7 @@ export type PieceType = 'one' | 'two' | '';
 export type Piece = '♟' |'♜' | '♞' | '♝' | '♛' | '♚' | 'checker' | '' ;
 export type SelectedGame = 'chess' | 'checkers' | '';
 export type Grid = Square[][];
-export type SelectedSquare = [number | null, number | null];
+export type SelectedSquare = [number, number] | [null, null];
 
 export interface Square { 
   id: string;
@@ -25,9 +25,6 @@ export interface BoardContextType extends BoardStateType {
 };
 
 export type BoardAction =
-  | { type: 'SELECTED_GAME'; payload: SelectedGame }
-  | { type: 'SELECTED_PIECE'; payload: string }
-  | { type: 'TARGETED_SELF'} // does not need payload
-  | { type: 'TARGETED_EMPTY'; payload: string}
-  | { type: 'TARGETED_PIECE'; payload: string }
-  | { type: 'CLOSED_GAME' };
+  | { type: 'SELECT_GAME'; payload: SelectedGame }
+  | { type: 'SELECT_PIECE'; payload: string }
+  | { type: 'CLOSE_GAME' };
