@@ -1,8 +1,9 @@
 'use client';
-import React, { useContext } from 'react';
+import React from 'react';
 import OctoBoardSquare from './OctoBoardSquare';
 import LoadingComponent from './LoadingComponent';
-import BoardContext from '@/context/board/boardContext';
+import { useAppSelector, useAppDispatch } from '@/redux/hooks';
+import { selectPiece } from '@/redux/board/boardActions'; // accion necesaria
 
 interface ColorsType {
   chess: string[];
@@ -15,16 +16,13 @@ interface ColorsClickedType {
 };
 
 const Octoboard = () => {
-  // Type improvements required
-  const boardContext = useContext(BoardContext);
-  if (!boardContext) return null;
-
-  const {
-    selectedGame,
-    gameGrid,
-    phaseTwo,
-    handleClickSqr
-  } = boardContext;
+  const dispatch = useAppDispatch();
+  const selectedGame = useAppSelector(state => state.board.selectedGame);
+  const gameGrid = useAppSelector(state => state.board.gameGrid);
+  const phaseTwo = useAppSelector(state => state.board.phaseTwo);
+  const handleClickSqr = (id: string) => {
+    dispatch(selectPiece(id))
+  }
 
   const gameColors: ColorsType = {
     chess: ['bg-teal-900','bg-teal-700','bg-teal-500','bg-teal-300'],

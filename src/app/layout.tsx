@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import BoardState from "@/context/board/BoardState";
 import "./globals.css";
-import { Analytics } from '@vercel/analytics/next';
+import { Analytics } from "@vercel/analytics/next";
 import AuthProvider from "@/components/AuthProvider";
+import  Providers from "./providers";
 
 export const metadata: Metadata = {
   title: "BOARDS | Virtual board games online",
@@ -31,12 +31,12 @@ const RootLayout = ({ children }: Readonly<{children: React.ReactNode }>) => {
   return (
     <AuthProvider>
       <html lang="en">
-        <BoardState>
+        <Providers>
           <body className="bg-stone-100 font-texts">
             {children}
             <Analytics />
           </body>
-        </BoardState>
+        </Providers>
       </html>
     </AuthProvider>
   );
