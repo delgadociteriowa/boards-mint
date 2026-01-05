@@ -1,6 +1,0 @@
-export const SELECTED_GAME = 'SELECTED_GAME';
-export const SELECTED_PIECE = 'SELECTED_PIECE';
-export const TARGETED_SELF = 'TARGETED_SELF';
-export const TARGETED_EMPTY = 'TARGETED_EMPTY';
-export const TARGETED_PIECE = 'TARGETED_PIECE';
-export const CLOSED_GAME = 'CLOSED_GAME';
