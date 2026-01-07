@@ -4,7 +4,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Octoboard from "@/components/Octoboard";
 import { useDispatch } from "react-redux";
-import { selectGame, closeGame } from "@/redux/board/boardActions";
+import { selectGame, closeGame } from "@/state/board/boardSlice";
 
 
 const Chess = () => {

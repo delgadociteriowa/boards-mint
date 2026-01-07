@@ -2,8 +2,8 @@
 import React from 'react';
 import OctoBoardSquare from './OctoBoardSquare';
 import LoadingComponent from './LoadingComponent';
-import { useAppSelector, useAppDispatch } from '@/redux/hooks';
-import { selectPiece } from '@/redux/board/boardActions'; // accion necesaria
+import { useAppSelector, useAppDispatch } from '@/state/hooks';
+import { selectPiece } from '@/state/board/boardSlice'; // accion necesaria
 
 interface ColorsType {
   chess: string[];

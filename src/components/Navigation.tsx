@@ -1,6 +1,6 @@
 'use client';
 import { useSession } from "next-auth/react";
-import { useAppSelector } from '@/redux/hooks';
+import { useAppSelector } from '@/state/hooks';
 import Link from 'next/link';
 import Image from 'next/image';
 import HamburguerIcon from '../assets/icon-hamburger.svg'

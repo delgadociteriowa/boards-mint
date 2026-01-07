@@ -10,6 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.11.2",
     "@vercel/analytics": "^1.5.0",
     "bcryptjs": "^3.0.3",
     "mongodb": "^6.21.0",
