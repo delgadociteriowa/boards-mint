@@ -14,6 +14,10 @@ import {
 } from './boardSetup';
 
 const initialState: BoardStateType = {
+  id: '',
+  owner: '',
+  createdAt: '',
+  lastSaved: '',
   selectedGame: '',
   gameGrid: [],
   selectedSqr: [null, null],
