@@ -1,15 +1,16 @@
 import Link from "next/link";
 
 interface SavedCardProps {
-  background: string;
-  title: string;
-  gameLink: string;
+  game: string;
+  gameId: string;
+  createdAt: string;
+  lastSaved: string;
 }
 
-const SavedCard = ({background, title, gameLink} : SavedCardProps) => (
-  <div className={`${background} h-[225px] p-6 bg-stone-900 rounded-3xl bg-center bg-cover flex flex-col w-[250px] max-w-[270px] grow shadow-xl/30`}>
+const SavedCard = ({game, gameId, createdAt, lastSaved} : SavedCardProps) => (
+  <div className={`bg-game-${game} h-[225px] p-6 bg-stone-900 rounded-3xl bg-center bg-cover flex flex-col w-[250px] max-w-[270px] grow shadow-xl/30`}>
     <h4 className="uppercase text-stone-200 tracking-[2px] text-2xl mb-4 flex items-center justify-between">
-      <span>{title}</span>
+      <span>{game}</span>
       <button
         type="button"
         aria-label="Delete"
@@ -25,9 +26,9 @@ const SavedCard = ({background, title, gameLink} : SavedCardProps) => (
         </svg>
       </button>
     </h4>
-    <h3 className="text-stone-200 text-lg">Created at: 11/1/2026</h3>
-    <h3 className="text-stone-200 text-lg">Last saved: 11/1/2026</h3>
-    <Link className="lowercase block bg-stone-200/70 hover:bg-stone-200/90 py-4 rounded-full text-center no-underline text-stone-800 text-xl tracking-[3px] mt-auto" href={`/${gameLink}`}>continue</Link>
+    <h3 className="text-stone-200 text-lg">Created at: {createdAt}</h3>
+    <h3 className="text-stone-200 text-lg">Last saved: {lastSaved}</h3>
+    <Link className="lowercase block bg-stone-200/70 hover:bg-stone-200/90 py-4 rounded-full text-center no-underline text-stone-800 text-xl tracking-[3px] mt-auto" href={`/${gameId}`}>continue</Link>
   </div>
 );
 

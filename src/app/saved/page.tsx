@@ -7,9 +7,21 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SavedCard from "@/components/SavedCard";
 import LoadingComponent from "@/components/LoadingComponent";
+import formatDate from "@/utils/formatDate";
+
+
+interface SavedBoard {
+  _id: string;
+  owner: string;
+  selectedGame: string;
+  createdAt: string;
+  lastSave: string;
+};
 
 const Saved = () => {
   const [userName, setUserName] = useState<string | null>(null);
+  const [boards, setBoards] = useState<SavedBoard[]>([]);
+  const [loadingBoards, setLoadingBoards] = useState(true);
 
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -25,44 +37,54 @@ const Saved = () => {
     setUserName(session?.user?.username ?? null);
   }, [status, session, router]);
 
-  if (status === "loading") {
-    return (
-      <>
-        <Header/>
-        <LoadingComponent/>
-        <Footer/>
-      </>
-    );
-  }
+  useEffect(() => {
+    if (status !== "authenticated") return;
+
+    const fetchBoards = async () => {
+      try {
+        const res = await fetch("/api/saved/get");
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch saved boards");
+        }
+
+        const data: SavedBoard[] = await res.json();
+        setBoards(data);
+      } catch (error) {
+        console.error("Error fetching boards:", error);
+      } finally {
+        setLoadingBoards(false);
+      }
+    };
+
+    fetchBoards();
+  }, [status]);
 
   return (
     <>
       <Header/>
+        {(status === "loading" || loadingBoards) && <LoadingComponent />}
         <main className="min-h-[800px]">
           <section className="w-[90%] mx-auto max-w-[1200px] py-14 text-stone-600">
             <h3 className="text-center text-4xl tracking-[2px] mb-2">Saved Games</h3>
             <h4 className="text-center text-2xl tracking-[2px] mb-8">{userName}</h4>
             <div className="py-5 flex flex-wrap justify-start gap-10 w-[100%] mb-8">
-              <SavedCard
-                background={'bg-game-chess'}
-                title={'chess'}
-                gameLink={'chess'}/>
-              <SavedCard
-                background={'bg-game-checkers'}
-                title={'checkers'}
-                gameLink={'checkers'}/>
-              <SavedCard
-                background={'bg-game-chess'}
-                title={'chess'}
-                gameLink={'chess'}/>
-              <SavedCard
-                background={'bg-game-checkers'}
-                title={'checkers'}
-                gameLink={'checkers'}/>
-              <SavedCard
-                background={'bg-game-checkers'}
-                title={'checkers'}
-                gameLink={'checkers'}/>
+              
+              {!loadingBoards && boards.length === 0 && (
+                <p className="text-center w-full">
+                  No saved games yet.
+                </p>
+              )}
+              {!loadingBoards &&
+                boards.map(board => (
+                  <SavedCard
+                    key={board._id}
+                    game={board.selectedGame}
+                    gameId={board._id}
+                    createdAt={formatDate(board.createdAt)}
+                    lastSaved={formatDate(board.lastSave)}
+                  />
+              ))}
             </div>
           </section>
         </main>
