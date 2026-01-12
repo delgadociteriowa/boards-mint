@@ -60,6 +60,32 @@ const Saved = () => {
     fetchBoards();
   }, [status]);
 
+  const handleDelete = async (id: string): Promise<void> => {
+    const confirmed = confirm("Are you sure you want to delete this saved game?");
+    if (!confirmed) return;
+
+    setLoadingBoards(true);
+
+    try {
+      const res = await fetch(`/api/board/delete/${id}`, {
+        method: "DELETE",
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to delete board");
+      }
+
+      setBoards(prev =>
+        prev.filter(board => board._id !== id)
+      );
+      setLoadingBoards(false);
+    } catch (error) {
+      console.error("Error deleting board:", error);
+      alert("Something went wrong while deleting the saved game.");
+      setLoadingBoards(false);
+    }
+  };
+
   return (
     <>
       <Header/>
@@ -83,6 +109,7 @@ const Saved = () => {
                     gameId={board._id}
                     createdAt={formatDate(board.createdAt)}
                     lastSaved={formatDate(board.lastSave)}
+                    handleDelete={handleDelete}
                   />
               ))}
             </div>
