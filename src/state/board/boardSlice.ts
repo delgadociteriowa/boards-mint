@@ -33,6 +33,15 @@ const boardSlice = createSlice({
       state.selectedGame =  action.payload;
       state.gameGrid = newGrid;
     },
+    loadGame: (state, action: PayloadAction<BoardStateType>) => {
+      const {id, owner, createdAt, lastSaved, selectedGame, gameGrid} = action.payload;
+      state.id = id;
+      state.owner = owner;
+      state.createdAt = createdAt;
+      state.lastSaved = lastSaved;
+      state.selectedGame = selectedGame;
+      state.gameGrid = gameGrid;
+    },
     selectPiece: (state, action: PayloadAction<string>) => {
       const [row, col] = action.payload.replace('sqr', '').split('-').map(n => Number(n));
       const selectedPiece: SelectedSquare = [row, col];
@@ -80,6 +89,6 @@ const boardSlice = createSlice({
   }
 });
 
-export const { selectGame, selectPiece, closeGame } = boardSlice.actions;
+export const { selectGame, loadGame, selectPiece, closeGame } = boardSlice.actions;
 
 export default boardSlice.reducer;

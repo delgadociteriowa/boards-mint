@@ -42,7 +42,7 @@ const Saved = () => {
 
     const fetchBoards = async () => {
       try {
-        const res = await fetch("/api/saved/get");
+        const res = await fetch("/api/board/get");
 
         if (!res.ok) {
           throw new Error("Failed to fetch saved boards");

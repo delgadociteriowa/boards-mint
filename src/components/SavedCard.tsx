@@ -28,7 +28,7 @@ const SavedCard = ({game, gameId, createdAt, lastSaved} : SavedCardProps) => (
     </h4>
     <h3 className="text-stone-200 text-lg">Created at: {createdAt}</h3>
     <h3 className="text-stone-200 text-lg">Last saved: {lastSaved}</h3>
-    <Link className="lowercase block bg-stone-200/70 hover:bg-stone-200/90 py-4 rounded-full text-center no-underline text-stone-800 text-xl tracking-[3px] mt-auto" href={`/${gameId}`}>continue</Link>
+    <Link className="lowercase block bg-stone-200/70 hover:bg-stone-200/90 py-4 rounded-full text-center no-underline text-stone-800 text-xl tracking-[3px] mt-auto" href={`/${game}?gameId=${gameId}`}>continue</Link>
   </div>
 );
 
