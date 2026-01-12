@@ -1,26 +1,59 @@
 'use client';
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import { useDispatch } from "react-redux";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Octoboard from "@/components/Octoboard";
-import { useDispatch } from "react-redux";
-import { selectGame, closeGame } from "@/state/board/boardSlice";
+import LoadingComponent from "@/components/LoadingComponent";
+import { selectGame, loadGame, closeGame } from "@/state/board/boardSlice";
+import { BoardStateType } from "@/state/board/boardTs";
+
 
 const Checkers = () => {
+  const [loading, setLoading] = useState(true);
+  const searchParams = useSearchParams();
+  const gameId = searchParams.get("gameId");
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(selectGame('checkers'));
+    const initGame = async () => {
+      try {
+        if (gameId) {
+          const res = await fetch(`/api/board/get/${gameId}`);
+
+          if (!res.ok) {
+            throw new Error("Failed to fetch the saved board");
+          }
+
+          const data: BoardStateType = await res.json();
+          dispatch(loadGame(data));
+        } else {
+          dispatch(selectGame("checkers"));
+        }
+      } catch (error) {
+        console.error("Error fetching board:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    initGame();
+
     return () => {
       dispatch(closeGame())
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  
+  }, [gameId, dispatch]);
+
   return (
     <>
       <Header/>
-      <Octoboard/>
+      {loading ? (
+        <LoadingComponent />
+      ) : (
+        <Octoboard />
+      )}
       <Footer/>
     </>
   );
