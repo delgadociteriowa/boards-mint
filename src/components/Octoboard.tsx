@@ -84,7 +84,7 @@ const Octoboard = () => {
             <button className="bg-sky-600 hover:bg-sky-500 text-stone-100 px-6 py-1 rounded-xl cursor-pointer">
             save
             </button>
-            <span className="ml-auto text-sm font-texts text-stone-500 my-auto mr-2">Last Saved: 01/01/01 11:11</span>
+            <span className="ml-auto text-sm font-texts text-stone-500 my-auto mr-2">Last Saved: {lastSaved}</span>
           </div>)}
         </main>
       ) : (

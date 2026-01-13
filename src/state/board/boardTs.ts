@@ -14,8 +14,8 @@ export interface Square {
 export interface BoardStateType {
   id: string;
   owner: string;
-  createdAt: Date | '';
-  lastSaved: Date | '';
+  createdAt: string;
+  lastSaved: string;
   selectedGame: SelectedGame;
   gameGrid: Grid;
   selectedSqr: SelectedSquare;

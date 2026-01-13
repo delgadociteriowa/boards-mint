@@ -30,9 +30,8 @@ const Chess = () => {
           const data: BoardStateType = {
             ...dataFromApi,
             id: dataFromApi._id,
-            lastSaved: formatDate(dataFromApi.lastSaved)
+            lastSaved: formatDate(dataFromApi.lastSave)
           };
-
           dispatch(loadGame(data));
         } else {
           dispatch(selectGame("chess"));
