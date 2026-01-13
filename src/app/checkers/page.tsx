@@ -7,7 +7,8 @@ import Footer from "@/components/Footer";
 import Octoboard from "@/components/Octoboard";
 import LoadingComponent from "@/components/LoadingComponent";
 import { selectGame, loadGame, closeGame } from "@/state/board/boardSlice";
-import { BoardStateType } from "@/state/board/boardTs";
+import { BoardStateType } from "@/types/board";
+import formatDate from "@/utils/formatDate";
 
 
 const Checkers = () => {
@@ -26,7 +27,12 @@ const Checkers = () => {
             throw new Error("Failed to fetch the saved board");
           }
 
-          const data: BoardStateType = await res.json();
+          const dataFromApi = await res.json();
+          const data: BoardStateType = {
+            ...dataFromApi,
+            id: dataFromApi._id,
+            lastSaved: formatDate(dataFromApi.lastSaved)
+          };
           dispatch(loadGame(data));
         } else {
           dispatch(selectGame("checkers"));

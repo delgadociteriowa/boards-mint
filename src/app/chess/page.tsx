@@ -7,7 +7,7 @@ import Footer from "@/components/Footer";
 import Octoboard from "@/components/Octoboard";
 import LoadingComponent from "@/components/LoadingComponent";
 import { selectGame, loadGame, closeGame } from "@/state/board/boardSlice";
-import { BoardStateType } from "@/state/board/boardTs";
+import { BoardStateType } from "@/types/board";
 import formatDate from "@/utils/formatDate";
 
 
@@ -30,7 +30,7 @@ const Chess = () => {
           const data: BoardStateType = {
             ...dataFromApi,
             id: dataFromApi._id,
-            lastSaved: formatDate(dataFromApi.lastSave)
+            lastSaved: formatDate(dataFromApi.lastSaved)
           };
           dispatch(loadGame(data));
         } else {

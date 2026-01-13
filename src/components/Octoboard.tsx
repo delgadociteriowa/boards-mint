@@ -1,10 +1,9 @@
 'use client';
-import React from 'react';
+import React, {useState} from 'react';
+import { useAppSelector, useAppDispatch } from '@/state/hooks';
 import OctoBoardSquare from './OctoBoardSquare';
 import LoadingComponent from './LoadingComponent';
-import { useAppSelector, useAppDispatch } from '@/state/hooks';
 import { selectPiece } from '@/state/board/boardSlice';
-import formatDate from '@/utils/formatDate';
 
 interface ColorsType {
   chess: string[];
@@ -26,6 +25,7 @@ const Octoboard = () => {
   const handleClickSqr = (id: string) => {
     dispatch(selectPiece(id))
   }
+  const [saveDisabled, setSaveDisabled] = useState<boolean>(false);
 
   const gameColors: ColorsType = {
     chess: ['bg-teal-900','bg-teal-700','bg-teal-500','bg-teal-300'],
@@ -59,6 +59,30 @@ const Octoboard = () => {
     return color
   }
 
+  const handleSave = async () => {
+    const confirmed = confirm("Are you sure you want to save the game?");
+    if (!confirmed) return;
+
+    try {
+      const res = await fetch(`/api/board/update/${boardId}`, {
+        method: "PATCH",
+        headers: {
+        "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          gameGrid,
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to save board");
+      }
+    } catch (error) {
+      console.error("Error saving board:", error);
+      alert("Something went wrong while trying to save the game.");
+    }
+  }
+
   return (
     <>
       {selectedGame && gameGrid.length > 0 ? (
@@ -80,12 +104,25 @@ const Octoboard = () => {
             })
           ))}
           </div>
-          {boardId && (<div className='flex w-[90%] mb-14 landscape:w-[75%] mx-auto'>
-            <button className="bg-sky-600 hover:bg-sky-500 text-stone-100 px-6 py-1 rounded-xl cursor-pointer">
-            save
-            </button>
-            <span className="ml-auto text-sm font-texts text-stone-500 my-auto mr-2">Last Saved: {lastSaved}</span>
-          </div>)}
+          <div className='flex w-[90%] mb-14 landscape:w-[75%] mx-auto'>
+            {boardId && 
+              (<button
+                disabled={saveDisabled}
+                className={`
+                  text-stone-100
+                  px-6
+                  py-1
+                  rounded-xl
+                  ${saveDisabled
+                    ? "bg-stone-600 cursor-not-allowed opacity-60"
+                    : "bg-sky-600 hover:bg-sky-500 cursor-pointer"}
+                  `}
+                onClick={handleSave}
+                >
+                  save
+                </button>)}
+            {boardId && (<span className="ml-auto text-sm font-texts text-stone-500 my-auto mr-2">Last Saved: {lastSaved}</span>)}
+          </div>
         </main>
       ) : (
         <LoadingComponent />

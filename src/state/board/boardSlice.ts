@@ -3,7 +3,7 @@ import {
   BoardStateType,
   SelectedGame,
   SelectedSquare
-} from "./boardTs";
+} from "../../types/board";
 import {
   buildGameGrid,
   selectSqrGrid,

@@ -1,5 +1,5 @@
 import { Schema, model, models, Document, Model } from 'mongoose';
-import { SelectedGame, Grid, SelectedSquare } from '@/state/board/boardTs';
+import { SelectedGame, Grid, SelectedSquare } from '@/types/board';
 
 export interface IBoard extends Document {
   owner: string;
@@ -7,8 +7,6 @@ export interface IBoard extends Document {
   gameGrid: Grid;
   selectedSqr: SelectedSquare;
   phaseTwo: boolean;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 const BoardSchema = new Schema<IBoard>(
@@ -18,11 +16,11 @@ const BoardSchema = new Schema<IBoard>(
       required: true,
     },
     selectedGame: {
-      type: Schema.Types.Mixed,
+      type: String,
       required: true,
     },
     gameGrid: {
-      type: Schema.Types.Mixed,
+      type: [[Schema.Types.Mixed]],
       required: true,
     },
     selectedSqr: {

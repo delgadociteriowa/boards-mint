@@ -14,7 +14,7 @@ export async function GET(req) {
 
     const boards = await Board.find({ owner: userId })
       .select('-gameGrid -selectedSqr -phaseTwo')
-      .sort({ lastSave: -1 })
+      .sort({ lastSaved: -1 })
       .lean();
 
     return Response.json(boards, { status: 200 });

@@ -30,7 +30,7 @@ export async function PATCH(req, { params }) {
       { _id: id, owner: userId },
       {
         gameGrid,
-        lastSave: new Date(),
+        lastSaved: new Date(),
       },
       {
         new: true,
