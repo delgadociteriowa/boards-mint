@@ -8,6 +8,7 @@ import Octoboard from "@/components/Octoboard";
 import LoadingComponent from "@/components/LoadingComponent";
 import { selectGame, loadGame, closeGame } from "@/state/board/boardSlice";
 import { BoardStateType } from "@/state/board/boardTs";
+import formatDate from "@/utils/formatDate";
 
 
 const Chess = () => {
@@ -25,8 +26,13 @@ const Chess = () => {
           if (!res.ok) {
             throw new Error("Failed to fetch the saved board");
           }
+          const dataFromApi = await res.json();
+          const data: BoardStateType = {
+            ...dataFromApi,
+            id: dataFromApi._id,
+            lastSaved: formatDate(dataFromApi.lastSaved)
+          };
 
-          const data: BoardStateType = await res.json();
           dispatch(loadGame(data));
         } else {
           dispatch(selectGame("chess"));

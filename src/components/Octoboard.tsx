@@ -3,7 +3,8 @@ import React from 'react';
 import OctoBoardSquare from './OctoBoardSquare';
 import LoadingComponent from './LoadingComponent';
 import { useAppSelector, useAppDispatch } from '@/state/hooks';
-import { selectPiece } from '@/state/board/boardSlice'; // accion necesaria
+import { selectPiece } from '@/state/board/boardSlice';
+import formatDate from '@/utils/formatDate';
 
 interface ColorsType {
   chess: string[];
@@ -17,6 +18,8 @@ interface ColorsClickedType {
 
 const Octoboard = () => {
   const dispatch = useAppDispatch();
+  const boardId = useAppSelector(state => state.board.id);
+  const lastSaved = useAppSelector(state => state.board.lastSaved);
   const selectedGame = useAppSelector(state => state.board.selectedGame);
   const gameGrid = useAppSelector(state => state.board.gameGrid);
   const phaseTwo = useAppSelector(state => state.board.phaseTwo);
@@ -60,7 +63,10 @@ const Octoboard = () => {
     <>
       {selectedGame && gameGrid.length > 0 ? (
         <main className="w-[100%] md:w-[90%] lg:w-[80%] my-0 mx-auto">
-          <div className="grid w-[90%] rounded-2xl board-areas overflow-hidden mt-2 mb-16 mx-auto landscape:w-[75%] shadow-xl/20">
+          {boardId && (<div className='flex w-[90%] landscape:w-[75%] mx-auto'> 
+              <span className="text-sm font-texts text-stone-500 ml-auto">ID: {boardId}</span>
+          </div>)}
+          <div className="grid w-[90%] rounded-2xl board-areas overflow-hidden mt-2 mb-4 mx-auto landscape:w-[75%] shadow-xl/20">
           {gameGrid.map((row, rowIndex) => (
             row.map((cellContent, colIndex) =>{
               if (selectedGame !== 'chess' && selectedGame !== 'checkers') return null;
@@ -74,6 +80,12 @@ const Octoboard = () => {
             })
           ))}
           </div>
+          {boardId && (<div className='flex w-[90%] mb-14 landscape:w-[75%] mx-auto'>
+            <button className="bg-sky-600 hover:bg-sky-500 text-stone-100 px-6 py-1 rounded-xl cursor-pointer">
+            save
+            </button>
+            <span className="ml-auto text-sm font-texts text-stone-500 my-auto mr-2">Last Saved: 01/01/01 11:11</span>
+          </div>)}
         </main>
       ) : (
         <LoadingComponent />
