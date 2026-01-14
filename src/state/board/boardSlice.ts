@@ -17,6 +17,28 @@ import {
   benchesAreFilled
 } from './boardSetup';
 
+export const getBoard = createAsyncThunk<
+  BoardStateType,   // returnsboard
+  string,           // id
+  { rejectValue: string }
+>(
+  "board/getBoard",
+  async (id, { rejectWithValue }) => {
+    try {
+      const res = await fetch(`/api/board/get/${id}`);
+
+      if (!res.ok) {
+        throw new Error("Failed to fetch board");
+      }
+
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return rejectWithValue("Error fetching board");
+    }
+  }
+);
+
 export const deleteBoard = createAsyncThunk<
   string,           // deleted id
   string,           // gets id
@@ -48,7 +70,11 @@ const initialState: BoardStateType = {
   selectedSqr: [null, null],
   phaseTwo: false,
   deleting: false,
-  deleteError: null
+  deleteError: null,
+  loading: false,
+  loadError: null,
+  createdAt: '',
+  updatedAt: '',
 };
 
 const boardSlice = createSlice({
@@ -59,13 +85,6 @@ const boardSlice = createSlice({
       const newGrid = buildGameGrid(action.payload);
       state.selectedGame =  action.payload;
       state.gameGrid = newGrid;
-    },
-    loadGame: (state, action: PayloadAction<BoardStateType>) => {
-      const {id, owner, selectedGame, gameGrid} = action.payload;
-      state.id = id;
-      state.owner = owner;
-      state.selectedGame = selectedGame;
-      state.gameGrid = gameGrid;
     },
     selectPiece: (state, action: PayloadAction<string>) => {
       const [row, col] = action.payload.replace('sqr', '').split('-').map(n => Number(n));
@@ -111,11 +130,35 @@ const boardSlice = createSlice({
       state.selectedSqr = [null, null];
       state.phaseTwo = false;
       state.phaseTwo = false;
+      state.deleting = false;
       state.deleteError = null;
+      state.loading = false;
+      state.loadError = null;
+      state.createdAt = '';
+      state.updatedAt = '';
     }
   },
   extraReducers: (builder) => {
-    builder
+      builder
+      .addCase(getBoard.pending, (state) => {
+        state.loading = true;
+        state.loadError = null;
+      })
+      .addCase(getBoard.fulfilled, (state, action) => {
+        state.loading = false;
+        state.id = action.payload.id;
+        state.owner = action.payload.owner;
+        state.selectedGame = action.payload.selectedGame;
+        state.gameGrid = action.payload.gameGrid;
+        state.selectedSqr = action.payload.selectedSqr;
+        state.phaseTwo = action.payload.phaseTwo;
+        state.createdAt = action.payload.createdAt;
+        state.updatedAt = action.payload.updatedAt;
+      })
+      .addCase(getBoard.rejected, (state, action) => {
+        state.loading = false;
+        state.loadError = action.payload ?? "Unknown error";
+      })
       .addCase(deleteBoard.pending, (state) => {
         state.deleting = true;
         state.deleteError = null;
@@ -130,6 +173,6 @@ const boardSlice = createSlice({
   }
 });
 
-export const { selectGame, loadGame, selectPiece, closeGame } = boardSlice.actions;
+export const { selectGame, selectPiece, closeGame } = boardSlice.actions;
 
 export default boardSlice.reducer;

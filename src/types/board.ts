@@ -20,4 +20,8 @@ export interface BoardStateType {
   phaseTwo: boolean;
   deleting: boolean;
   deleteError: string | null;
+  loading: boolean;
+  loadError: string | null;
+  createdAt: string;
+  updatedAt: string;
 };
