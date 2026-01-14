@@ -16,8 +16,6 @@ import {
 const initialState: BoardStateType = {
   id: '',
   owner: '',
-  createdAt: '',
-  lastSaved: '',
   selectedGame: '',
   gameGrid: [],
   selectedSqr: [null, null],
@@ -34,11 +32,9 @@ const boardSlice = createSlice({
       state.gameGrid = newGrid;
     },
     loadGame: (state, action: PayloadAction<BoardStateType>) => {
-      const {id, owner, createdAt, lastSaved, selectedGame, gameGrid} = action.payload;
+      const {id, owner, selectedGame, gameGrid} = action.payload;
       state.id = id;
       state.owner = owner;
-      state.createdAt = createdAt;
-      state.lastSaved = lastSaved;
       state.selectedGame = selectedGame;
       state.gameGrid = gameGrid;
     },

@@ -5,10 +5,9 @@ interface SavedCardProps {
   gameId: string;
   createdAt: string;
   lastSaved: string;
-  handleDelete: (gameId: string) => void;
 }
 
-const SavedCard = ({game, gameId, createdAt, lastSaved, handleDelete} : SavedCardProps) => (
+const SavedCard = ({game, gameId, createdAt, lastSaved} : SavedCardProps) => (
   <div className={`bg-game-${game} h-[225px] p-6 bg-stone-900 rounded-3xl bg-center bg-cover flex flex-col w-[250px] max-w-[270px] grow shadow-xl/30`}>
     <h4 className="uppercase text-stone-200 tracking-[2px] text-2xl mb-4 flex items-center justify-between">
       <span>{game}</span>
@@ -16,7 +15,6 @@ const SavedCard = ({game, gameId, createdAt, lastSaved, handleDelete} : SavedCar
         type="button"
         aria-label="Delete"
         className="hover:text-stone-50 transition cursor-pointer"
-        onClick={() => handleDelete(gameId)}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

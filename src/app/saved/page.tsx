@@ -9,13 +9,12 @@ import SavedCard from "@/components/SavedCard";
 import LoadingComponent from "@/components/LoadingComponent";
 import formatDate from "@/utils/formatDate";
 
-
 interface SavedBoard {
   _id: string;
   owner: string;
   selectedGame: string;
   createdAt: string;
-  lastSave: string;
+  updatedAt: string;
 };
 
 const Saved = () => {
@@ -38,8 +37,6 @@ const Saved = () => {
   }, [status, session, router]);
 
   useEffect(() => {
-    if (status !== "authenticated") return;
-
     const fetchBoards = async () => {
       try {
         const res = await fetch("/api/board/get");
@@ -59,32 +56,6 @@ const Saved = () => {
 
     fetchBoards();
   }, [status]);
-
-  const handleDelete = async (id: string): Promise<void> => {
-    const confirmed = confirm("Are you sure you want to delete this saved game?");
-    if (!confirmed) return;
-
-    setLoadingBoards(true);
-
-    try {
-      const res = await fetch(`/api/board/delete/${id}`, {
-        method: "DELETE",
-      });
-
-      if (!res.ok) {
-        throw new Error("Failed to delete board");
-      }
-
-      setBoards(prev =>
-        prev.filter(board => board._id !== id)
-      );
-      setLoadingBoards(false);
-    } catch (error) {
-      console.error("Error deleting board:", error);
-      alert("Something went wrong while deleting the saved game.");
-      setLoadingBoards(false);
-    }
-  };
 
   return (
     <>
@@ -108,8 +79,7 @@ const Saved = () => {
                     game={board.selectedGame}
                     gameId={board._id}
                     createdAt={formatDate(board.createdAt)}
-                    lastSaved={formatDate(board.lastSave)}
-                    handleDelete={handleDelete}
+                    lastSaved={formatDate(board.updatedAt)}
                   />
               ))}
             </div>

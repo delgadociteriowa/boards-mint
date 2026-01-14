@@ -18,7 +18,6 @@ interface ColorsClickedType {
 const Octoboard = () => {
   const dispatch = useAppDispatch();
   const boardId = useAppSelector(state => state.board.id);
-  const lastSaved = useAppSelector(state => state.board.lastSaved);
   const selectedGame = useAppSelector(state => state.board.selectedGame);
   const gameGrid = useAppSelector(state => state.board.gameGrid);
   const phaseTwo = useAppSelector(state => state.board.phaseTwo);
@@ -121,7 +120,7 @@ const Octoboard = () => {
                 >
                   save
                 </button>)}
-            {boardId && (<span className="ml-auto text-sm font-texts text-stone-500 my-auto mr-2">Last Saved: {lastSaved}</span>)}
+            {boardId && (<span className="ml-auto text-sm font-texts text-stone-500 my-auto mr-2">Last Saved: 1234</span>)}
           </div>
         </main>
       ) : (
