@@ -20,6 +20,7 @@ const Octoboard = () => {
   const selectedGame = useAppSelector(state => state.board.selectedGame);
   const gameGrid = useAppSelector(state => state.board.gameGrid);
   const phaseTwo = useAppSelector(state => state.board.phaseTwo);
+  const updatedAt = useAppSelector(state => state.board.updatedAt);
   const handleClickSqr = (id: string) => {
     dispatch(selectPiece(id))
   }
@@ -62,7 +63,7 @@ const Octoboard = () => {
     <>
       <main className="w-[100%] md:w-[90%] lg:w-[80%] my-0 mx-auto">
         <div className='flex w-[90%] landscape:w-[75%] mx-auto'> 
-          <span className="text-sm font-texts text-stone-500 ml-auto">ID: 1234</span>
+          {boardId && (<span className="text-sm font-texts text-stone-500 ml-auto">ID: {boardId}</span>)}
         </div>
         <div className="grid w-[90%] rounded-2xl board-areas overflow-hidden mt-2 mb-4 mx-auto landscape:w-[75%] shadow-xl/20">
         {gameGrid.map((row, rowIndex) => (
@@ -79,20 +80,24 @@ const Octoboard = () => {
         ))}
         </div>
         <div className='flex w-[90%] mb-14 landscape:w-[75%] mx-auto'>
-          <button
-              className={`
-                text-stone-100
-                px-6
-                py-1
-                rounded-xl
-                ${saveDisabled
-                  ? "bg-stone-600 cursor-not-allowed opacity-60"
-                  : "bg-sky-600 hover:bg-sky-500 cursor-pointer"}
-                `}
-              >
-                save
+          {boardId &&
+            (<>
+              <button
+                className={`
+                  text-stone-100
+                  px-6
+                  py-1
+                  rounded-xl
+                  ${saveDisabled
+                    ? "bg-stone-600 cursor-not-allowed opacity-60"
+                    : "bg-sky-600 hover:bg-sky-500 cursor-pointer"}
+                  `}
+                >
+                  save
               </button>
-              <span className="ml-auto text-sm font-texts text-stone-500 my-auto mr-2">Last Saved: 1234</span>
+              <span className="ml-auto text-sm font-texts text-stone-500 my-auto mr-2">Last Saved: {updatedAt}</span>
+              </>)
+           }
         </div>
       </main>
     </>

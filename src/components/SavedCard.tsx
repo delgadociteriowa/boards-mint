@@ -1,14 +1,13 @@
-import Link from "next/link";
-
 interface SavedCardProps {
   game: string;
   gameId: string;
   createdAt: string;
   lastSaved: string;
   onDelete: (id: string) => void;
+  onContinue: (id: string, game: string) => void;
 }
 
-const SavedCard = ({game, gameId, createdAt, lastSaved, onDelete} : SavedCardProps) => (
+const SavedCard = ({game, gameId, createdAt, lastSaved, onContinue, onDelete} : SavedCardProps) => (
   <div className={`bg-game-${game} h-[225px] p-6 bg-stone-900 rounded-3xl bg-center bg-cover flex flex-col w-[250px] max-w-[270px] grow shadow-xl/30`}>
     <h4 className="uppercase text-stone-200 tracking-[2px] text-2xl mb-4 flex items-center justify-between">
       <span>{game}</span>
@@ -30,7 +29,7 @@ const SavedCard = ({game, gameId, createdAt, lastSaved, onDelete} : SavedCardPro
     </h4>
     <h3 className="text-stone-200 text-lg">Created at: {createdAt}</h3>
     <h3 className="text-stone-200 text-lg">Last saved: {lastSaved}</h3>
-    <Link className="lowercase block bg-stone-200/70 hover:bg-stone-200/90 py-4 rounded-full text-center no-underline text-stone-800 text-xl tracking-[3px] mt-auto" href={`/${game}?gameId=${gameId}`}>continue</Link>
+    <button className="lowercase block bg-stone-200/70 hover:bg-stone-200/90 py-4 rounded-full text-center no-underline text-stone-800 text-xl tracking-[3px] mt-auto" onClick={() => onContinue(gameId, game)}>continue</button>
   </div>
 );
 

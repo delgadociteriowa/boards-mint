@@ -16,6 +16,7 @@ import {
   targetedPieceGrid,
   benchesAreFilled
 } from './boardSetup';
+import formatDate from "@/utils/formatDate";
 
 export const getBoard = createAsyncThunk<
   BoardStateType,   // returnsboard
@@ -32,7 +33,16 @@ export const getBoard = createAsyncThunk<
       }
 
       const data = await res.json();
-      return data;
+      console.log("RAW API DATA:", data);
+      return {
+        ...data,
+        id: data._id,
+        owner: data.owner,
+        selectedGame: data.selectedGame,
+        gameGrid: data.gameGrid,
+        createdAt: formatDate(data.createdAt),
+        updatedAt: formatDate(data.updatedAt),
+      };
     } catch (error) {
       return rejectWithValue("Error fetching board");
     }

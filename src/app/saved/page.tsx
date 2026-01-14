@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/state/hooks";
 import { fetchSavedBoards } from "@/state/savedBoards/savedBoardsSlice";
+import { getBoard } from "@/state/board/boardSlice";
 import { deleteBoard } from "@/state/board/boardSlice";
 
 import Header from "@/components/Header";
@@ -22,6 +23,10 @@ const Saved = () => {
     state => state.savedBoards
   );
 
+  const boardLoading = useAppSelector(
+    state => state.board.loading
+  );
+
   useEffect(() => {
     if (status === "loading") return;
 
@@ -32,6 +37,15 @@ const Saved = () => {
 
     dispatch(fetchSavedBoards());
   }, [status, dispatch, router]);
+
+  const handleContinue = async (id: string, game: string) => {
+    const result = await dispatch(getBoard(id));
+
+    if (getBoard.fulfilled.match(result)) {
+      router.push(`/${game}`);
+    }
+    //if it fails
+  };
 
   const handleDelete = async (id: string) => {
     const confirmed = window.confirm(
@@ -47,7 +61,7 @@ const Saved = () => {
   return (
     <>
       <Header />
-      {(status === "loading" || loading) && <LoadingComponent />}
+      {(status === "loading" || loading || boardLoading) && <LoadingComponent />}
       <main className="min-h-[800px]">
         <section className="w-[90%] mx-auto max-w-[1200px] py-14 text-stone-600">
           <h3 className="text-center text-4xl tracking-[2px] mb-2">
@@ -73,6 +87,7 @@ const Saved = () => {
                   createdAt={formatDate(board.createdAt)}
                   lastSaved={formatDate(board.updatedAt)}
                   onDelete={handleDelete}
+                  onContinue={handleContinue}
                 />
               ))}
           </div>
