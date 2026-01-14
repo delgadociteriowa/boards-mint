@@ -1,4 +1,8 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  PayloadAction,
+  createAsyncThunk
+} from "@reduxjs/toolkit";
 import {
   BoardStateType,
   SelectedGame,
@@ -13,13 +17,38 @@ import {
   benchesAreFilled
 } from './boardSetup';
 
+export const deleteBoard = createAsyncThunk<
+  string,           // deleted id
+  string,           // gets id
+  { rejectValue: string }
+>(
+  "board/deleteBoard",
+  async (id, { rejectWithValue }) => {
+    try {
+      const res = await fetch(`/api/board/delete/${id}`, {
+        method: "DELETE"
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to delete board");
+      }
+
+      return id;
+    } catch (error) {
+      return rejectWithValue("Error deleting board");
+    }
+  }
+);
+
 const initialState: BoardStateType = {
   id: '',
   owner: '',
   selectedGame: '',
   gameGrid: [],
   selectedSqr: [null, null],
-  phaseTwo: false
+  phaseTwo: false,
+  deleting: false,
+  deleteError: null
 };
 
 const boardSlice = createSlice({
@@ -81,7 +110,23 @@ const boardSlice = createSlice({
       state.gameGrid = [];
       state.selectedSqr = [null, null];
       state.phaseTwo = false;
+      state.phaseTwo = false;
+      state.deleteError = null;
     }
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(deleteBoard.pending, (state) => {
+        state.deleting = true;
+        state.deleteError = null;
+      })
+      .addCase(deleteBoard.fulfilled, (state) => {
+        state.deleting = false;
+      })
+      .addCase(deleteBoard.rejected, (state, action) => {
+        state.deleting = false;
+        state.deleteError = action.payload ?? "Unknown error";
+      });
   }
 });
 

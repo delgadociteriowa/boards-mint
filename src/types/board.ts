@@ -18,4 +18,6 @@ export interface BoardStateType {
   gameGrid: Grid;
   selectedSqr: SelectedSquare;
   phaseTwo: boolean;
+  deleting: boolean;
+  deleteError: string | null;
 };

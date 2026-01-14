@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/state/hooks";
 import { fetchSavedBoards } from "@/state/savedBoards/savedBoardsSlice";
+import { deleteBoard } from "@/state/board/boardSlice";
 
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -31,6 +32,17 @@ const Saved = () => {
 
     dispatch(fetchSavedBoards());
   }, [status, dispatch, router]);
+
+  const handleDelete = async (id: string) => {
+    const confirmed = window.confirm(
+    "Are you sure you want to delete this board?"
+    );
+
+    if (!confirmed) return;
+    
+    await dispatch(deleteBoard(id));
+    dispatch(fetchSavedBoards());
+  };
 
   return (
     <>
@@ -60,6 +72,7 @@ const Saved = () => {
                   gameId={board._id}
                   createdAt={formatDate(board.createdAt)}
                   lastSaved={formatDate(board.updatedAt)}
+                  onDelete={handleDelete}
                 />
               ))}
           </div>
