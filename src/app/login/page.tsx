@@ -22,7 +22,7 @@ const Login = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true); // ← activar loading
+    setLoading(true);
 
     const res = await signIn("credentials", {
       username: userName,
@@ -33,7 +33,7 @@ const Login = () => {
     if (res?.ok) {
       router.push("/account");
     } else {
-      setLoading(false); // ← si hay error, volver a habilitar
+      setLoading(false);
     }
   };
 
@@ -81,7 +81,7 @@ const Login = () => {
               className={`py-5 rounded-full text-center text-stone-100 text-lg tracking-[2px] mt-4 shadow-xl/20
                 ${loading 
                   ? "bg-stone-400 cursor-not-allowed" 
-                  : "bg-sky-600 hover:bg-sky-500"}
+                  : "bg-sky-600 hover:bg-sky-500 cursor-pointer"}
               `}
             >
               {loading ? "loading..." : "login"}

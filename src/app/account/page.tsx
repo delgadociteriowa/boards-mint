@@ -92,7 +92,7 @@ const Account = () => {
                 )}
 
                 <button
-                  className="bg-sky-600 hover:bg-sky-500 text-stone-100 px-5 py-2 rounded-xl ml-4"
+                  className="bg-sky-600 hover:bg-sky-500 text-stone-100 px-5 py-2 rounded-xl ml-4 cursor-pointer"
                   onClick={() =>
                     editingFirst ? handleSave('firstname') : setEditingFirst(true)
                   }
@@ -120,7 +120,7 @@ const Account = () => {
                 )}
 
                 <button
-                  className="bg-sky-600 hover:bg-sky-500 text-stone-100 px-5 py-2 rounded-xl ml-4"
+                  className="bg-sky-600 hover:bg-sky-500 text-stone-100 px-5 py-2 rounded-xl ml-4 cursor-pointer"
                   onClick={() =>
                     editingLast ? handleSave('lastname') : setEditingLast(true)
                   }
@@ -131,7 +131,7 @@ const Account = () => {
             </div>
             <button
               onClick={handleLogout}
-              className="bg-sky-600 hover:bg-sky-500 py-5 rounded-full text-center text-stone-100 text-lg tracking-[2px] mt-4 shadow-xl/20"
+              className="bg-sky-600 hover:bg-sky-500 py-5 rounded-full text-center text-stone-100 text-lg tracking-[2px] mt-4 shadow-xl/20  cursor-pointer"
             >
               log out
             </button>
