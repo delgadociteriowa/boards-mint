@@ -4,7 +4,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Octoboard from "@/components/Octoboard";
 import { useAppDispatch, useAppSelector } from "@/state/hooks";
-import { selectGame, closeGame } from "@/state/board/boardSlice";
+import { selectGame, resetLoad } from "@/state/board/boardSlice";
 
 const Checkers = () => {
   const dispatch = useAppDispatch();
@@ -14,6 +14,7 @@ const Checkers = () => {
 
 
   useEffect(() => {
+    dispatch(resetLoad());
     if(boardId === ''){
       dispatch(selectGame('checkers'));
     }

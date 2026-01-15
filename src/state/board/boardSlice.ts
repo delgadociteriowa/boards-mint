@@ -146,6 +146,9 @@ const boardSlice = createSlice({
       state.loadError = null;
       state.createdAt = '';
       state.updatedAt = '';
+    },
+    resetLoad: (state) => {
+      state.loading = false;
     }
   },
   extraReducers: (builder) => {
@@ -155,7 +158,6 @@ const boardSlice = createSlice({
         state.loadError = null;
       })
       .addCase(getBoard.fulfilled, (state, action) => {
-        state.loading = false;
         state.id = action.payload.id;
         state.owner = action.payload.owner;
         state.selectedGame = action.payload.selectedGame;
@@ -183,6 +185,6 @@ const boardSlice = createSlice({
   }
 });
 
-export const { selectGame, selectPiece, closeGame } = boardSlice.actions;
+export const { selectGame, selectPiece, closeGame, resetLoad } = boardSlice.actions;
 
 export default boardSlice.reducer;
