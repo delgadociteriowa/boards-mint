@@ -112,7 +112,7 @@ const Account = () => {
                     className="border border-stone-300 rounded-xl py-3 px-4 text-stone-700 focus:outline-none focus:ring-2 focus:ring-sky-500 w-full"
                     value={lastName ?? "-"}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      setFirstName(e.target.value)
+                      setLastName(e.target.value)
                     }
                   />
                 ) : (
