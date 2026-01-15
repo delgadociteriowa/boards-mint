@@ -92,7 +92,7 @@ const Account = () => {
                 )}
 
                 <button
-                  className="bg-sky-600 hover:bg-sky-500 text-stone-100 px-5 py-2 rounded-xl ml-4"
+                  className="bg-sky-600 hover:bg-sky-500 text-stone-100 px-5 py-2 rounded-xl ml-4 cursor-pointer"
                   onClick={() =>
                     editingFirst ? handleSave('firstname') : setEditingFirst(true)
                   }
@@ -112,7 +112,7 @@ const Account = () => {
                     className="border border-stone-300 rounded-xl py-3 px-4 text-stone-700 focus:outline-none focus:ring-2 focus:ring-sky-500 w-full"
                     value={lastName ?? "-"}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      setFirstName(e.target.value)
+                      setLastName(e.target.value)
                     }
                   />
                 ) : (
@@ -120,7 +120,7 @@ const Account = () => {
                 )}
 
                 <button
-                  className="bg-sky-600 hover:bg-sky-500 text-stone-100 px-5 py-2 rounded-xl ml-4"
+                  className="bg-sky-600 hover:bg-sky-500 text-stone-100 px-5 py-2 rounded-xl ml-4 cursor-pointer"
                   onClick={() =>
                     editingLast ? handleSave('lastname') : setEditingLast(true)
                   }
@@ -131,7 +131,7 @@ const Account = () => {
             </div>
             <button
               onClick={handleLogout}
-              className="bg-sky-600 hover:bg-sky-500 py-5 rounded-full text-center text-stone-100 text-lg tracking-[2px] mt-4 shadow-xl/20"
+              className="bg-sky-600 hover:bg-sky-500 py-5 rounded-full text-center text-stone-100 text-lg tracking-[2px] mt-4 shadow-xl/20  cursor-pointer"
             >
               log out
             </button>

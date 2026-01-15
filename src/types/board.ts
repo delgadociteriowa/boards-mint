@@ -12,19 +12,17 @@ export interface Square {
 };
 
 export interface BoardStateType {
+  id: string;
+  owner: string;
   selectedGame: SelectedGame;
   gameGrid: Grid;
   selectedSqr: SelectedSquare;
   phaseTwo: boolean;
+  deleting: boolean;
+  deleteError: string | null;
+  loading: boolean;
+  loadError: string | null;
+  saveEnabled: boolean;
+  createdAt: string;
+  updatedAt: string;
 };
-
-export interface BoardContextType extends BoardStateType {
-  handleGameSelection: (game: SelectedGame) => void;
-  handleClickSqr: (clickedSqr: string) => void;
-  handleExitGame: () => void;
-};
-
-export type BoardAction =
-  | { type: 'SELECT_GAME'; payload: SelectedGame }
-  | { type: 'SELECT_PIECE'; payload: string }
-  | { type: 'CLOSE_GAME' };

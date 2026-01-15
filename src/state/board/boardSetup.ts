@@ -1,4 +1,4 @@
-import { SelectedGame, Grid, Piece, PieceType, SelectedSquare, Square } from "./boardTs";
+import { SelectedGame, Grid, Piece, PieceType, SelectedSquare, Square } from "../../types/board";
 
 const buildChessGrid = (): Grid => {
   const rows = 12;

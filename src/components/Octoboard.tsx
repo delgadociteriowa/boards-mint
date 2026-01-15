@@ -1,9 +1,8 @@
 'use client';
 import React from 'react';
-import OctoBoardSquare from './OctoBoardSquare';
-import LoadingComponent from './LoadingComponent';
 import { useAppSelector, useAppDispatch } from '@/state/hooks';
-import { selectPiece } from '@/state/board/boardSlice'; // accion necesaria
+import OctoBoardSquare from './OctoBoardSquare';
+import { selectPiece, updateBoard } from '@/state/board/boardSlice';
 
 interface ColorsType {
   chess: string[];
@@ -17,13 +16,16 @@ interface ColorsClickedType {
 
 const Octoboard = () => {
   const dispatch = useAppDispatch();
+  const boardId = useAppSelector(state => state.board.id);
   const selectedGame = useAppSelector(state => state.board.selectedGame);
   const gameGrid = useAppSelector(state => state.board.gameGrid);
   const phaseTwo = useAppSelector(state => state.board.phaseTwo);
+  const updatedAt = useAppSelector(state => state.board.updatedAt);
+  const saveEnabled = useAppSelector(state => state.board.saveEnabled);
   const handleClickSqr = (id: string) => {
     dispatch(selectPiece(id))
   }
-
+  
   const gameColors: ColorsType = {
     chess: ['bg-teal-900','bg-teal-700','bg-teal-500','bg-teal-300'],
     checkers: ['bg-cyan-900','bg-cyan-700','bg-cyan-500','bg-cyan-300']
@@ -56,28 +58,52 @@ const Octoboard = () => {
     return color
   }
 
+  const handleSave = async () => {
+    await dispatch(updateBoard({id: boardId, gameGrid: gameGrid}));
+  };
+
   return (
     <>
-      {selectedGame && gameGrid.length > 0 ? (
-        <main className="w-[100%] md:w-[90%] lg:w-[80%] my-0 mx-auto">
-          <div className="grid w-[90%] rounded-2xl board-areas overflow-hidden mt-2 mb-16 mx-auto landscape:w-[75%] shadow-xl/20">
-          {gameGrid.map((row, rowIndex) => (
-            row.map((cellContent, colIndex) =>{
-              if (selectedGame !== 'chess' && selectedGame !== 'checkers') return null;
-              const colors = {
-                color: setSquareColor(rowIndex, colIndex, gameColors),
-                colorHover: setSquareColor(rowIndex, colIndex, gameColorsHover),
-                colorClicked: colorsClicked[selectedGame],
-                colorClickedHover: colorsClickedHover[selectedGame]
-              };
-              return (<OctoBoardSquare key={cellContent.id} cellContent={cellContent} colors={colors} onClickPiece={handleClickSqr} phaseTwo={phaseTwo}/>)
-            })
-          ))}
-          </div>
-        </main>
-      ) : (
-        <LoadingComponent />
-      )}
+      <main className="w-[100%] md:w-[90%] lg:w-[80%] my-0 mx-auto">
+        <div className='flex w-[90%] landscape:w-[75%] mx-auto'> 
+          {boardId && (<span className="text-sm font-texts text-stone-500 ml-auto">ID: {boardId}</span>)}
+        </div>
+        <div className="grid w-[90%] rounded-2xl board-areas overflow-hidden mt-2 mb-4 mx-auto landscape:w-[75%] shadow-xl/20">
+        {gameGrid.map((row, rowIndex) => (
+          row.map((cellContent, colIndex) =>{
+            if (selectedGame !== 'chess' && selectedGame !== 'checkers') return null;
+            const colors = {
+              color: setSquareColor(rowIndex, colIndex, gameColors),
+              colorHover: setSquareColor(rowIndex, colIndex, gameColorsHover),
+              colorClicked: colorsClicked[selectedGame],
+              colorClickedHover: colorsClickedHover[selectedGame]
+            };
+            return (<OctoBoardSquare key={cellContent.id} cellContent={cellContent} colors={colors} onClickPiece={handleClickSqr} phaseTwo={phaseTwo}/>)
+          })
+        ))}
+        </div>
+        <div className='flex w-[90%] mb-14 landscape:w-[75%] mx-auto'>
+          {boardId &&
+            (<>
+              <button
+                className={`
+                  text-stone-100
+                  px-6
+                  py-1
+                  rounded-xl
+                  ${saveEnabled
+                    ? "bg-sky-600 hover:bg-sky-500 cursor-pointer"
+                    : "bg-stone-600 cursor-not-allowed opacity-60"}
+                  `}
+                  onClick={handleSave}
+                >
+                  save
+              </button>
+              <span className="ml-auto text-sm font-texts text-stone-500 my-auto mr-2">Last Saved: {updatedAt}</span>
+              </>)
+           }
+        </div>
+      </main>
     </>
   );
 };

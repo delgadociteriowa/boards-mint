@@ -1,9 +1,14 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  PayloadAction,
+  createAsyncThunk
+} from "@reduxjs/toolkit";
 import {
   BoardStateType,
   SelectedGame,
-  SelectedSquare
-} from "./boardTs";
+  SelectedSquare,
+  Grid
+} from "../../types/board";
 import {
   buildGameGrid,
   selectSqrGrid,
@@ -12,12 +17,108 @@ import {
   targetedPieceGrid,
   benchesAreFilled
 } from './boardSetup';
+import formatDate from "@/utils/formatDate";
+
+export const getBoard = createAsyncThunk<
+  BoardStateType,   // returnsboard
+  string,           // id
+  { rejectValue: string }
+>(
+  "board/getBoard",
+  async (id, { rejectWithValue }) => {
+    try {
+      const res = await fetch(`/api/board/get/${id}`);
+
+      if (!res.ok) {
+        throw new Error("Failed to fetch board");
+      }
+
+      const data = await res.json();
+      console.log("RAW API DATA:", data);
+      return {
+        ...data,
+        id: data._id,
+        owner: data.owner,
+        selectedGame: data.selectedGame,
+        selectedSqr: [null, null],
+        gameGrid: data.gameGrid,
+        createdAt: formatDate(data.createdAt),
+        updatedAt: formatDate(data.updatedAt),
+      };
+    } catch (error) {
+      return rejectWithValue("Error fetching board");
+    }
+  }
+);
+
+export const updateBoard = createAsyncThunk<
+  { updatedAt: string },           // return updated date
+  { id: string; gameGrid: Grid },  // id, gameGrid
+  { rejectValue: string }
+>(
+  "board/updateBoard",
+  async ({ id, gameGrid }, { rejectWithValue }) => {
+    try {
+      const res = await fetch(`/api/board/update/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ gameGrid }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to update board");
+      }
+
+      const data = await res.json();
+
+      return {
+        updatedAt: formatDate(data.updatedAt),
+      };
+    } catch (error) {
+      return rejectWithValue("Error updating board");
+    }
+  }
+);
+
+export const deleteBoard = createAsyncThunk<
+  string,           // deleted id
+  string,           // gets id
+  { rejectValue: string }
+>(
+  "board/deleteBoard",
+  async (id, { rejectWithValue }) => {
+    try {
+      const res = await fetch(`/api/board/delete/${id}`, {
+        method: "DELETE"
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to delete board");
+      }
+
+      return id;
+    } catch (error) {
+      return rejectWithValue("Error deleting board");
+    }
+  }
+);
 
 const initialState: BoardStateType = {
+  id: '',
+  owner: '',
   selectedGame: '',
   gameGrid: [],
   selectedSqr: [null, null],
-  phaseTwo: false
+  phaseTwo: false,
+  deleting: false,
+  deleteError: null,
+  loading: false,
+  loadError: null,
+  saveEnabled: false,
+  createdAt: '',
+  updatedAt: '',
 };
 
 const boardSlice = createSlice({
@@ -39,6 +140,7 @@ const boardSlice = createSlice({
         state.gameGrid = selectSqrGrid(selectedPiece, state.gameGrid);
         state.selectedSqr = selectedPiece;
         state.phaseTwo = true;
+        state.saveEnabled = false;
         return;
       }
 
@@ -46,6 +148,7 @@ const boardSlice = createSlice({
         state.gameGrid = targetedSelfGrid(state.selectedSqr, state.gameGrid);
         state.selectedSqr = emptySqr;
         state.phaseTwo = false;
+        state.saveEnabled = true;
         return;
       }
 
@@ -53,6 +156,7 @@ const boardSlice = createSlice({
         state.gameGrid = targetedEmptyGrid(selectedPiece, state.selectedSqr, state.gameGrid);
         state.selectedSqr = emptySqr;
         state.phaseTwo = false;
+        state.saveEnabled = true;
         return;
       }
 
@@ -64,6 +168,7 @@ const boardSlice = createSlice({
         }
         state.selectedSqr = emptySqr;
         state.phaseTwo = false;
+        state.saveEnabled = true;
         return;
       }
     },
@@ -72,10 +177,63 @@ const boardSlice = createSlice({
       state.gameGrid = [];
       state.selectedSqr = [null, null];
       state.phaseTwo = false;
+      state.phaseTwo = false;
+      state.deleting = false;
+      state.deleteError = null;
+      state.loading = false;
+      state.loadError = null;
+      state.saveEnabled = false;
+      state.createdAt = '';
+      state.updatedAt = '';
+    },
+    resetLoad: (state) => {
+      state.loading = false;
     }
+  },
+  extraReducers: (builder) => {
+      builder
+      .addCase(getBoard.pending, (state) => {
+        state.loading = true;
+        state.loadError = null;
+      })
+      .addCase(getBoard.fulfilled, (state, action) => {
+        state.id = action.payload.id;
+        state.owner = action.payload.owner;
+        state.selectedGame = action.payload.selectedGame;
+        state.gameGrid = action.payload.gameGrid;
+        state.selectedSqr = action.payload.selectedSqr;
+        state.phaseTwo = action.payload.phaseTwo;
+        state.createdAt = action.payload.createdAt;
+        state.updatedAt = action.payload.updatedAt;
+      })
+      .addCase(getBoard.rejected, (state, action) => {
+        state.loading = false;
+        state.loadError = action.payload ?? "Unknown error";
+      })
+      .addCase(updateBoard.pending, (state) => {
+        state.saveEnabled = false;
+      })
+      .addCase(updateBoard.fulfilled, (state, action) => {
+        state.updatedAt = action.payload.updatedAt;
+        state.saveEnabled = true;
+      })
+      .addCase(updateBoard.rejected, (state) => {
+        state.saveEnabled = true;
+      })
+      .addCase(deleteBoard.pending, (state) => {
+        state.deleting = true;
+        state.deleteError = null;
+      })
+      .addCase(deleteBoard.fulfilled, (state) => {
+        state.deleting = false;
+      })
+      .addCase(deleteBoard.rejected, (state, action) => {
+        state.deleting = false;
+        state.deleteError = action.payload ?? "Unknown error";
+      });
   }
 });
 
-export const { selectGame, selectPiece, closeGame } = boardSlice.actions;
+export const { selectGame, selectPiece, closeGame, resetLoad } = boardSlice.actions;
 
 export default boardSlice.reducer;
