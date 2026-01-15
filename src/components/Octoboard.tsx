@@ -1,8 +1,8 @@
 'use client';
-import React, { useState } from 'react';
+import React from 'react';
 import { useAppSelector, useAppDispatch } from '@/state/hooks';
 import OctoBoardSquare from './OctoBoardSquare';
-import { selectPiece } from '@/state/board/boardSlice';
+import { selectPiece, updateBoard } from '@/state/board/boardSlice';
 
 interface ColorsType {
   chess: string[];
@@ -21,14 +21,11 @@ const Octoboard = () => {
   const gameGrid = useAppSelector(state => state.board.gameGrid);
   const phaseTwo = useAppSelector(state => state.board.phaseTwo);
   const updatedAt = useAppSelector(state => state.board.updatedAt);
+  const saveEnabled = useAppSelector(state => state.board.saveEnabled);
   const handleClickSqr = (id: string) => {
     dispatch(selectPiece(id))
   }
   
-  const [saveDisabled, setSaveDisabled] = useState(true);
-
-
-
   const gameColors: ColorsType = {
     chess: ['bg-teal-900','bg-teal-700','bg-teal-500','bg-teal-300'],
     checkers: ['bg-cyan-900','bg-cyan-700','bg-cyan-500','bg-cyan-300']
@@ -61,6 +58,10 @@ const Octoboard = () => {
     return color
   }
 
+  const handleSave = async () => {
+    await dispatch(updateBoard({id: boardId, gameGrid: gameGrid}));
+  };
+
   return (
     <>
       <main className="w-[100%] md:w-[90%] lg:w-[80%] my-0 mx-auto">
@@ -90,10 +91,11 @@ const Octoboard = () => {
                   px-6
                   py-1
                   rounded-xl
-                  ${saveDisabled
-                    ? "bg-stone-600 cursor-not-allowed opacity-60"
-                    : "bg-sky-600 hover:bg-sky-500 cursor-pointer"}
+                  ${saveEnabled
+                    ? "bg-sky-600 hover:bg-sky-500 cursor-pointer"
+                    : "bg-stone-600 cursor-not-allowed opacity-60"}
                   `}
+                  onClick={handleSave}
                 >
                   save
               </button>

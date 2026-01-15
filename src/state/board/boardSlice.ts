@@ -6,7 +6,8 @@ import {
 import {
   BoardStateType,
   SelectedGame,
-  SelectedSquare
+  SelectedSquare,
+  Grid
 } from "../../types/board";
 import {
   buildGameGrid,
@@ -39,12 +40,44 @@ export const getBoard = createAsyncThunk<
         id: data._id,
         owner: data.owner,
         selectedGame: data.selectedGame,
+        selectedSqr: [null, null],
         gameGrid: data.gameGrid,
         createdAt: formatDate(data.createdAt),
         updatedAt: formatDate(data.updatedAt),
       };
     } catch (error) {
       return rejectWithValue("Error fetching board");
+    }
+  }
+);
+
+export const updateBoard = createAsyncThunk<
+  { updatedAt: string },           // return updated date
+  { id: string; gameGrid: Grid },  // id, gameGrid
+  { rejectValue: string }
+>(
+  "board/updateBoard",
+  async ({ id, gameGrid }, { rejectWithValue }) => {
+    try {
+      const res = await fetch(`/api/board/update/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ gameGrid }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to update board");
+      }
+
+      const data = await res.json();
+
+      return {
+        updatedAt: formatDate(data.updatedAt),
+      };
+    } catch (error) {
+      return rejectWithValue("Error updating board");
     }
   }
 );
@@ -83,6 +116,7 @@ const initialState: BoardStateType = {
   deleteError: null,
   loading: false,
   loadError: null,
+  saveEnabled: false,
   createdAt: '',
   updatedAt: '',
 };
@@ -106,6 +140,7 @@ const boardSlice = createSlice({
         state.gameGrid = selectSqrGrid(selectedPiece, state.gameGrid);
         state.selectedSqr = selectedPiece;
         state.phaseTwo = true;
+        state.saveEnabled = false;
         return;
       }
 
@@ -113,6 +148,7 @@ const boardSlice = createSlice({
         state.gameGrid = targetedSelfGrid(state.selectedSqr, state.gameGrid);
         state.selectedSqr = emptySqr;
         state.phaseTwo = false;
+        state.saveEnabled = true;
         return;
       }
 
@@ -120,6 +156,7 @@ const boardSlice = createSlice({
         state.gameGrid = targetedEmptyGrid(selectedPiece, state.selectedSqr, state.gameGrid);
         state.selectedSqr = emptySqr;
         state.phaseTwo = false;
+        state.saveEnabled = true;
         return;
       }
 
@@ -131,6 +168,7 @@ const boardSlice = createSlice({
         }
         state.selectedSqr = emptySqr;
         state.phaseTwo = false;
+        state.saveEnabled = true;
         return;
       }
     },
@@ -144,6 +182,7 @@ const boardSlice = createSlice({
       state.deleteError = null;
       state.loading = false;
       state.loadError = null;
+      state.saveEnabled = false;
       state.createdAt = '';
       state.updatedAt = '';
     },
@@ -170,6 +209,16 @@ const boardSlice = createSlice({
       .addCase(getBoard.rejected, (state, action) => {
         state.loading = false;
         state.loadError = action.payload ?? "Unknown error";
+      })
+      .addCase(updateBoard.pending, (state) => {
+        state.saveEnabled = false;
+      })
+      .addCase(updateBoard.fulfilled, (state, action) => {
+        state.updatedAt = action.payload.updatedAt;
+        state.saveEnabled = true;
+      })
+      .addCase(updateBoard.rejected, (state) => {
+        state.saveEnabled = true;
       })
       .addCase(deleteBoard.pending, (state) => {
         state.deleting = true;

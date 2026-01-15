@@ -22,6 +22,7 @@ export interface BoardStateType {
   deleteError: string | null;
   loading: boolean;
   loadError: string | null;
+  saveEnabled: boolean;
   createdAt: string;
   updatedAt: string;
 };
