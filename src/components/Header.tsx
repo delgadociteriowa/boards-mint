@@ -10,9 +10,11 @@ const Header = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const gameRoutes = ['/chess', '/checkers'];
+    const isGameRoute =
+    pathname.startsWith('/chess') ||
+    pathname.startsWith('/checkers');
 
-    if (!gameRoutes.includes(pathname)) {
+    if (!isGameRoute) {
       dispatch(closeGame());
     }
   }, [pathname, dispatch]);
