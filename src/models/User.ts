@@ -18,7 +18,7 @@ const UserSchema = new Schema<IUser>(
     },
     lastname: {
       type: String,
-      required: [true, 'Your last name is required'],
+      required: false,
     },
     username: {
       type: String,
@@ -32,7 +32,8 @@ const UserSchema = new Schema<IUser>(
     },
     password: {
       type: String,
-      required: [true, 'A Password is required'],
+      required: false,
+      select: false,
     },
   },
   {

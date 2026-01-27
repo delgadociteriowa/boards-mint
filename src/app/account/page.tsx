@@ -140,7 +140,7 @@ const Account = () => {
             </div>
             <button
               onClick={handleLogout}
-              className="bg-sky-600 hover:bg-sky-500 py-5 rounded-full text-center text-stone-100 text-lg tracking-[2px] mt-4 shadow-xl/20  cursor-pointer"
+              className="bg-sky-600 hover:bg-sky-500 py-5 rounded-full text-center text-stone-100 text-xl tracking-[2px] mx-auto mt-10 shadow-xl/20  cursor-pointer w-[90%]"
             >
               log out
             </button>

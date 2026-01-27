@@ -30,7 +30,7 @@ export const authOptions: NextAuthOptions = {
           isEmail
             ? { email: identifier.toLowerCase() }
             : { username: identifier }
-        );
+        ).select('+password');
 
         if (!user || !user.password) return null;
 
@@ -83,16 +83,18 @@ export const authOptions: NextAuthOptions = {
       return token
     },
 
-    async signIn({ user, profile, account }) {
-      if (account?.provider !== "google") {
-        return true;
-      }
-
+    async signIn({ profile, account }) {
+      if (account?.provider !== "google") return true;
       if (!profile?.email) return false;
-
+      
       await connectDB();
-      const userExist = await User.findOne({ email: profile.email })
-      if (!userExist) {
+
+      const user = await User.findOne({ email: profile.email })
+      
+      if (!user) {
+        const fullName = profile.name ?? '';
+        const [firstname = '', lastname = ''] = fullName.split(' ');
+
         const username = 
           profile.name?.replace(/\s+/g, "").toLowerCase().slice(0, 20) ??
           profile.email.split("@")[0];
@@ -100,12 +102,16 @@ export const authOptions: NextAuthOptions = {
         await User.create({
           email: profile.email,
           username,
+          firstname,
+          lastname
         });
       }
       return true
     },
 
     async session({ session, token }) {
+      if (!token.id) return session;
+
       await connectDB();
       const user = await User.findById(token.id);
 

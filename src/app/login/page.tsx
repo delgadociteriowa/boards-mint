@@ -45,7 +45,7 @@ const Login = () => {
           Login
         </h3>
 
-        <section className="w-[90%] mx-auto max-w-[500px] py-20 text-stone-700 mb-40">
+        <section className="w-[90%] mx-auto max-w-[500px] py-20 text-stone-700 mb-26">
           <form onSubmit={handleLogin} className="flex flex-col gap-8">
             <div className="flex flex-col gap-2">
               <label className="text-stone-600 tracking-[1px] text-sm">
@@ -78,7 +78,7 @@ const Login = () => {
             <button
               type="submit"
               disabled={loading}
-              className={`py-5 rounded-full text-center text-stone-100 text-lg tracking-[2px] mt-4 shadow-xl/20
+              className={`py-5 rounded-full text-center text-stone-100 text-xl tracking-[2px] mx-auto mt-4 shadow-xl/20 w-[90%]
                 ${loading 
                   ? "bg-stone-400 cursor-not-allowed" 
                   : "bg-sky-600 hover:bg-sky-500 cursor-pointer"}
@@ -86,17 +86,18 @@ const Login = () => {
             >
               {loading ? "loading..." : "login"}
             </button>
+            <div className="w-full h-px bg-stone-300"></div>
             <button
               type="button"
               onClick={() => signIn("google", { callbackUrl: "/account" })}
               disabled={loading}
-              className={`py-5 rounded-full text-center text-stone-100 text-lg tracking-[2px] mt-4 shadow-xl/20
+              className={`py-5 rounded-full text-center text-stone-100 text-xl tracking-[2px] mx-auto shadow-xl/20 w-[90%]
                 ${loading 
                   ? "bg-stone-400 cursor-not-allowed" 
                   : "bg-sky-600 hover:bg-sky-500 cursor-pointer"}
               `}
             >
-              {loading ? "loading..." : "login with google"}
+              {loading ? "loading..." : "login/register with Google"}
             </button>
           </form>
         </section>
