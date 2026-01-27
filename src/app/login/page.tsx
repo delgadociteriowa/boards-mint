@@ -86,6 +86,18 @@ const Login = () => {
             >
               {loading ? "loading..." : "login"}
             </button>
+            <button
+              type="button"
+              onClick={() => signIn("google", { callbackUrl: "/account" })}
+              disabled={loading}
+              className={`py-5 rounded-full text-center text-stone-100 text-lg tracking-[2px] mt-4 shadow-xl/20
+                ${loading 
+                  ? "bg-stone-400 cursor-not-allowed" 
+                  : "bg-sky-600 hover:bg-sky-500 cursor-pointer"}
+              `}
+            >
+              {loading ? "loading..." : "login with google"}
+            </button>
           </form>
         </section>
       </main>

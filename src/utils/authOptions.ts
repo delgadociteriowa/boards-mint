@@ -62,31 +62,48 @@ export const authOptions: NextAuthOptions = {
   },
 
   callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
+    async jwt({ token, user, account }) {
+      if (user && account?.provider === "credentials") {
         token.id = user.id;
         token.username = user.username;
         token.email = user.email;
+        return token;
       }
-      return token;
+
+      if (account?.provider === "google") {
+        await connectDB();
+        const dbUser = await User.findOne({ email: token.email });
+        if (dbUser) {
+          token.id = dbUser._id.toString();
+          token.username = dbUser.username;
+          token.email = dbUser.email;
+        }
+      }
+
+      return token
     },
 
-    // async signIn({ profile, user }) {
-    //   if (!profile) return false;
+    async signIn({ user, profile, account }) {
+      if (account?.provider !== "google") {
+        return true;
+      }
 
-    //   await connectDB();
-    //   const userExist = await User.findOne({ email: profile.email })
-    //   if (!userExist) {
-    //     const username = profile?.name?.slice(0,20);
+      if (!profile?.email) return false;
 
-    //     await User.create({
-    //       email: profile.email,
-    //       username,
-    //       image: user.image
-    //     });
-    //   }
-    //   return true
-    // },
+      await connectDB();
+      const userExist = await User.findOne({ email: profile.email })
+      if (!userExist) {
+        const username = 
+          profile.name?.replace(/\s+/g, "").toLowerCase().slice(0, 20) ??
+          profile.email.split("@")[0];
+
+        await User.create({
+          email: profile.email,
+          username,
+        });
+      }
+      return true
+    },
 
     async session({ session, token }) {
       await connectDB();
