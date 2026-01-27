@@ -1,42 +1,61 @@
 import Credentials from 'next-auth/providers/credentials';
+import GoogleProvider from 'next-auth/providers/google';
 import type { NextAuthOptions } from "next-auth";
 import bcrypt from 'bcryptjs';
 import connectDB from '@/config/database';
 import User from '@/models/User';
+import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from "./env";
 
 export const authOptions: NextAuthOptions = {
   providers: [
     Credentials({
       name: 'Credentials',
       credentials: {
-        username: { label: 'Username', type: 'text' },
-        password: { label: 'Password', type: 'password' },
+        identifier: { label: 'username / email', type: 'text' },
+        password: { label: 'password', type: 'password' },
       },
       async authorize(credentials) {
         //logic that reurns object with user info or null if login is invalid
-        if (!credentials?.username || !credentials?.password) {
+        if (!credentials?.identifier || !credentials?.password) {
           return null;
         }
 
         await connectDB();
 
-        const user = await User.findOne({ username: credentials.username });
-        if (!user) return null;
+        const { identifier, password } = credentials;
 
-        const isValid = await bcrypt.compare(
-          credentials.password,
-          user.password
+        const isEmail = identifier.includes('@');
+
+        const user = await User.findOne(
+          isEmail
+            ? { email: identifier.toLowerCase() }
+            : { username: identifier }
         );
 
+        if (!user || !user.password) return null;
+
+        const isValid = await bcrypt.compare(password, user.password);
         if (!isValid) return null;
 
         // what is returned here goes to session.user
         return {
           id: user._id.toString(),
           username: user.username,
+          email: user.email,
         };
       },
     }),
+    GoogleProvider({
+      clientId: GOOGLE_CLIENT_ID,
+      clientSecret: GOOGLE_CLIENT_SECRET,
+      authorization: {
+        params: {
+          prompt: 'consent',
+          access_type: 'offline',
+          response_type: 'code'
+        }
+      }
+    })
   ],
   session: {
     strategy: 'jwt',
@@ -47,9 +66,27 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id;
         token.username = user.username;
+        token.email = user.email;
       }
       return token;
     },
+
+    // async signIn({ profile, user }) {
+    //   if (!profile) return false;
+
+    //   await connectDB();
+    //   const userExist = await User.findOne({ email: profile.email })
+    //   if (!userExist) {
+    //     const username = profile?.name?.slice(0,20);
+
+    //     await User.create({
+    //       email: profile.email,
+    //       username,
+    //       image: user.image
+    //     });
+    //   }
+    //   return true
+    // },
 
     async session({ session, token }) {
       await connectDB();
@@ -61,6 +98,10 @@ export const authOptions: NextAuthOptions = {
       session.user.username = token.username;
       session.user.firstname = user.firstname;
       session.user.lastname = user.lastname;
+
+      if (token.email) {
+        session.user.email = token.email;
+      }
 
       return session;
     },

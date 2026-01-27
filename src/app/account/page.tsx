@@ -14,6 +14,7 @@ type UserPayload = Partial<{
 
 const Account = () => {
   const [userName, setUserName] = useState<string | null>(null);
+  const [email, setEmail] = useState<string | null>(null);
   const [firstName, setFirstName] = useState<string | null>(null);
   const [lastName, setLastName] = useState<string | null>(null);
   const [editingFirst, setEditingFirst] = useState(false);
@@ -31,6 +32,7 @@ const Account = () => {
       setUserName(session.user.username);
       setFirstName(session.user.firstname);
       setLastName(session.user.lastname);
+      setEmail(session.user.email);
     }
     syncSessionToState();
   }, [session, router]);
@@ -73,6 +75,13 @@ const Account = () => {
               <label className="text-stone-600 tracking-[1px] text-sm">user name</label>
               <div className="flex items-center justify-between">
                 <p className="text-stone-700 text-lg">{userName ?? "-"}</p>
+              </div>
+            </div>
+            <div className="w-full h-px bg-stone-300"></div>
+            <div className="flex flex-col gap-2">
+              <label className="text-stone-600 tracking-[1px] text-sm">email</label>
+              <div className="flex items-center justify-between">
+                <p className="text-stone-700 text-lg">{email ?? "-"}</p>
               </div>
             </div>
             <div className="w-full h-px bg-stone-300"></div>
