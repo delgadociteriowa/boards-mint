@@ -2,7 +2,8 @@
 import React from 'react';
 import { useAppSelector, useAppDispatch } from '@/state/hooks';
 import OctoBoardSquare from './OctoBoardSquare';
-import { selectPiece, updateBoard } from '@/state/board/boardSlice';
+import { selectPiece, updateBoard, addBoard } from '@/state/board/boardSlice';
+import { useSession } from "next-auth/react";
 
 interface ColorsType {
   chess: string[];
@@ -15,6 +16,7 @@ interface ColorsClickedType {
 };
 
 const Octoboard = () => {
+  const { data: session } = useSession();
   const dispatch = useAppDispatch();
   const boardId = useAppSelector(state => state.board.id);
   const selectedGame = useAppSelector(state => state.board.selectedGame);
@@ -58,8 +60,20 @@ const Octoboard = () => {
     return color
   }
 
+  const handleCreate = async () => {
+    await dispatch(addBoard({ gameGrid, selectedGame }));
+  };
+
   const handleSave = async () => {
     await dispatch(updateBoard({id: boardId, gameGrid: gameGrid}));
+  };
+
+  const handleClick = async () => {
+    if (!boardId) {
+      await handleCreate();
+    } else {
+      await handleSave();
+    }
   };
 
   return (
@@ -83,7 +97,7 @@ const Octoboard = () => {
         ))}
         </div>
         <div className='flex w-[90%] mb-14 landscape:w-[75%] mx-auto'>
-          {boardId &&
+          {session &&
             (<>
               <button
                 className={`
@@ -95,11 +109,13 @@ const Octoboard = () => {
                     ? "bg-sky-600 hover:bg-sky-500 cursor-pointer"
                     : "bg-stone-600 cursor-not-allowed opacity-60"}
                   `}
-                  onClick={handleSave}
+                  onClick={handleClick}
                 >
-                  save
+                  {boardId ? "save" : "save"}
               </button>
-              <span className="ml-auto text-sm font-texts text-stone-500 my-auto mr-2">Last Saved: {updatedAt}</span>
+              {boardId && (
+                <span className="ml-auto text-sm font-texts text-stone-500 my-auto mr-2">Last Saved: {updatedAt}</span>
+              )}
               </>)
            }
         </div>

@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import LoadingComponent from "@/components/LoadingComponent";
+import Link from 'next/link';
 
 type UserPayload = Partial<{
   firstname: string;
@@ -138,9 +139,15 @@ const Account = () => {
                 </button>
               </div>
             </div>
+            <Link
+               href="/saved"
+              className="bg-sky-600 hover:bg-sky-500 py-5 rounded-full text-center text-stone-100 text-xl tracking-[2px] mx-auto mt-5 shadow-xl/20  cursor-pointer w-[90%]"
+            >
+              my saved games
+            </Link>
             <button
               onClick={handleLogout}
-              className="bg-sky-600 hover:bg-sky-500 py-5 rounded-full text-center text-stone-100 text-xl tracking-[2px] mx-auto mt-10 shadow-xl/20  cursor-pointer w-[90%]"
+              className="bg-sky-600 hover:bg-sky-500 py-5 rounded-full text-center text-stone-100 text-xl tracking-[2px] mx-auto mt-5 shadow-xl/20  cursor-pointer w-[90%]"
             >
               log out
             </button>
