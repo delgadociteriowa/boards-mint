@@ -19,13 +19,7 @@ const Saved = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  const { boards, loading } = useAppSelector(
-    state => state.savedBoards
-  );
-
-  const boardLoading = useAppSelector(
-    state => state.board.loading
-  );
+  const { boards, loading } = useAppSelector(state => state.savedBoards);
 
   useEffect(() => {
     if (status === "loading") return;
@@ -61,16 +55,12 @@ const Saved = () => {
   return (
     <>
       <Header />
-      {(status === "loading" || loading || boardLoading) && <LoadingComponent />}
+      {(status === "loading" || loading ) && <LoadingComponent />}
       <main className="min-h-[800px]">
         <section className="w-[90%] mx-auto max-w-[1200px] py-14 text-stone-600">
-          <h3 className="text-center text-4xl tracking-[2px] mb-2">
+          <h3 className="text-center text-4xl tracking-[2px] mb-10">
             Saved Games
           </h3>
-          <h4 className="text-center text-2xl tracking-[2px] mb-8">
-            {session?.user?.username}
-          </h4>
-
           <div className="py-5 flex flex-wrap gap-10 w-full mb-8">
             {!loading && boards.length === 0 && (
               <p className="text-center w-full">
