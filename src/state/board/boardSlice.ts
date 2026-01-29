@@ -19,6 +19,57 @@ import {
 } from './boardSetup';
 import formatDate from "@/utils/formatDate";
 
+
+export const addBoard = createAsyncThunk<
+  {
+    id: string;
+    owner: string;
+    gameGrid: Grid;
+    selectedGame: SelectedGame;
+    createdAt: string;
+    updatedAt: string;
+  },                //returned
+  { 
+    gameGrid?: Grid;
+    selectedGame: SelectedGame;
+   },           // received
+  { rejectValue: string }
+>(
+  "board/addBoard",
+  async ({ gameGrid, selectedGame }, { rejectWithValue }) => {
+    try {
+      const res = await fetch(`/api/board/create`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          gameGrid,
+          selectedGame,
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to create board");
+      }
+
+      const data = await res.json();
+
+      return {
+        id: data._id,
+        owner: data.owner,
+        selectedGame: data.selectedGame,
+        gameGrid: data.gameGrid ?? [],
+        createdAt: formatDate(data.createdAt),
+        updatedAt: formatDate(data.updatedAt),
+      };
+    } catch (error) {
+      return rejectWithValue("Error creating board");
+    }
+  }
+);
+
+
 export const getBoard = createAsyncThunk<
   BoardStateType,   // returnsboard
   string,           // id
@@ -205,6 +256,25 @@ const boardSlice = createSlice({
         state.phaseTwo = action.payload.phaseTwo;
         state.createdAt = action.payload.createdAt;
         state.updatedAt = action.payload.updatedAt;
+        state.loading = false;
+      })
+      .addCase(addBoard.pending, (state) => {
+        state.loading = true;
+        state.loadError = null;
+        state.saveEnabled = false;
+      })
+      .addCase(addBoard.fulfilled, (state, action) => {
+        state.id = action.payload.id;
+        state.owner = action.payload.owner;
+        state.selectedGame = action.payload.selectedGame;
+        state.gameGrid = action.payload.gameGrid;
+        state.createdAt = action.payload.createdAt;
+        state.updatedAt = action.payload.updatedAt;
+        state.loading = false;
+      })
+      .addCase(addBoard.rejected, (state, action) => {
+        state.loading = false;
+        state.loadError = action.payload ?? "Unknown error";
       })
       .addCase(getBoard.rejected, (state, action) => {
         state.loading = false;
