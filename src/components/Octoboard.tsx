@@ -1,9 +1,10 @@
 'use client';
 import React from 'react';
 import { useAppSelector, useAppDispatch } from '@/state/hooks';
-import OctoBoardSquare from './OctoBoardSquare';
 import { selectPiece, updateBoard, addBoard } from '@/state/board/boardSlice';
 import { useSession } from "next-auth/react";
+import OctoBoardSquare from './OctoBoardSquare';
+import LoadingComponent from './LoadingComponent';
 
 interface ColorsType {
   chess: string[];
@@ -78,6 +79,7 @@ const Octoboard = () => {
 
   return (
     <>
+      {!gameGrid.length && <LoadingComponent />}
       <main className="w-[100%] md:w-[90%] lg:w-[80%] my-0 mx-auto">
         <div className='flex w-[90%] landscape:w-[75%] mx-auto'> 
           {boardId && (<span className="text-sm font-texts text-stone-500 ml-auto">ID: {boardId}</span>)}
