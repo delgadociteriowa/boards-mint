@@ -79,7 +79,8 @@ export const getBoard = createAsyncThunk<
       const res = await fetch(`/api/board/get/${id}`);
 
       if (!res.ok) {
-        throw new Error("Failed to fetch board");
+        console.log(`Error. Response status: ${res.status}`)
+        throw new Error(`Failed to fetch the selected board`);
       }
 
       const data = await res.json();
@@ -94,7 +95,7 @@ export const getBoard = createAsyncThunk<
         updatedAt: formatDate(data.updatedAt),
       };
     } catch (error) {
-      return rejectWithValue("Error fetching board");
+      return rejectWithValue(`${error}`);
     }
   }
 );
@@ -143,12 +144,13 @@ export const deleteBoard = createAsyncThunk<
       });
 
       if (!res.ok) {
-        throw new Error("Failed to delete board");
+        console.log(`Error. Response status: ${res.status}`)
+        throw new Error("Failed to delete the board");
       }
 
       return id;
     } catch (error) {
-      return rejectWithValue("Error deleting board");
+      return rejectWithValue(`${error}`);
     }
   }
 );
@@ -217,7 +219,6 @@ const boardSlice = createSlice({
       state.selectedGame = '';
       state.gameGrid = [];
       state.selectedSqr = [null, null];
-      state.phaseTwo = false;
       state.phaseTwo = false;
       state.loading = false;
       state.error = null;

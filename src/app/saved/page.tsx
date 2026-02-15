@@ -22,6 +22,9 @@ const Saved = () => {
 
   const { boards, loading } = useAppSelector(state => state.savedBoards);
 
+  const loadingBoard = useAppSelector(state => state.board.loading);
+  const error = useAppSelector(state => state.board.error);
+
   useEffect(() => {
     if (status === "loading") return;
 
@@ -34,7 +37,6 @@ const Saved = () => {
     if (getBoard.fulfilled.match(result)) {
       router.push(`/${game}`);
     }
-    //if it fails
   };
 
   const handleDelete = async (id: string) => {
@@ -60,13 +62,19 @@ const Saved = () => {
               Saved Games
             </h3>
             <div className="py-5 flex flex-wrap gap-10 w-full mb-8">
-              {loading && (
+              {loading || loadingBoard &&  (
                 <Spinner />
               )}
 
               {!loading && status === "unauthenticated" && (
                 <p className="text-center w-full">
                   Log in to save games
+                </p>
+              )}
+              
+              {error && (
+                <p className="text-center w-full text-red-500 text-xl">
+                  {error}
                 </p>
               )}
 
@@ -76,7 +84,7 @@ const Saved = () => {
                 </p>
               )}
 
-              {!loading &&
+              {!loading && !loadingBoard && !error &&
                 boards.map(board => (
                   <SavedCard
                     key={board._id}
@@ -88,6 +96,7 @@ const Saved = () => {
                     onContinue={handleContinue}
                   />
                 ))}
+
             </div>
           </section>
         </main>
