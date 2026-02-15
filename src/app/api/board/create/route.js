@@ -21,8 +21,6 @@ export async function POST(req) {
       owner: userId,
       gameGrid: gameGrid ?? undefined,
       selectedGame: selectedGame ?? undefined,
-      selectedSqr: [null, null],
-      phaseTwo: false,
     });
 
     return Response.json(newBoard, { status: 201 });

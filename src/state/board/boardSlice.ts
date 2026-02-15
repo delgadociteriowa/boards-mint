@@ -19,7 +19,6 @@ import {
 } from './boardSetup';
 import formatDate from "@/utils/formatDate";
 
-
 export const addBoard = createAsyncThunk<
   {
     id: string;
@@ -69,7 +68,6 @@ export const addBoard = createAsyncThunk<
   }
 );
 
-
 export const getBoard = createAsyncThunk<
   BoardStateType,   // returnsboard
   string,           // id
@@ -91,7 +89,6 @@ export const getBoard = createAsyncThunk<
         id: data._id,
         owner: data.owner,
         selectedGame: data.selectedGame,
-        selectedSqr: [null, null],
         gameGrid: data.gameGrid,
         createdAt: formatDate(data.createdAt),
         updatedAt: formatDate(data.updatedAt),
@@ -163,11 +160,8 @@ const initialState: BoardStateType = {
   gameGrid: [],
   selectedSqr: [null, null],
   phaseTwo: false,
-  deleting: false,
-  deleteError: null,
-  loading: false,
-  loadError: null,
-  saveEnabled: false,
+  loading: false, //pending
+  error: null,
   createdAt: '',
   updatedAt: '',
 };
@@ -191,7 +185,6 @@ const boardSlice = createSlice({
         state.gameGrid = selectSqrGrid(selectedPiece, state.gameGrid);
         state.selectedSqr = selectedPiece;
         state.phaseTwo = true;
-        state.saveEnabled = false;
         return;
       }
 
@@ -199,7 +192,6 @@ const boardSlice = createSlice({
         state.gameGrid = targetedSelfGrid(state.selectedSqr, state.gameGrid);
         state.selectedSqr = emptySqr;
         state.phaseTwo = false;
-        state.saveEnabled = true;
         return;
       }
 
@@ -207,7 +199,6 @@ const boardSlice = createSlice({
         state.gameGrid = targetedEmptyGrid(selectedPiece, state.selectedSqr, state.gameGrid);
         state.selectedSqr = emptySqr;
         state.phaseTwo = false;
-        state.saveEnabled = true;
         return;
       }
 
@@ -219,7 +210,6 @@ const boardSlice = createSlice({
         }
         state.selectedSqr = emptySqr;
         state.phaseTwo = false;
-        state.saveEnabled = true;
         return;
       }
     },
@@ -229,11 +219,8 @@ const boardSlice = createSlice({
       state.selectedSqr = [null, null];
       state.phaseTwo = false;
       state.phaseTwo = false;
-      state.deleting = false;
-      state.deleteError = null;
       state.loading = false;
-      state.loadError = null;
-      state.saveEnabled = false;
+      state.error = null;
       state.createdAt = '';
       state.updatedAt = '';
     },
@@ -243,64 +230,61 @@ const boardSlice = createSlice({
   },
   extraReducers: (builder) => {
       builder
-      .addCase(getBoard.pending, (state) => {
-        state.loading = true;
-        state.loadError = null;
-      })
-      .addCase(getBoard.fulfilled, (state, action) => {
-        state.id = action.payload.id;
-        state.owner = action.payload.owner;
-        state.selectedGame = action.payload.selectedGame;
-        state.gameGrid = action.payload.gameGrid;
-        state.selectedSqr = action.payload.selectedSqr;
-        state.phaseTwo = action.payload.phaseTwo;
-        state.createdAt = action.payload.createdAt;
-        state.updatedAt = action.payload.updatedAt;
-        state.loading = false;
-      })
-      .addCase(addBoard.pending, (state) => {
-        state.loading = true;
-        state.loadError = null;
-        state.saveEnabled = false;
-      })
-      .addCase(addBoard.fulfilled, (state, action) => {
-        state.id = action.payload.id;
-        state.owner = action.payload.owner;
-        state.selectedGame = action.payload.selectedGame;
-        state.gameGrid = action.payload.gameGrid;
-        state.createdAt = action.payload.createdAt;
-        state.updatedAt = action.payload.updatedAt;
-        state.loading = false;
-      })
-      .addCase(addBoard.rejected, (state, action) => {
-        state.loading = false;
-        state.loadError = action.payload ?? "Unknown error";
-      })
-      .addCase(getBoard.rejected, (state, action) => {
-        state.loading = false;
-        state.loadError = action.payload ?? "Unknown error";
-      })
-      .addCase(updateBoard.pending, (state) => {
-        state.saveEnabled = false;
-      })
-      .addCase(updateBoard.fulfilled, (state, action) => {
-        state.updatedAt = action.payload.updatedAt;
-        state.saveEnabled = true;
-      })
-      .addCase(updateBoard.rejected, (state) => {
-        state.saveEnabled = true;
-      })
-      .addCase(deleteBoard.pending, (state) => {
-        state.deleting = true;
-        state.deleteError = null;
-      })
-      .addCase(deleteBoard.fulfilled, (state) => {
-        state.deleting = false;
-      })
-      .addCase(deleteBoard.rejected, (state, action) => {
-        state.deleting = false;
-        state.deleteError = action.payload ?? "Unknown error";
-      });
+        // getBoard
+        .addCase(getBoard.pending, (state) => {
+          state.loading = true;
+        })
+        .addCase(getBoard.fulfilled, (state, action) => {
+          state.id = action.payload.id;
+          state.owner = action.payload.owner;
+          state.selectedGame = action.payload.selectedGame;
+          state.gameGrid = action.payload.gameGrid;
+          state.createdAt = action.payload.createdAt;
+          state.updatedAt = action.payload.updatedAt;
+          state.loading = false;
+        })
+        .addCase(getBoard.rejected, (state, action) => {
+          state.loading = false;
+          state.error = action.payload ?? "Unknown error";
+        })
+        // addBoard
+        .addCase(addBoard.pending, (state) => {
+          state.loading = true;
+        })
+        .addCase(addBoard.fulfilled, (state, action) => {
+          state.id = action.payload.id;
+          state.owner = action.payload.owner;
+          state.selectedGame = action.payload.selectedGame;
+          state.gameGrid = action.payload.gameGrid;
+          state.createdAt = action.payload.createdAt;
+          state.updatedAt = action.payload.updatedAt;
+          state.loading = false;
+        })
+        .addCase(addBoard.rejected, (state, action) => {
+          state.loading = false;
+          state.error = action.payload ?? "Unknown error";
+        })
+        // updateBoard
+        .addCase(updateBoard.pending, (state) => {
+          state.loading = true;
+        })
+        .addCase(updateBoard.fulfilled, (state, action) => {
+          state.updatedAt = action.payload.updatedAt;
+        })
+        .addCase(updateBoard.rejected, (state, action) => {
+          state.error = action.payload ?? "Unknown error";
+        })
+        // deleteBoard
+        .addCase(deleteBoard.pending, (state) => {
+          state.loading = true;
+        })
+        .addCase(deleteBoard.fulfilled, (state) => {
+          state.loading = false;
+        })
+        .addCase(deleteBoard.rejected, (state, action) => {
+          state.loading = false;
+          state.error = action.payload ?? "Unknown error";
+        });
   }
 });
 

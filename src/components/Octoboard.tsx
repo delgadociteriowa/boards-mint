@@ -24,7 +24,8 @@ const Octoboard = () => {
   const gameGrid = useAppSelector(state => state.board.gameGrid);
   const phaseTwo = useAppSelector(state => state.board.phaseTwo);
   const updatedAt = useAppSelector(state => state.board.updatedAt);
-  const saveEnabled = useAppSelector(state => state.board.saveEnabled);
+  const loading = useAppSelector(state => state.board.loading);
+  const error = useAppSelector(state => state.board.error);
   const handleClickSqr = (id: string) => {
     dispatch(selectPiece(id))
   }
@@ -107,7 +108,7 @@ const Octoboard = () => {
                   px-6
                   py-1
                   rounded-xl
-                  ${saveEnabled
+                  ${!phaseTwo
                     ? "bg-sky-600 hover:bg-sky-500 cursor-pointer"
                     : "bg-stone-600 cursor-not-allowed opacity-60"}
                   `}
