@@ -173,9 +173,13 @@ const boardSlice = createSlice({
   initialState,
   reducers:{
     selectGame: (state, action: PayloadAction<SelectedGame>) => {
-      const newGrid = buildGameGrid(action.payload);
+      // const newGrid = buildGameGrid(action.payload);
       state.selectedGame =  action.payload;
-      state.gameGrid = newGrid;
+      // state.gameGrid = newGrid;
+    },
+    buildSyncGrid: (state) => {
+      const grid = buildGameGrid(state.selectedGame);
+      state.gameGrid = grid;
     },
     selectPiece: (state, action: PayloadAction<string>) => {
       const [row, col] = action.payload.replace('sqr', '').split('-').map(n => Number(n));
@@ -287,7 +291,7 @@ const boardSlice = createSlice({
   }
 });
 
-export const { selectGame, selectPiece, closeGame } = boardSlice.actions;
+export const { selectGame, buildSyncGrid, selectPiece, closeGame } = boardSlice.actions;
 
 export default boardSlice.reducer;
 

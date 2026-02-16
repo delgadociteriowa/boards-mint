@@ -1,14 +1,13 @@
 'use client';
-
-import { useEffect } from "react";
-import { useSearchParams } from "next/navigation";
-import { useAppSelector, useAppDispatch } from "@/state/hooks";
-import { buildSyncGrid, selectPiece } from "@/state/board/boardSlice";
+import { useEffect } from 'react';
+import { useAppSelector, useAppDispatch } from '@/state/hooks';
+import { useSearchParams } from 'next/navigation';
+import { buildSyncGrid, selectPiece, updateBoard, addBoard, closeGame } from '@/state/board/boardSlice';
 import { useSession } from "next-auth/react";
-import { getBoard, addBoard, updateBoard } from "@/state/board/boardSlice";
+import { getBoard } from "@/state/board/boardSlice";
 
-import OctoBoardSquare from "./OctoBoardSquare";
-import LoadingComponent from "./LoadingComponent";
+import OctoBoardSquare from './OctoBoardSquare';
+import Spinner from './Spinner';
 
 interface ColorsType {
   chess: string[];
@@ -21,44 +20,47 @@ interface ColorsClickedType {
 };
 
 const Octoboard = () => {
+  const { data: session } = useSession();
   const dispatch = useAppDispatch();
-  const { selectedGame, gameGrid, phaseTwo, loading, error, updatedAt }  = useAppSelector(state => state.board);
+  const selectedGame = useAppSelector(state => state.board.selectedGame);
+  const gameGrid = useAppSelector(state => state.board.gameGrid);
+  const phaseTwo = useAppSelector(state => state.board.phaseTwo);
+  const updatedAt = useAppSelector(state => state.board.updatedAt);
+  const loading = useAppSelector(state => state.board.loading);
+  const error = useAppSelector(state => state.board.error);
+
   const searchParams = useSearchParams();
   const boardId = searchParams.get("id");
-  const { data: session } = useSession();
-  
-  useEffect(() => {
-    if (!selectedGame) return;
-
-    if (!boardId) {
-      dispatch(buildSyncGrid());
-    } else {
-      dispatch(getBoard(boardId));
-    } 
-  }, [selectedGame, dispatch]);
 
   const handleClickSqr = (id: string) => {
     dispatch(selectPiece(id))
-  };
-
-  const handleCreate = async () => {
-      await dispatch(addBoard({ gameGrid, selectedGame }));
-    };
+  }
   
-    const handleSave = async () => {
-      if(!boardId) return
-      await dispatch(updateBoard({id: boardId, gameGrid: gameGrid}));
-    };
+  const exitGame = () => {
+    dispatch(closeGame())
+  }
 
-  const handleClick = async () => {
-    if (!boardId) {
-      await handleCreate();
+  useEffect(() => {
+    if(!boardId) {
+      dispatch(buildSyncGrid())
     } else {
-      await handleSave();
+      dispatch(getBoard(boardId))
     }
+    return exitGame();
+  }, [dispatch, boardId])
+  
+  const handleCreate = async () => {
+    await dispatch(addBoard({ gameGrid, selectedGame }));
   };
 
+  const handleSave = async () => {
+    if(!boardId) return
+    await dispatch(updateBoard({id: boardId, gameGrid: gameGrid}));
+  };
+
+  
   // UI
+
   const gameColors: ColorsType = {
     chess: ['bg-teal-900','bg-teal-700','bg-teal-500','bg-teal-300'],
     checkers: ['bg-cyan-900','bg-cyan-700','bg-cyan-500','bg-cyan-300']
@@ -90,10 +92,19 @@ const Octoboard = () => {
     }
     return color
   }
+
+  const handleClick = async () => {
+    if (!boardId) {
+      await handleCreate();
+    } else {
+      await handleSave();
+    }
+  };
+
   return (
     <>
-      {(!gameGrid.length || loading) && !error && 
-        <LoadingComponent />
+      {!gameGrid.length && !error && 
+        <Spinner />
       }
       {error && (
         <p className="text-center w-full text-red-500 text/xl">
@@ -118,9 +129,32 @@ const Octoboard = () => {
           })
         ))}
         </div>
+        <div className='flex w-[90%] mb-14 landscape:w-[75%] mx-auto'>
+          {session &&
+            (<>
+              <button
+                className={`
+                  text-stone-100
+                  px-6
+                  py-1
+                  rounded-xl
+                  ${!phaseTwo
+                    ? "bg-sky-600 hover:bg-sky-500 cursor-pointer"
+                    : "bg-stone-600 cursor-not-allowed opacity-60"}
+                  `}
+                  onClick={handleClick}
+                >
+                  {boardId ? "save" : "save"}
+              </button>
+              {boardId && (
+                <span className="ml-auto text-sm font-texts text-stone-500 my-auto mr-2">Last Saved: {updatedAt}</span>
+              )}
+              </>)
+           }
+        </div>
       </main>
     </>
-  )
+  );
 };
 
 export default Octoboard;

@@ -2,10 +2,8 @@
 
 import { useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/state/hooks";
 import { fetchSavedBoards } from "@/state/savedBoards/savedBoardsSlice";
-import { getBoard } from "@/state/board/boardSlice";
 import { deleteBoard } from "@/state/board/boardSlice";
 
 import Header from "@/components/Header";
@@ -16,28 +14,15 @@ import LoadingComponent from "@/components/LoadingComponent";
 import formatDate from "@/utils/formatDate";
 
 const Saved = () => {
-  const { data: session, status } = useSession();
-  const router = useRouter();
+  const { status } = useSession();
   const dispatch = useAppDispatch();
 
-  const { boards, loading } = useAppSelector(state => state.savedBoards);
-
-  const loadingBoard = useAppSelector(state => state.board.loading);
-  const error = useAppSelector(state => state.board.error);
+  const { boards, loading, error } = useAppSelector(state => state.savedBoards);
 
   useEffect(() => {
     if (status === "loading") return;
-
     dispatch(fetchSavedBoards());
-  }, [status, dispatch, router]);
-
-  const handleContinue = async (id: string, game: string) => {
-    const result = await dispatch(getBoard(id));
-
-    if (getBoard.fulfilled.match(result)) {
-      router.push(`/${game}`);
-    }
-  };
+  }, [status, dispatch]);
 
   const handleDelete = async (id: string) => {
     const confirmed = window.confirm(
@@ -62,7 +47,7 @@ const Saved = () => {
               Saved Games
             </h3>
             <div className="py-5 flex flex-wrap gap-10 w-full mb-8">
-              {loading || loadingBoard &&  (
+              {loading &&  (
                 <Spinner />
               )}
 
@@ -72,19 +57,19 @@ const Saved = () => {
                 </p>
               )}
               
-              {error && (
-                <p className="text-center w-full text-red-500 text-xl">
-                  {error}
-                </p>
-              )}
-
               {!loading && boards.length === 0 && status === "authenticated" && (
                 <p className="text-center w-full">
                   No saved games yet
                 </p>
               )}
+              
+              {error && (
+                <p className="text-center w-full text-red-500 text/xl">
+                  {error}
+                </p>
+              )}
 
-              {!loading && !loadingBoard && !error &&
+              {!loading &&
                 boards.map(board => (
                   <SavedCard
                     key={board._id}
@@ -93,7 +78,6 @@ const Saved = () => {
                     createdAt={formatDate(board.createdAt)}
                     lastSaved={formatDate(board.updatedAt)}
                     onDelete={handleDelete}
-                    onContinue={handleContinue}
                   />
                 ))}
 
