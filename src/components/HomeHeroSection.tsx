@@ -1,18 +1,7 @@
-'use client'
-import { useEffect } from "react";
-import { useAppDispatch } from "@/state/hooks";
-import { closeGame } from "@/state/board/boardSlice";
-
 import Link from 'next/link';
 import Navigation from './Navigation';
 
 const HomeHeroSection = () => {
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(closeGame());
-  }, [dispatch]);
-
   return (
     <header>
       <Navigation/>

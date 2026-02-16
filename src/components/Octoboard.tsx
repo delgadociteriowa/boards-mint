@@ -1,7 +1,7 @@
 'use client';
-import React from 'react';
+import { useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from '@/state/hooks';
-import { selectPiece, updateBoard, addBoard } from '@/state/board/boardSlice';
+import { selectPiece, updateBoard, addBoard, closeGame } from '@/state/board/boardSlice';
 import { useSession } from "next-auth/react";
 import OctoBoardSquare from './OctoBoardSquare';
 import LoadingComponent from './LoadingComponent';
@@ -26,9 +26,18 @@ const Octoboard = () => {
   const updatedAt = useAppSelector(state => state.board.updatedAt);
   const loading = useAppSelector(state => state.board.loading);
   const error = useAppSelector(state => state.board.error);
+
   const handleClickSqr = (id: string) => {
     dispatch(selectPiece(id))
   }
+  
+  const exitGame = () => {
+    dispatch(closeGame())
+  }
+
+  useEffect(() => {
+    return exitGame(); // necesita ir a /chess/id  y octoboard maneja uno u otro dependiendo del caso
+  }, [])
   
   const gameColors: ColorsType = {
     chess: ['bg-teal-900','bg-teal-700','bg-teal-500','bg-teal-300'],

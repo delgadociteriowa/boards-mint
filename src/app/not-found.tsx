@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import Notfound from "../assets/notfound.svg";
 import Link from "next/link";
 
-const NotFoundPage: React.FC = () => {
+const NotFoundPage = () => {
   return (
     <>
       <Header/>
@@ -21,5 +21,6 @@ const NotFoundPage: React.FC = () => {
       <Footer/>
     </>
   );
-}
+};
+
 export default NotFoundPage;

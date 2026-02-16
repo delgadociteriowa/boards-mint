@@ -2,7 +2,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import LoadingComponent from "@/components/LoadingComponent";
 
-const LoadingPage: React.FC = () => {
+const LoadingPage = () => {
   return (
     <>
       <Header/>
@@ -10,5 +10,6 @@ const LoadingPage: React.FC = () => {
       <Footer/>
     </>
   );
-}
+};
+
 export default LoadingPage;

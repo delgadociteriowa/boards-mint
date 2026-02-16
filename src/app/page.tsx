@@ -3,10 +3,8 @@ import HomeMainSection from "@/components/HomeMainSection";
 import HomeMessageSection from "@/components/HomeMessageSection";
 import HomeGamesSection from "@/components/HomeGamesSection";
 import Footer from "@/components/Footer";
-//import connectDB from "@/config/database";
 
-const Home: React.FC = () => {
-  //connectDB();
+const Home = () => {;
   return (
     <>
       <HomeHeroSection/>
@@ -16,5 +14,6 @@ const Home: React.FC = () => {
       <Footer/>
     </>
   );
-}
+};
+
 export default Home;

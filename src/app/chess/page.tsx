@@ -4,8 +4,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Octoboard from "@/components/Octoboard";
 import { useAppDispatch, useAppSelector } from "@/state/hooks";
-import { selectGame, closeGame } from "@/state/board/boardSlice";
-
+import { selectGame } from "@/state/board/boardSlice";
 
 const Chess = () => {
   const dispatch = useAppDispatch();
