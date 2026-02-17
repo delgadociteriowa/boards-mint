@@ -1,10 +1,15 @@
 'use client';
-import React from 'react';
-import { useAppSelector, useAppDispatch } from '@/state/hooks';
-import { selectPiece, updateBoard, addBoard } from '@/state/board/boardSlice';
+
+import { useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { useAppSelector, useAppDispatch } from "@/state/hooks";
+import { buildSyncGrid, selectPiece } from "@/state/board/boardSlice";
 import { useSession } from "next-auth/react";
-import OctoBoardSquare from './OctoBoardSquare';
-import LoadingComponent from './LoadingComponent';
+import { getBoard, addBoard, updateBoard } from "@/state/board/boardSlice";
+
+import OctoBoardSquare from "./OctoBoardSquare";
+import LoadingComponent from "./LoadingComponent";
+import ErrorComponent from "./ErrorComponent";
 
 interface ColorsType {
   chess: string[];
@@ -17,18 +22,53 @@ interface ColorsClickedType {
 };
 
 const Octoboard = () => {
-  const { data: session } = useSession();
   const dispatch = useAppDispatch();
-  const boardId = useAppSelector(state => state.board.id);
-  const selectedGame = useAppSelector(state => state.board.selectedGame);
-  const gameGrid = useAppSelector(state => state.board.gameGrid);
-  const phaseTwo = useAppSelector(state => state.board.phaseTwo);
-  const updatedAt = useAppSelector(state => state.board.updatedAt);
-  const saveEnabled = useAppSelector(state => state.board.saveEnabled);
+  const { id, selectedGame, gameGrid, phaseTwo, loading, error, updatedAt }  = useAppSelector(state => state.board);
+  const searchParams = useSearchParams();
+  const boardId = searchParams.get("id");
+  const { data: session } = useSession();
+  const router = useRouter();
+  
+  useEffect(() => {
+    if (!selectedGame) return;
+
+    if (!boardId) {
+      dispatch(buildSyncGrid());
+    } else {
+      dispatch(getBoard(boardId));
+    } 
+  }, [selectedGame, dispatch]);
+
+  useEffect(() => {
+    if(!boardId && id) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("id", id);
+      router.replace(`?${params.toString()}`);
+    }
+  }, [id]);
+
   const handleClickSqr = (id: string) => {
     dispatch(selectPiece(id))
-  }
+  };
+
+  const handleCreate = async () => {
+    await dispatch(addBoard({ gameGrid, selectedGame }));
+  };
   
+  const handleSave = async () => {
+    if(!boardId) return
+    await dispatch(updateBoard({id: boardId, gameGrid: gameGrid}));
+  };
+
+  const handleClick = async () => {
+    if (!boardId) {
+      await handleCreate();
+    } else {
+      await handleSave();
+    }
+  };
+
+  // UI
   const gameColors: ColorsType = {
     chess: ['bg-teal-900','bg-teal-700','bg-teal-500','bg-teal-300'],
     checkers: ['bg-cyan-900','bg-cyan-700','bg-cyan-500','bg-cyan-300']
@@ -60,70 +100,60 @@ const Octoboard = () => {
     }
     return color
   }
-
-  const handleCreate = async () => {
-    await dispatch(addBoard({ gameGrid, selectedGame }));
-  };
-
-  const handleSave = async () => {
-    await dispatch(updateBoard({id: boardId, gameGrid: gameGrid}));
-  };
-
-  const handleClick = async () => {
-    if (!boardId) {
-      await handleCreate();
-    } else {
-      await handleSave();
-    }
-  };
-
   return (
     <>
-      {!gameGrid.length && <LoadingComponent />}
-      <main className="w-[100%] md:w-[90%] lg:w-[80%] my-0 mx-auto">
-        <div className='flex w-[90%] landscape:w-[75%] mx-auto'> 
-          {boardId && (<span className="text-sm font-texts text-stone-500 ml-auto">ID: {boardId}</span>)}
-        </div>
-        <div className="grid w-[90%] rounded-2xl board-areas overflow-hidden mt-2 mb-4 mx-auto landscape:w-[75%] shadow-xl/20">
-        {gameGrid.map((row, rowIndex) => (
-          row.map((cellContent, colIndex) =>{
-            if (selectedGame !== 'chess' && selectedGame !== 'checkers') return null;
-            const colors = {
-              color: setSquareColor(rowIndex, colIndex, gameColors),
-              colorHover: setSquareColor(rowIndex, colIndex, gameColorsHover),
-              colorClicked: colorsClicked[selectedGame],
-              colorClickedHover: colorsClickedHover[selectedGame]
-            };
-            return (<OctoBoardSquare key={cellContent.id} cellContent={cellContent} colors={colors} onClickPiece={handleClickSqr} phaseTwo={phaseTwo}/>)
-          })
-        ))}
-        </div>
-        <div className='flex w-[90%] mb-14 landscape:w-[75%] mx-auto'>
-          {session &&
-            (<>
-              <button
-                className={`
-                  text-stone-100
-                  px-6
-                  py-1
-                  rounded-xl
-                  ${saveEnabled
-                    ? "bg-sky-600 hover:bg-sky-500 cursor-pointer"
-                    : "bg-stone-600 cursor-not-allowed opacity-60"}
-                  `}
-                  onClick={handleClick}
-                >
-                  {boardId ? "save" : "save"}
-              </button>
-              {boardId && (
-                <span className="ml-auto text-sm font-texts text-stone-500 my-auto mr-2">Last Saved: {updatedAt}</span>
-              )}
-              </>)
-           }
-        </div>
-      </main>
+      {(!gameGrid.length || loading) && !error && 
+        <LoadingComponent />
+      }
+      {error && (
+        <ErrorComponent error={error} />
+      )}
+      {!loading && !error && (
+        <main className="w-[100%] md:w-[90%] lg:w-[80%] my-0 mx-auto">
+          <div className='flex w-[90%] landscape:w-[75%] mx-auto'> 
+            {boardId && (<span className="text-sm font-texts text-stone-500 ml-auto">ID: {boardId}</span>)}
+          </div>
+          <div className="grid w-[90%] rounded-2xl board-areas overflow-hidden mt-2 mb-4 mx-auto landscape:w-[75%] shadow-xl/20">
+          {gameGrid.map((row, rowIndex) => (
+            row.map((cellContent, colIndex) =>{
+              if (selectedGame !== 'chess' && selectedGame !== 'checkers') return null;
+              const colors = {
+                color: setSquareColor(rowIndex, colIndex, gameColors),
+                colorHover: setSquareColor(rowIndex, colIndex, gameColorsHover),
+                colorClicked: colorsClicked[selectedGame],
+                colorClickedHover: colorsClickedHover[selectedGame]
+              };
+              return (<OctoBoardSquare key={cellContent.id} cellContent={cellContent} colors={colors} onClickPiece={handleClickSqr} phaseTwo={phaseTwo}/>)
+            })
+          ))}
+          </div> 
+          <div className='flex w-[90%] mb-14 landscape:w-[75%] mx-auto'>
+            {session &&
+              (<>
+                <button
+                  className={`
+                    text-stone-100
+                    px-6
+                    py-1
+                    rounded-xl
+                    ${!phaseTwo
+                      ? "bg-sky-600 hover:bg-sky-500 cursor-pointer"
+                      : "bg-stone-600 cursor-not-allowed opacity-60"}
+                    `}
+                    onClick={handleClick}
+                  >
+                    {id ? "save" : "save"}
+                </button>
+                {id && (
+                  <span className="ml-auto text-sm font-texts text-stone-500 my-auto mr-2">Last Saved: {updatedAt}</span>
+                )}
+                </>)
+            }
+          </div>
+        </main>
+      )}
     </>
-  );
+  )
 };
 
 export default Octoboard;

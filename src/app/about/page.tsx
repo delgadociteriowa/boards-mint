@@ -6,8 +6,7 @@ import AboutCenter from "../../assets/about_2.jpg";
 import AboutBottom from "../../assets/about_3.jpg";
 import Link from "next/link";
 
-
-const Soon = () => {
+const About = () => {
   return (
     <>
       <Header/>
@@ -45,4 +44,4 @@ const Soon = () => {
     </>
   );
 }
-export default Soon;
+export default About;

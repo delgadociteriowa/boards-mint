@@ -18,11 +18,10 @@ export interface BoardStateType {
   gameGrid: Grid;
   selectedSqr: SelectedSquare;
   phaseTwo: boolean;
-  deleting: boolean;
-  deleteError: string | null;
   loading: boolean;
-  loadError: string | null;
-  saveEnabled: boolean;
+  error: string | null;
   createdAt: string;
   updatedAt: string;
 };
+
+// activar/desactivar save sin depender de saveEnabled:boolean

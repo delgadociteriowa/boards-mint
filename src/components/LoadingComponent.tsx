@@ -1,4 +1,3 @@
-
 import Image from "next/image";
 import Loading from "../assets/loading.svg";
 

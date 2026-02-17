@@ -5,8 +5,6 @@ export interface IBoard extends Document {
   owner: string;
   selectedGame: SelectedGame;
   gameGrid: Grid;
-  selectedSqr: SelectedSquare;
-  phaseTwo: boolean;
 }
 
 const BoardSchema = new Schema<IBoard>(
@@ -22,14 +20,6 @@ const BoardSchema = new Schema<IBoard>(
     gameGrid: {
       type: [[Schema.Types.Mixed]],
       required: true,
-    },
-    selectedSqr: {
-      type: Schema.Types.Mixed,
-      required: true,
-    },
-    phaseTwo: {
-      type: Boolean,
-      default: false,
     },
   },
   {
