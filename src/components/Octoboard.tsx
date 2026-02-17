@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useAppSelector, useAppDispatch } from "@/state/hooks";
 import { buildSyncGrid, selectPiece } from "@/state/board/boardSlice";
 import { useSession } from "next-auth/react";
@@ -22,10 +22,11 @@ interface ColorsClickedType {
 
 const Octoboard = () => {
   const dispatch = useAppDispatch();
-  const { selectedGame, gameGrid, phaseTwo, loading, error, updatedAt }  = useAppSelector(state => state.board);
+  const { id, selectedGame, gameGrid, phaseTwo, loading, error, updatedAt }  = useAppSelector(state => state.board);
   const searchParams = useSearchParams();
   const boardId = searchParams.get("id");
   const { data: session } = useSession();
+  const router = useRouter();
   
   useEffect(() => {
     if (!selectedGame) return;
@@ -37,18 +38,26 @@ const Octoboard = () => {
     } 
   }, [selectedGame, dispatch]);
 
+  useEffect(() => {
+    if(!boardId && id) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("id", id);
+      router.replace(`?${params.toString()}`);
+    }
+  }, [id]);
+
   const handleClickSqr = (id: string) => {
     dispatch(selectPiece(id))
   };
 
   const handleCreate = async () => {
-      await dispatch(addBoard({ gameGrid, selectedGame }));
-    };
+    await dispatch(addBoard({ gameGrid, selectedGame }));
+  };
   
-    const handleSave = async () => {
-      if(!boardId) return
-      await dispatch(updateBoard({id: boardId, gameGrid: gameGrid}));
-    };
+  const handleSave = async () => {
+    if(!boardId) return
+    await dispatch(updateBoard({id: boardId, gameGrid: gameGrid}));
+  };
 
   const handleClick = async () => {
     if (!boardId) {
@@ -100,25 +109,50 @@ const Octoboard = () => {
           {error}
         </p>
       )}
-      <main className="w-[100%] md:w-[90%] lg:w-[80%] my-0 mx-auto">
-        <div className='flex w-[90%] landscape:w-[75%] mx-auto'> 
-          {boardId && (<span className="text-sm font-texts text-stone-500 ml-auto">ID: {boardId}</span>)}
-        </div>
-        <div className="grid w-[90%] rounded-2xl board-areas overflow-hidden mt-2 mb-4 mx-auto landscape:w-[75%] shadow-xl/20">
-        {gameGrid.map((row, rowIndex) => (
-          row.map((cellContent, colIndex) =>{
-            if (selectedGame !== 'chess' && selectedGame !== 'checkers') return null;
-            const colors = {
-              color: setSquareColor(rowIndex, colIndex, gameColors),
-              colorHover: setSquareColor(rowIndex, colIndex, gameColorsHover),
-              colorClicked: colorsClicked[selectedGame],
-              colorClickedHover: colorsClickedHover[selectedGame]
-            };
-            return (<OctoBoardSquare key={cellContent.id} cellContent={cellContent} colors={colors} onClickPiece={handleClickSqr} phaseTwo={phaseTwo}/>)
-          })
-        ))}
-        </div>
-      </main>
+      {!loading && !error && (
+        <main className="w-[100%] md:w-[90%] lg:w-[80%] my-0 mx-auto">
+          <div className='flex w-[90%] landscape:w-[75%] mx-auto'> 
+            {boardId && (<span className="text-sm font-texts text-stone-500 ml-auto">ID: {boardId}</span>)}
+          </div>
+          <div className="grid w-[90%] rounded-2xl board-areas overflow-hidden mt-2 mb-4 mx-auto landscape:w-[75%] shadow-xl/20">
+          {gameGrid.map((row, rowIndex) => (
+            row.map((cellContent, colIndex) =>{
+              if (selectedGame !== 'chess' && selectedGame !== 'checkers') return null;
+              const colors = {
+                color: setSquareColor(rowIndex, colIndex, gameColors),
+                colorHover: setSquareColor(rowIndex, colIndex, gameColorsHover),
+                colorClicked: colorsClicked[selectedGame],
+                colorClickedHover: colorsClickedHover[selectedGame]
+              };
+              return (<OctoBoardSquare key={cellContent.id} cellContent={cellContent} colors={colors} onClickPiece={handleClickSqr} phaseTwo={phaseTwo}/>)
+            })
+          ))}
+          </div> 
+          <div className='flex w-[90%] mb-14 landscape:w-[75%] mx-auto'>
+            {session &&
+              (<>
+                <button
+                  className={`
+                    text-stone-100
+                    px-6
+                    py-1
+                    rounded-xl
+                    ${!phaseTwo
+                      ? "bg-sky-600 hover:bg-sky-500 cursor-pointer"
+                      : "bg-stone-600 cursor-not-allowed opacity-60"}
+                    `}
+                    onClick={handleClick}
+                  >
+                    {id ? "save" : "save"}
+                </button>
+                {id && (
+                  <span className="ml-auto text-sm font-texts text-stone-500 my-auto mr-2">Last Saved: {updatedAt}</span>
+                )}
+                </>)
+            }
+          </div>
+        </main>
+      )}
     </>
   )
 };

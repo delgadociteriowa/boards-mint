@@ -273,6 +273,7 @@ const boardSlice = createSlice({
         })
         .addCase(updateBoard.fulfilled, (state, action) => {
           state.updatedAt = action.payload.updatedAt;
+          state.loading = false;
         })
         .addCase(updateBoard.rejected, (state, action) => {
           state.error = action.payload ?? "Unknown error";
@@ -294,9 +295,3 @@ const boardSlice = createSlice({
 export const { selectGame, buildSyncGrid, selectPiece, closeGame } = boardSlice.actions;
 
 export default boardSlice.reducer;
-
-
-// Selected game no es necesario en base de datos. Si es necesario para mostrarlos en saved
-// en saved deben ser un link y no un botón. chess/jhflkasdhlafk por ejemplo
-// en chess/checkers, se define el selected game y es nuevo si no tiene id y si si lo tiene es cargado
-//el tablero se debe cargar solo con un spinner
