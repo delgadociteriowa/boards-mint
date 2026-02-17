@@ -9,6 +9,7 @@ import { getBoard, addBoard, updateBoard } from "@/state/board/boardSlice";
 
 import OctoBoardSquare from "./OctoBoardSquare";
 import LoadingComponent from "./LoadingComponent";
+import ErrorComponent from "./ErrorComponent";
 
 interface ColorsType {
   chess: string[];
@@ -105,9 +106,7 @@ const Octoboard = () => {
         <LoadingComponent />
       }
       {error && (
-        <p className="text-center w-full text-red-500 text/xl">
-          {error}
-        </p>
+        <ErrorComponent error={error} />
       )}
       {!loading && !error && (
         <main className="w-[100%] md:w-[90%] lg:w-[80%] my-0 mx-auto">

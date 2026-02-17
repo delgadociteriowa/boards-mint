@@ -63,7 +63,7 @@ export const addBoard = createAsyncThunk<
         updatedAt: formatDate(data.updatedAt),
       };
     } catch (error) {
-      return rejectWithValue("Error creating board");
+      return rejectWithValue(`${error}`);
     }
   }
 );
@@ -126,7 +126,7 @@ export const updateBoard = createAsyncThunk<
         updatedAt: formatDate(data.updatedAt),
       };
     } catch (error) {
-      return rejectWithValue("Error updating board");
+      return rejectWithValue(`${error}`);
     }
   }
 );
@@ -276,6 +276,7 @@ const boardSlice = createSlice({
           state.loading = false;
         })
         .addCase(updateBoard.rejected, (state, action) => {
+          state.loading = false;
           state.error = action.payload ?? "Unknown error";
         })
         // deleteBoard
