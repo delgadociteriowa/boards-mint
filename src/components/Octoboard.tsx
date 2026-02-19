@@ -4,8 +4,8 @@ import { useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useAppSelector, useAppDispatch } from "@/state/hooks";
 import { buildSyncGrid, selectPiece } from "@/state/board/boardSlice";
-import { useSession } from "next-auth/react";
-import { getBoard, addBoard, updateBoard } from "@/state/board/boardSlice";
+import { getBoard } from "@/state/board/boardSlice";
+import SaveBoard from "./SaveBoard";
 
 import OctoBoardSquare from "./OctoBoardSquare";
 import LoadingComponent from "./LoadingComponent";
@@ -23,10 +23,9 @@ interface ColorsClickedType {
 
 const Octoboard = () => {
   const dispatch = useAppDispatch();
-  const { id, selectedGame, gameGrid, phaseTwo, loading, error, updatedAt }  = useAppSelector(state => state.board);
+  const { id, selectedGame, gameGrid, phaseTwo, loading, error }  = useAppSelector(state => state.board);
   const searchParams = useSearchParams();
   const boardId = searchParams.get("id");
-  const { data: session } = useSession();
   const router = useRouter();
   
   useEffect(() => {
@@ -49,23 +48,6 @@ const Octoboard = () => {
 
   const handleClickSqr = (id: string) => {
     dispatch(selectPiece(id))
-  };
-
-  const handleCreate = async () => {
-    await dispatch(addBoard({ gameGrid, selectedGame }));
-  };
-  
-  const handleSave = async () => {
-    if(!boardId) return
-    await dispatch(updateBoard({id: boardId, gameGrid: gameGrid}));
-  };
-
-  const handleClick = async () => {
-    if (!boardId) {
-      await handleCreate();
-    } else {
-      await handleSave();
-    }
   };
 
   // UI
@@ -126,30 +108,8 @@ const Octoboard = () => {
               return (<OctoBoardSquare key={cellContent.id} cellContent={cellContent} colors={colors} onClickPiece={handleClickSqr} phaseTwo={phaseTwo}/>)
             })
           ))}
-          </div> 
-          <div className='flex w-[90%] mb-14 landscape:w-[75%] mx-auto'>
-            {session &&
-              (<>
-                <button
-                  className={`
-                    text-stone-100
-                    px-6
-                    py-1
-                    rounded-xl
-                    ${!phaseTwo
-                      ? "bg-sky-600 hover:bg-sky-500 cursor-pointer"
-                      : "bg-stone-600 cursor-not-allowed opacity-60"}
-                    `}
-                    onClick={handleClick}
-                  >
-                    {id ? "save" : "save"}
-                </button>
-                {id && (
-                  <span className="ml-auto text-sm font-texts text-stone-500 my-auto mr-2">Last Saved: {updatedAt}</span>
-                )}
-                </>)
-            }
           </div>
+          <SaveBoard/> 
         </main>
       )}
     </>
