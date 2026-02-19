@@ -5,11 +5,12 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useAppSelector, useAppDispatch } from "@/state/hooks";
 import { buildSyncGrid, selectPiece } from "@/state/board/boardSlice";
 import { getBoard } from "@/state/board/boardSlice";
-import SaveBoard from "./SaveBoard";
 
 import OctoBoardSquare from "./OctoBoardSquare";
 import LoadingComponent from "./LoadingComponent";
 import ErrorComponent from "./ErrorComponent";
+import BoardIdentifier from "./BoardIdentifier";
+import SaveBoard from "./SaveBoard";
 
 interface ColorsType {
   chess: string[];
@@ -22,24 +23,22 @@ interface ColorsClickedType {
 };
 
 const Octoboard = () => {
-  const dispatch = useAppDispatch();
-  const { id, selectedGame, gameGrid, phaseTwo, loading, error }  = useAppSelector(state => state.board);
   const searchParams = useSearchParams();
-  const boardId = searchParams.get("id");
+  const queryParamId = searchParams.get("id") || '';
   const router = useRouter();
+  const { id, selectedGame, gameGrid, phaseTwo, loading, error }  = useAppSelector(state => state.board);
+  const dispatch = useAppDispatch();
   
   useEffect(() => {
-    if (!selectedGame) return;
-
-    if (!boardId) {
+    if (!queryParamId) {
       dispatch(buildSyncGrid());
     } else {
-      dispatch(getBoard(boardId));
+      dispatch(getBoard(queryParamId));
     } 
   }, [selectedGame, dispatch]);
 
   useEffect(() => {
-    if(!boardId && id) {
+    if(!queryParamId && id) {
       const params = new URLSearchParams(searchParams.toString());
       params.set("id", id);
       router.replace(`?${params.toString()}`);
@@ -84,17 +83,11 @@ const Octoboard = () => {
   }
   return (
     <>
-      {(!gameGrid.length || loading) && !error && 
-        <LoadingComponent />
-      }
-      {error && (
-        <ErrorComponent error={error} />
-      )}
+      {(!gameGrid.length || loading) && !error && <LoadingComponent />}
+      {error && <ErrorComponent error={error} />}
       {!loading && !error && (
         <main className="w-[100%] md:w-[90%] lg:w-[80%] my-0 mx-auto">
-          <div className='flex w-[90%] landscape:w-[75%] mx-auto'> 
-            {boardId && (<span className="text-sm font-texts text-stone-500 ml-auto">ID: {boardId}</span>)}
-          </div>
+          <BoardIdentifier queryParamId={queryParamId}/>
           <div className="grid w-[90%] rounded-2xl board-areas overflow-hidden mt-2 mb-4 mx-auto landscape:w-[75%] shadow-xl/20">
           {gameGrid.map((row, rowIndex) => (
             row.map((cellContent, colIndex) =>{
