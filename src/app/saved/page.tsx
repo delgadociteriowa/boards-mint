@@ -43,9 +43,9 @@ const Saved = () => {
         :
         <main className="min-h-[800px]">
           <section className="w-[90%] mx-auto max-w-[1200px] py-14 text-stone-600">
-            <h3 className="text-center text-4xl tracking-[2px] mb-10">
+            <h2 className="text-center text-4xl tracking-[2px] mb-10">
               Saved Games
-            </h3>
+            </h2>
             <div className="py-5 flex flex-wrap gap-10 w-full mb-8">
               {loading &&  (
                 <Spinner />
