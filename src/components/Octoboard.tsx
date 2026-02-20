@@ -108,6 +108,13 @@ const Octoboard = () => {
     return squareStyle
   };
 
+  const createPieceStyle = (cell: Square): string => {
+    if(cell.piece.includes('checker')) {
+      return `${cell.pieceType.includes('one') ? 'bg-rose-400' : 'bg-stone-600'} relative w-[60%] h-[60%] rounded-full checker-shadow`
+    }
+    return `${cell.pieceType === 'one' ? 'text-stone-800' : 'text-stone-50'} piece__size select-none [text-shadow:2px_2px_4px_rgba(0,0,0,0.3)]`
+  }
+
   return (
     <>
       {(!gameGrid.length || loading) && !error && <LoadingComponent />}
@@ -119,7 +126,14 @@ const Octoboard = () => {
           {gameGrid.map((row) => (
             row.map((cell) =>{
               const squareStyle = createSquareStyle(cell);  
-              return (<OctoBoardSquare key={cell.id} cell={cell} squareStyle={squareStyle} onClickPiece={handleClickSqr} />)
+              const pieceStyle = createPieceStyle(cell);  
+              return (<OctoBoardSquare
+                key={cell.id}
+                cell={cell}
+                squareStyle={squareStyle}
+                pieceStyle={pieceStyle}
+                onClickPiece={handleClickSqr}
+                />)
             })
           ))}
           </div>
