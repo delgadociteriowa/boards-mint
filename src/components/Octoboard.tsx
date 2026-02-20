@@ -40,9 +40,13 @@ const Octoboard = () => {
     }
   }, [queryParamId, id]);
 
-  // No necesita ser función
-  const handleClickSqr = (id: string) => {
-    dispatch(selectPiece(id))
+  const handleClickSqr = (cell: Square) => {
+    if (!phaseTwo) {
+      if(!cell.piece) return
+      dispatch(selectPiece(cell.id));
+      return
+    }
+    dispatch(selectPiece(cell.id))
   };
 
   // UI
@@ -115,7 +119,7 @@ const Octoboard = () => {
           {gameGrid.map((row) => (
             row.map((cell) =>{
               const squareStyle = createSquareStyle(cell);  
-              return (<OctoBoardSquare key={cell.id} cell={cell} squareStyle={squareStyle} onClickPiece={handleClickSqr} phaseTwo={phaseTwo} />)
+              return (<OctoBoardSquare key={cell.id} cell={cell} squareStyle={squareStyle} onClickPiece={handleClickSqr} />)
             })
           ))}
           </div>
