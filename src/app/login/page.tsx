@@ -1,17 +1,18 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useAppSelector, useAppDispatch } from "@/state/hooks";
+import { setIdentifier, setPassword, login } from "@/state/user/userSlice";
+
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Spinner from "@/components/Spinner";
 
 const Login = () => {
-  const [identifier, setIdentifier] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const dispatch = useAppDispatch();
+  const { identifier, password, loading, error }  = useAppSelector(state => state.user);
 
   const { data: session } = useSession();
   const router = useRouter();
@@ -22,30 +23,9 @@ const Login = () => {
     }
   }, [session, router]);
   
-  useEffect(() => {
-    if (error.length) {
-      setTimeout(() => {
-        setError('');
-      }, 3000);
-    }
-  }, [error]);
-
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-
-    const res = await signIn("credentials", {
-      identifier,
-      password,
-      redirect: false,
-    });
-
-    if (res?.ok) {
-      router.push("/account");
-    } else {
-      setLoading(false);
-      setError('Wrong username or password');
-    }
+    dispatch(login({identifier, password}));
   };
 
   return (
@@ -76,7 +56,7 @@ const Login = () => {
                   required
                   value={identifier}
                   disabled={loading}
-                  onChange={(e) => setIdentifier(e.target.value)}
+                  onChange={(e) => dispatch(setIdentifier(e.target.value))}
                   className="border border-stone-300 rounded-xl py-4 px-4 text-stone-700 focus:outline-none focus:ring-2 focus:ring-sky-500"
                 />
               </div>
@@ -90,7 +70,7 @@ const Login = () => {
                   required
                   value={password}
                   disabled={loading}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => dispatch(setPassword(e.target.value))}
                   className="border border-stone-300 rounded-xl py-4 px-4 text-stone-700 focus:outline-none focus:ring-2 focus:ring-sky-500"
                 />
               </div>
