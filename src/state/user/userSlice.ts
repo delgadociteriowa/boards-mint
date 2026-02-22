@@ -1,5 +1,5 @@
-import { UserStateType, LoginState } from "../../types/user";
-import { signIn } from "next-auth/react";
+import { UserStateType, LoginState, SyncSession } from "../../types/user";
+import { signIn, signOut } from "next-auth/react";
 
 import {
   createSlice,
@@ -8,11 +8,11 @@ import {
 } from "@reduxjs/toolkit";
 
 export const login = createAsyncThunk<
-  undefined,           
+  void,           
   LoginState,      
   { rejectValue: string }
 >(
-  "board/deleteBoard",
+  "user/login",
   async (LoginState, { rejectWithValue }) => {
     const {identifier, password} = LoginState;
     try {
@@ -31,9 +31,34 @@ export const login = createAsyncThunk<
   }
 );
 
+export const logout = createAsyncThunk<
+  void,           
+  void,      
+  { rejectValue: string }
+>(
+  "user/logout",
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await signOut({ redirect: false });
+      
+      if (!res || res.url === null) {
+        throw new Error(`Logout failed.`);
+      }
+    } catch (error) {
+      return rejectWithValue(`${error}`);
+    }
+  }
+);
+
 const initialState: UserStateType = {
   identifier: '',
   password: '',
+  userName: '',
+  email: '',
+  firstName: '',
+  lastName: '',
+  editingFirst: false,
+  editingLast: false,
   loading: false,
   error: '',
 };
@@ -49,6 +74,12 @@ const userSlice = createSlice({
     setPassword: (state, action: PayloadAction<string>) => {
       const trimPassword = action.payload.trim();
       state.password =  trimPassword;
+    },
+    syncSessionToState: (state, action: PayloadAction<SyncSession>) => {
+      state.userName = action.payload.userName; 
+      state.firstName = action.payload.firstName;
+      state.lastName = action.payload.lastName;
+      state.email = action.payload.email;
     },
   },
   extraReducers: (builder) => {
@@ -67,6 +98,26 @@ const userSlice = createSlice({
         state.error = action.payload ?? "Unknown error";
         state.identifier = '';
         state.password = '';
+      })
+      // logout
+      .addCase(logout.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(logout.fulfilled, (state) => {
+        state.identifier =  '';
+        state.password =  '';
+        state.userName =  '';
+        state.email =  '';
+        state.firstName =  '';
+        state.lastName =  '';
+        state.editingFirst =  false;
+        state.editingLast =  false;
+        state.loading =  false;
+        state.error =  '';
+      })
+      .addCase(logout.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload ?? "Unknown error";
       })
   }
 });
