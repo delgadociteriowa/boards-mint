@@ -1,8 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { signOut, useSession } from "next-auth/react";
+import { useEffect } from "react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useAppSelector, useAppDispatch } from "@/state/hooks";
+import { syncUserData, logout, updateUser, setFirstName, setLastName, setEditingFirst, setEditingLast } from "@/state/user/userSlice";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import LoadingComponent from "@/components/LoadingComponent";
@@ -14,12 +16,8 @@ type UserPayload = Partial<{
 }>;
 
 const Account = () => {
-  const [userName, setUserName] = useState<string | null>(null);
-  const [email, setEmail] = useState<string | null>(null);
-  const [firstName, setFirstName] = useState<string | null>(null);
-  const [lastName, setLastName] = useState<string | null>(null);
-  const [editingFirst, setEditingFirst] = useState(false);
-  const [editingLast, setEditingLast] = useState(false);
+  const dispatch = useAppDispatch();
+  const { userName, email, firstName, lastName, editingFirst, editingLast }  = useAppSelector(state => state.user);
 
   const { data: session, update } = useSession();
   const router = useRouter();
@@ -30,17 +28,21 @@ const Account = () => {
         router.push("/login");
         return
       }
-      setUserName(session.user.username);
-      setFirstName(session.user.firstname);
-      setLastName(session.user.lastname);
-      setEmail(session.user.email);
+      dispatch(syncUserData(
+        {
+          userName: session.user.username,
+          firstName: session.user.firstname,
+          lastName: session.user.lastname,
+          email: session.user.email || '',
+        }
+      ))
+
     }
     syncSessionToState();
   }, [session, router]);
 
-  const handleLogout = async () => {
-    await signOut({ redirect: false });
-    router.push("/login");
+  const handleLogout = () => {
+    dispatch(logout());
   };
 
   const handleSave = async (field: "firstname" | "lastname") => {
@@ -48,17 +50,12 @@ const Account = () => {
       [field]: field === "firstname" ? firstName : lastName,
     };
 
-    await fetch("/api/account/update", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-
+    await dispatch(updateUser(payload));
     await update();
 
     field === "firstname"
-      ? setEditingFirst(false)
-      : setEditingLast(false);
+      ? dispatch(setEditingFirst(false))
+      : dispatch(setEditingLast(false));
   };
 
   return (
@@ -95,7 +92,7 @@ const Account = () => {
                   <input
                     className="border border-stone-300 rounded-xl py-3 px-4 text-stone-700 focus:outline-none focus:ring-2 focus:ring-sky-500 w-full"
                     value={firstName ??  "-"}
-                    onChange={(e) => setFirstName(e.target.value)}
+                    onChange={(e) => dispatch(setFirstName(e.target.value))}
                   />
                 ) : (
                   <p className="text-stone-700 text-lg">{firstName ??  "-"}</p>
@@ -104,7 +101,7 @@ const Account = () => {
                 <button
                   className="bg-sky-600 hover:bg-sky-500 text-stone-100 px-5 py-2 rounded-xl ml-4 cursor-pointer"
                   onClick={() =>
-                    editingFirst ? handleSave('firstname') : setEditingFirst(true)
+                    editingFirst ? handleSave('firstname') : dispatch(setEditingFirst(true))
                   }
                 >
                   {editingFirst ? "save" : "edit"}
@@ -122,7 +119,7 @@ const Account = () => {
                     className="border border-stone-300 rounded-xl py-3 px-4 text-stone-700 focus:outline-none focus:ring-2 focus:ring-sky-500 w-full"
                     value={lastName ?? "-"}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      setLastName(e.target.value)
+                      dispatch(setLastName(e.target.value))
                     }
                   />
                 ) : (
@@ -132,7 +129,7 @@ const Account = () => {
                 <button
                   className="bg-sky-600 hover:bg-sky-500 text-stone-100 px-5 py-2 rounded-xl ml-4 cursor-pointer"
                   onClick={() =>
-                    editingLast ? handleSave('lastname') : setEditingLast(true)
+                    editingLast ? handleSave('lastname') : dispatch(setEditingLast(true))
                   }
                 >
                   {editingLast ? "save" : "edit"}

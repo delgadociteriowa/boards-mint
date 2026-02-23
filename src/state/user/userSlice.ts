@@ -1,4 +1,4 @@
-import { UserStateType, LoginState, SyncSession } from "../../types/user";
+import { UserStateType, LoginState, SyncUser, UpdateUser } from "../../types/user";
 import { signIn, signOut } from "next-auth/react";
 
 import {
@@ -50,6 +50,29 @@ export const logout = createAsyncThunk<
   }
 );
 
+export const updateUser = createAsyncThunk<
+  void,
+  UpdateUser,
+  { rejectValue: string }
+>(
+    "user/update",
+    async (UpdateUser, { rejectWithValue }) => {
+      try {
+        const res = await fetch("/api/account/update", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(UpdateUser),
+        });
+        if ( !res ) {
+          throw new Error(`Update failed failed.`);
+        }        
+      } catch (error) {
+        return rejectWithValue(`${error}`);
+      }
+    }
+  )
+
+
 const initialState: UserStateType = {
   identifier: '',
   password: '',
@@ -75,11 +98,25 @@ const userSlice = createSlice({
       const trimPassword = action.payload.trim();
       state.password =  trimPassword;
     },
-    syncSessionToState: (state, action: PayloadAction<SyncSession>) => {
+    setFirstName: (state, action: PayloadAction<string>) => {
+      const trimFirstName = action.payload.trim();
+      state.firstName=  trimFirstName;
+    },
+    setLastName: (state, action: PayloadAction<string>) => {
+      const trimLastName = action.payload.trim();
+      state.lastName=  trimLastName;
+    },
+    syncUserData: (state, action: PayloadAction<SyncUser>) => {
       state.userName = action.payload.userName; 
       state.firstName = action.payload.firstName;
       state.lastName = action.payload.lastName;
       state.email = action.payload.email;
+    },
+    setEditingFirst: (state, action: PayloadAction<boolean>) => {
+      state.editingFirst = action.payload;
+    },
+    setEditingLast: (state, action: PayloadAction<boolean>) => {
+      state.editingLast = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -122,6 +159,14 @@ const userSlice = createSlice({
   }
 });
 
-export const { setIdentifier, setPassword } = userSlice.actions;
+export const {
+  setIdentifier,
+  setPassword,
+  syncUserData,
+  setFirstName,
+  setLastName,
+  setEditingFirst,
+  setEditingLast
+} = userSlice.actions;
 
 export default userSlice.reducer;

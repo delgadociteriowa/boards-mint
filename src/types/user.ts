@@ -16,9 +16,14 @@ export interface LoginState {
   password: string;
 }
 
-export interface SyncSession {
+export interface SyncUser {
   userName: string;
   firstName: string;
   lastName: string;
   email: string;
 }
+
+export type UpdateUser = Partial<{
+  firstname: string;
+  lastname: string;
+}>;
