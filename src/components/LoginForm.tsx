@@ -1,5 +1,7 @@
 import Spinner from "./Spinner";
 import { useLogin } from "@/app/hooks/useLogin";
+import GoogleLogo from '@/assets/b-google.png'
+import Image from "next/image";
 
 const LoginForm = () => {
   
@@ -41,16 +43,22 @@ const LoginForm = () => {
             disabled={loading}
             className="py-5 rounded-full text-center text-stone-100 text-xl tracking-[2px] shadow-xl/20 w-[60%] mx-auto bg-sky-600 hover:bg-sky-500 cursor-pointer"
           >
-            login
+            sign in
           </button>
           <div className="w-full h-px bg-stone-300"></div>
           <button
             type="button"
             onClick={() => signIn("google", { callbackUrl: "/account" })}
             disabled={loading}
-            className="py-5 rounded-full text-center text-stone-100 text-xl tracking-[2px] shadow-xl/20 w-[60%] mx-auto bg-sky-600 hover:bg-sky-500 cursor-pointer"
+            className="py-5 rounded-full flex items-center justify-center gap-3 text-center text-stone-100 text-xl tracking-[2px] shadow-xl/20 w-[60%] mx-auto bg-stone-700 hover:bg-stone-600 cursor-pointer"
           >
-            {loading ? "loading..." : "sign up with Google"}
+            {loading ? 
+              "loading..." 
+            :
+            (<>
+              <Image src={GoogleLogo} alt="Google" width={24} height={24} />
+              <span>sign in / sign up</span>
+            </>)}
           </button>
         </>
         :
