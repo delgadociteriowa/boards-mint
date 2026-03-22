@@ -45,19 +45,19 @@ const LoginForm = () => {
           >
             sign in
           </button>
-          <div className="w-full h-px bg-stone-300"></div>
+          <span className="text-stone-600 tracking-[1px] text-center">or sign in/ sign up with</span>
           <button
             type="button"
             onClick={() => signIn("google", { callbackUrl: "/account" })}
             disabled={loading}
-            className="py-5 rounded-full flex items-center justify-center gap-3 text-center text-stone-100 text-xl tracking-[2px] shadow-xl/20 w-[60%] mx-auto bg-stone-700 hover:bg-stone-600 cursor-pointer"
+            className="py-5 rounded-full flex items-center justify-center gap-3 text-center text-stone-600 text-xl tracking-[2px] shadow-xl/20 w-[60%] mx-auto bg-neutral-100 hover:bg-neutral-50 cursor-pointer border-stone-300 border-1"
           >
             {loading ? 
               "loading..." 
             :
             (<>
               <Image src={GoogleLogo} alt="Google" width={24} height={24} />
-              <span>sign in / sign up</span>
+              <span>Google</span>
             </>)}
           </button>
         </>
