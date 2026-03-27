@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { io, Socket } from "socket.io-client";
 import { useAppSelector, useAppDispatch } from "@/state/hooks";
 import { setSocketActive, setShareDelay } from "@/state/board/boardSlice";
@@ -8,9 +8,21 @@ export const useSocket = () => {
   const {
     id,
     socketActive,
+    gameGrid,
+    phaseTwo
   }  = useAppSelector(state => state.board);
 
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const sendGridChange = () => {
+      if(socketActive && !phaseTwo){
+        console.log('GRID:', gameGrid);
+        socketRef.current?.emit("send-move", id, JSON.stringify(gameGrid))
+      }
+    }
+    sendGridChange();
+  }, [socketActive, gameGrid])
   
   const handleShare = () => {
     dispatch(setShareDelay(true));
