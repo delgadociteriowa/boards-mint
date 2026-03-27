@@ -166,6 +166,8 @@ const initialState: BoardStateType = {
   error: null,
   createdAt: '',
   updatedAt: '',
+  socketActive: false,
+  shareDelay: false,
 };
 
 const boardSlice = createSlice({
@@ -230,6 +232,12 @@ const boardSlice = createSlice({
       state.createdAt = '';
       state.updatedAt = '';
     },
+    setSocketActive: (state, action: PayloadAction<boolean>) => {
+      state.socketActive = action.payload
+    },
+    setShareDelay: (state, action: PayloadAction<boolean>) => {
+      state.shareDelay = action.payload
+    },
   },
   extraReducers: (builder) => {
       builder
@@ -293,6 +301,13 @@ const boardSlice = createSlice({
   }
 });
 
-export const { selectGame, buildSyncGrid, selectPiece, closeGame } = boardSlice.actions;
+export const {
+  selectGame,
+  buildSyncGrid,
+  selectPiece,
+  closeGame,
+  setSocketActive,
+  setShareDelay
+} = boardSlice.actions;
 
 export default boardSlice.reducer;

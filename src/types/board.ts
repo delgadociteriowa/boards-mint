@@ -22,6 +22,8 @@ export interface BoardStateType {
   error: string | null;
   createdAt: string;
   updatedAt: string;
+  socketActive: boolean;
+  shareDelay: boolean;
 };
 
 // activar/desactivar save sin depender de saveEnabled:boolean
