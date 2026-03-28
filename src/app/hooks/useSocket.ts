@@ -4,6 +4,7 @@ import { useAppSelector, useAppDispatch } from "@/state/hooks";
 import { setSocketActive, setShareDelay } from "@/state/board/boardSlice";
 
 export const useSocket = () => {
+  const isFirstRender = useRef(true);
   const socketRef = useRef<Socket | null>(null);
   const {
     id,
@@ -15,14 +16,17 @@ export const useSocket = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const sendGridChange = () => {
-      if(socketActive && !phaseTwo){
-        console.log('GRID:', gameGrid);
-        socketRef.current?.emit("send-move", id, JSON.stringify(gameGrid))
-      }
+    // no hacer nada en el primer render
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
     }
-    sendGridChange();
-  }, [socketActive, gameGrid])
+    // enviar el board cuando cambie
+    if(socketActive && !phaseTwo){
+      console.log('GRID:', gameGrid);
+      socketRef.current?.emit("send-move", id, JSON.stringify(gameGrid))
+    }
+  }, [gameGrid]);
   
   const handleShare = () => {
     dispatch(setShareDelay(true));

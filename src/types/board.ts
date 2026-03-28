@@ -24,6 +24,8 @@ export interface BoardStateType {
   updatedAt: string;
   socketActive: boolean;
   shareDelay: boolean;
+  socketHost: string;
+  socketGuest: string;
 };
 
 // activar/desactivar save sin depender de saveEnabled:boolean

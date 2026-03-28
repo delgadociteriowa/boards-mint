@@ -168,6 +168,8 @@ const initialState: BoardStateType = {
   updatedAt: '',
   socketActive: false,
   shareDelay: false,
+  socketHost: '',
+  socketGuest: 'player'
 };
 
 const boardSlice = createSlice({

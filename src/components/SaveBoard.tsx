@@ -52,6 +52,9 @@ const SaveBoard = () => {
           >
             {socketActive ? "stop sharing" : "share"}
           </button>
+          {/* implementar correctamente: <span className="text-sm font-texts text-stone-600 my-auto ml-2">
+            share link: {window.location.origin}{window.location.pathname}?room={id}&host={session?.user.username}
+          </span> */}
           {id && (
             <span className="ml-auto text-sm font-texts text-stone-500 my-auto mr-2">Last Saved: {updatedAt}</span>
           )}
