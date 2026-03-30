@@ -28,7 +28,7 @@ export const useSocket = () => {
     }
   }, [gameGrid]);
   
-  const startGameRoom = () => {
+  const createGameRoom = () => {
     dispatch(setShareDelay(true));
     
     // connects
@@ -36,7 +36,7 @@ export const useSocket = () => {
 
     // OK
     socketRef.current.on("connect", () => {
-      socketRef.current?.emit('game-room', id);
+      socketRef.current?.emit('create-game-room', id);
       dispatch(setSocketActive(true));
       dispatch(setSocketHost(session?.user.username ?? ''));
       dispatch(setSocketGuest('waiting'));
@@ -47,21 +47,14 @@ export const useSocket = () => {
     
     // error
     socketRef.current.on("connect_error", (err) => {
-      console.log("There was an error:", err.message);
-      alert("There was a connection error. Please, try again.");
-      socketRef.current?.removeAllListeners(); // en duda
-      dispatch(setSocketActive(false));
-      setTimeout(() => {
-        dispatch(setShareDelay(false));
-      }, 800);
+      connectionError(err.message, "The room couldn't be created due to a connection error. Please, try again.")
     });
-
   }
 
-  const stopGameRoom = () => {
+  const deleteGameRoom = () => {
     dispatch(setShareDelay(true));
-    
-    // diconnects
+
+    socketRef.current?.emit('delete-game-room', id);
     socketRef.current?.disconnect();
     socketRef.current?.removeAllListeners();
     dispatch(setSocketActive(false));
@@ -70,8 +63,18 @@ export const useSocket = () => {
     }, 800);
   }
 
+  const connectionError = (errorMessage: string, message: string) => {
+    console.log("There was an error:", errorMessage);
+    alert(message);
+    socketRef.current?.removeAllListeners(); // check this
+    dispatch(setSocketActive(false));
+    setTimeout(() => {
+    dispatch(setShareDelay(false));
+    }, 800);
+  }
+
   return {
-    startGameRoom,
-    stopGameRoom
+    createGameRoom,
+    deleteGameRoom
   }
 }; 
