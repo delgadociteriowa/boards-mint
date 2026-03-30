@@ -28,45 +28,50 @@ export const useSocket = () => {
     }
   }, [gameGrid]);
   
-  const handleShare = () => {
+  const startGameRoom = () => {
     dispatch(setShareDelay(true));
-    if (!socketActive) {
-      // se conecta
-      socketRef.current = io("http://localhost:3001");
-      
-      // si hubo un error
-      socketRef.current.on("connect_error", (err) => {
-        console.log("There was an error:", err.message);
-        alert("There was a connection error. Please, try again.");
-        socketRef.current?.removeAllListeners(); // en duda
-        dispatch(setSocketActive(false));
-        setTimeout(() => {
-          dispatch(setShareDelay(false));
-        }, 800);
-      });
+    
+    // connects
+    socketRef.current = io("http://localhost:3001");
 
-      // Si todo va bien
-      socketRef.current.on("connect", () => {
-        socketRef.current?.emit('game-room', id);
-        dispatch(setSocketActive(true));
-        dispatch(setSocketHost(session?.user.username ?? ''));
-        dispatch(setSocketGuest('waiting'));
-        setTimeout(() => {
-          dispatch(setShareDelay(false));
-        }, 800);
-      });    
-    } else {
-      // Al desconectarse
-      socketRef.current?.disconnect();
-      socketRef.current?.removeAllListeners();
+    // OK
+    socketRef.current.on("connect", () => {
+      socketRef.current?.emit('game-room', id);
+      dispatch(setSocketActive(true));
+      dispatch(setSocketHost(session?.user.username ?? ''));
+      dispatch(setSocketGuest('waiting'));
+      setTimeout(() => {
+        dispatch(setShareDelay(false));
+      }, 800);
+    });
+    
+    // error
+    socketRef.current.on("connect_error", (err) => {
+      console.log("There was an error:", err.message);
+      alert("There was a connection error. Please, try again.");
+      socketRef.current?.removeAllListeners(); // en duda
       dispatch(setSocketActive(false));
       setTimeout(() => {
         dispatch(setShareDelay(false));
       }, 800);
-    }
-  };
+    });
+
+  }
+
+  const stopGameRoom = () => {
+    dispatch(setShareDelay(true));
+    
+    // diconnects
+    socketRef.current?.disconnect();
+    socketRef.current?.removeAllListeners();
+    dispatch(setSocketActive(false));
+    setTimeout(() => {
+      dispatch(setShareDelay(false));
+    }, 800);
+  }
 
   return {
-    handleShare
+    startGameRoom,
+    stopGameRoom
   }
 }; 
