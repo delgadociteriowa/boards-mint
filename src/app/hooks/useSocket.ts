@@ -42,7 +42,7 @@ export const useSocket = () => {
       const room = params.get("room") ?? '';
       if (room) {
         hasJoined.current = true;
-        guestJoinsGameRoom(room, session?.user.username ?? 'visitor')
+        gJoinsGameRoom(room, session?.user.username ?? 'visitor')
       }
     }
 
@@ -62,13 +62,13 @@ export const useSocket = () => {
       // Socket Listeners
 
       // Only received by host because .to
-      socket.on("guest-joined-game-room", (guestName: string) => {
+      socket.on("g-joined-game-room", (guestName: string) => {
         dispatch(setSocketGuest(guestName));
-        socket.emit('host-shares-board', id, session?.user.username, gameGrid);
+        socket.emit('h-shares-board', id, session?.user.username, gameGrid);
       });
       
       // Only received by guest because .to
-      socket.on("host-shared-board", (hostName: string, board: Grid) => {
+      socket.on("h-shared-board", (hostName: string, board: Grid) => {
         dispatch(setSocketGuest(session?.user.username || 'visitor'));
         dispatch(setSocketHost(hostName));
         dispatch(setGameGrid(board));
@@ -117,11 +117,11 @@ export const useSocket = () => {
   }
 
   // used by guest
-  const guestJoinsGameRoom = (boardIdRoom: string, guestName: string) => {
+  const gJoinsGameRoom = (boardIdRoom: string, guestName: string) => {
     const socket = initSocket();
 
     const emitJoin = () => {
-      socket.emit('guest-joins-game-room', boardIdRoom, guestName);
+      socket.emit('g-joins-game-room', boardIdRoom, guestName);
       dispatch(setSocketActive(true));
     };
 
@@ -164,7 +164,6 @@ export const useSocket = () => {
 
   return {
     hCreatesGameRoom,
-    hDeletesGameRoom,
-    guestJoinsGameRoom
+    hDeletesGameRoom
   }
 };
