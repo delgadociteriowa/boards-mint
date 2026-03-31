@@ -16,7 +16,7 @@ const SaveBoard = () => {
     socketActive,
     shareDelay
   }  = useAppSelector(state => state.board);
-  const { createGameRoom, deleteGameRoom } = useSocket();
+  const { hCreatesGameRoom, hDeletesGameRoom } = useSocket();
 
   const dispatch = useAppDispatch();
   const searchParams = useSearchParams();
@@ -46,7 +46,7 @@ const SaveBoard = () => {
           </button>
           <button
             className={`text-stone-100 px-6 py-1 rounded-xl ${styleByShare} ml-2`}
-            onClick={!socketActive ? createGameRoom : deleteGameRoom}
+            onClick={!socketActive ? hCreatesGameRoom : hDeletesGameRoom}
             disabled={phaseTwo || shareDelay}
           >
             {socketActive ? "stop sharing" : "share"}

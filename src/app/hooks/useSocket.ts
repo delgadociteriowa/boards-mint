@@ -87,7 +87,7 @@ export const useSocket = () => {
   };
   
   // used by host
-  const createGameRoom = () => {
+  const hCreatesGameRoom = () => {
     dispatch(setShareDelay(true));
     
     // connects
@@ -133,12 +133,19 @@ export const useSocket = () => {
   }
 
   // used by host
-  const deleteGameRoom = () => {
+  const hDeletesGameRoom = () => {
+    const answer = window.confirm('Are you sure you want to finish the game session?');
+
+    if (!answer) return
+
     dispatch(setShareDelay(true));
-    socketRef.current?.emit('delete-game-room', id);
+    socketRef.current?.emit('h-deletes-game-room', id);
     socketRef.current?.disconnect();
     socketRef.current = null;
     dispatch(setSocketActive(false));
+
+    alert('The online game session has ben finished.')
+
     setTimeout(() => {
       dispatch(setShareDelay(false));
     }, 800);
@@ -156,8 +163,8 @@ export const useSocket = () => {
   }
 
   return {
-    createGameRoom,
-    deleteGameRoom,
+    hCreatesGameRoom,
+    hDeletesGameRoom,
     guestJoinsGameRoom
   }
 };
