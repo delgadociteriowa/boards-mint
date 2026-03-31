@@ -36,7 +36,7 @@ export const useSocket = () => {
       const room = params.get("room") ?? '';
       if (room) {
         hasJoined.current = true;
-        guestJoinsGameRoom(room, session?.user.username ?? 'theplayer')
+        guestJoinsGameRoom(room, session?.user.username ?? 'visitor')
       }
     }
 
@@ -51,7 +51,17 @@ export const useSocket = () => {
   // only one socket
   const initSocket = () => {
     if (!socketRef.current) {
-      socketRef.current = io("http://localhost:3001");
+      const socket = io("http://localhost:3001");
+      
+      // Socket Listeners
+
+      // Only received by host because .to
+      socket.on("guest-joined-game-room", (guestName: string) => {
+        console.log('the guest name: ', guestName);
+        dispatch(setSocketGuest(guestName));
+      });
+
+      socketRef.current = socket;
     }
     return socketRef.current;
   };
@@ -125,4 +135,4 @@ export const useSocket = () => {
     deleteGameRoom,
     guestJoinsGameRoom
   }
-}; 
+};
