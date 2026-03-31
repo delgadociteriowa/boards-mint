@@ -12,6 +12,8 @@ import {
 export const useSocket = () => {
   const { data: session } = useSession();
   const socketRef = useRef<Socket | null>(null);
+  const hasJoined = useRef(false);
+
   const {
     id,
     socketActive,
@@ -27,12 +29,40 @@ export const useSocket = () => {
       socketRef.current?.emit("send-move", id, JSON.stringify(gameGrid))
     }
   }, [gameGrid]);
+
+  useEffect(() => {
+    if (!hasJoined.current) {
+      const params = new URLSearchParams(window.location.search);
+      const room = params.get("room") ?? '';
+      if (room) {
+        hasJoined.current = true;
+        guestJoinsGameRoom(room, session?.user.username ?? 'theplayer')
+      }
+    }
+
+    return () => {
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+        socketRef.current = null;
+      }
+    };
+  }, []);
+
+  // only one socket
+  const initSocket = () => {
+    if (!socketRef.current) {
+      socketRef.current = io("http://localhost:3001");
+    }
+    return socketRef.current;
+  };
   
+  // used by host
   const createGameRoom = () => {
     dispatch(setShareDelay(true));
     
     // connects
-    socketRef.current = io("http://localhost:3001");
+    initSocket();
+    if (socketRef.current === null) return
 
     // OK
     socketRef.current.on("connect", () => {
@@ -51,12 +81,28 @@ export const useSocket = () => {
     });
   }
 
+  // used by guest
+  const guestJoinsGameRoom = (boardIdRoom: string, guestName: string) => {
+    const socket = initSocket();
+
+    const emitJoin = () => {
+      socket.emit('guest-joins-game-room', boardIdRoom, guestName);
+      dispatch(setSocketActive(true));
+    };
+
+    if (socket.connected) {
+      emitJoin();
+    } else {
+      socket.once("connect", emitJoin);
+    }
+  }
+
+  // used by host
   const deleteGameRoom = () => {
     dispatch(setShareDelay(true));
-
     socketRef.current?.emit('delete-game-room', id);
     socketRef.current?.disconnect();
-    socketRef.current?.removeAllListeners();
+    socketRef.current = null;
     dispatch(setSocketActive(false));
     setTimeout(() => {
       dispatch(setShareDelay(false));
@@ -66,7 +112,8 @@ export const useSocket = () => {
   const connectionError = (errorMessage: string, message: string) => {
     console.log("There was an error:", errorMessage);
     alert(message);
-    socketRef.current?.removeAllListeners(); // check this
+    socketRef.current?.disconnect();
+    socketRef.current = null;
     dispatch(setSocketActive(false));
     setTimeout(() => {
     dispatch(setShareDelay(false));
@@ -75,6 +122,7 @@ export const useSocket = () => {
 
   return {
     createGameRoom,
-    deleteGameRoom
+    deleteGameRoom,
+    guestJoinsGameRoom
   }
 }; 
