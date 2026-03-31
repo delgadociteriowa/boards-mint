@@ -246,6 +246,9 @@ const boardSlice = createSlice({
     setSocketGuest: (state, action: PayloadAction<string>) => {
       state.socketGuest = action.payload
     },
+    setGameGrid: (state, action: PayloadAction<Grid>) => {
+      state.gameGrid = action.payload;
+    },
   },
   extraReducers: (builder) => {
       builder
@@ -317,7 +320,8 @@ export const {
   setSocketActive,
   setShareDelay,
   setSocketHost,
-  setSocketGuest
+  setSocketGuest,
+  setGameGrid
 } = boardSlice.actions;
 
 export default boardSlice.reducer;

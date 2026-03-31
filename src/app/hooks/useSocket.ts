@@ -6,8 +6,11 @@ import {
   setSocketActive,
   setShareDelay,
   setSocketHost,
-  setSocketGuest
+  setSocketGuest,
+  setGameGrid
   } from "@/state/board/boardSlice";
+import { Grid } from "@/types/board";
+
 
 export const useSocket = () => {
   const { data: session } = useSession();
@@ -18,15 +21,18 @@ export const useSocket = () => {
     id,
     socketActive,
     gameGrid,
-    phaseTwo
+    phaseTwo,
   }  = useAppSelector(state => state.board);
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const room = params.get("room") ?? '';
+    const identifier = id ? id : room;
+
     if(socketActive && !phaseTwo){
-      console.log('GRID:', gameGrid);
-      socketRef.current?.emit("send-move", id, JSON.stringify(gameGrid))
+      socketRef.current?.emit("send-move", identifier, JSON.stringify(gameGrid))
     }
   }, [gameGrid]);
 
@@ -57,8 +63,22 @@ export const useSocket = () => {
 
       // Only received by host because .to
       socket.on("guest-joined-game-room", (guestName: string) => {
-        console.log('the guest name: ', guestName);
         dispatch(setSocketGuest(guestName));
+        socket.emit('host-shares-board', id, session?.user.username, gameGrid);
+      });
+      
+      // Only received by guest because .to
+      socket.on("host-shared-board", (hostName: string, board: Grid) => {
+        dispatch(setSocketGuest(session?.user.username || 'visitor'));
+        dispatch(setSocketHost(hostName));
+        dispatch(setGameGrid(board));
+        dispatch(setSocketActive(true));
+        // ojo loading
+      });
+      
+      // sents separados. Verificar error pieza obscura y error stop sharing que debería estar cancelado en step 2.
+      socket.on("sent-move", (board: Grid) => {
+        dispatch(setGameGrid(board));
       });
 
       socketRef.current = socket;
