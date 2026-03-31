@@ -32,7 +32,11 @@ export const useSocket = () => {
     const identifier = id ? id : room;
 
     if(socketActive && !phaseTwo){
-      socketRef.current?.emit("send-move", identifier, JSON.stringify(gameGrid))
+      if (!room) {
+        hSendsMove(identifier, JSON.stringify(gameGrid))
+      } else {
+        gSendsMove(identifier, JSON.stringify(gameGrid))
+      }
     }
   }, [gameGrid]);
 
@@ -76,8 +80,13 @@ export const useSocket = () => {
         // ojo loading
       });
       
-      // sents separados. Verificar error pieza obscura y error stop sharing que debería estar cancelado en step 2.
-      socket.on("sent-move", (board: Grid) => {
+      // Only received by guest because .to
+      socket.on("h-sent-move", (board: Grid) => {
+        dispatch(setGameGrid(board));
+      });
+      
+      // Only received by host because .to
+      socket.on("g-sent-move", (board: Grid) => {
         dispatch(setGameGrid(board));
       });
 
@@ -149,6 +158,14 @@ export const useSocket = () => {
     setTimeout(() => {
       dispatch(setShareDelay(false));
     }, 800);
+  }
+
+  const hSendsMove = (boardIdRoom: string, board: string) => {
+    socketRef.current?.emit('h-sends-move', boardIdRoom, board);
+  }
+  
+  const gSendsMove = (boardIdRoom: string, board: string) => {
+    socketRef.current?.emit('g-sends-move', boardIdRoom, board);
   }
 
   const connectionError = (errorMessage: string, message: string) => {

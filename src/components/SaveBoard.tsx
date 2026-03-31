@@ -31,7 +31,7 @@ const SaveBoard = () => {
   };
 
   const styleByPhase = !phaseTwo ? "bg-sky-600 hover:bg-sky-500 cursor-pointer" : "bg-stone-600 cursor-not-allowed opacity-60"; 
-  const styleByShare = !shareDelay ? "bg-sky-600 hover:bg-sky-500 cursor-pointer" : "bg-stone-600 cursor-not-allowed opacity-60"; 
+  const styleByShare = !shareDelay || !phaseTwo ? "bg-sky-600 hover:bg-sky-500 cursor-pointer" : "bg-stone-600 cursor-not-allowed opacity-60"; 
 
   return (
     <div className='flex w-[90%] mb-14 landscape:w-[75%] mx-auto'>
@@ -45,7 +45,7 @@ const SaveBoard = () => {
               {id ? "save" : "save"}
           </button>
           <button
-            className={`text-stone-100 px-6 py-1 rounded-xl ${styleByShare} ml-2`}
+            className={`text-stone-100 px-6 py-1 rounded-xl ml-2 ${styleByShare}`}
             onClick={!socketActive ? hCreatesGameRoom : hDeletesGameRoom}
             disabled={phaseTwo || shareDelay}
           >
