@@ -47,7 +47,7 @@ const SaveBoard = () => {
           <button
             className={`text-stone-100 px-6 py-1 rounded-xl ${styleByShare} ml-2`}
             onClick={!socketActive ? createGameRoom : deleteGameRoom}
-            disabled={shareDelay}
+            disabled={phaseTwo || shareDelay}
           >
             {socketActive ? "stop sharing" : "share"}
           </button>

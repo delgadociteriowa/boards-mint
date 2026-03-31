@@ -96,13 +96,18 @@ export const useSocket = () => {
 
     // OK
     socketRef.current.on("connect", () => {
-      socketRef.current?.emit('create-game-room', id);
+      socketRef.current?.emit('h-creates-game-room', id);
       dispatch(setSocketActive(true));
       dispatch(setSocketHost(session?.user.username ?? ''));
       dispatch(setSocketGuest('waiting'));
       setTimeout(() => {
         dispatch(setShareDelay(false));
       }, 800);
+      
+      const shareLink = window.location.href.replace('?id', '?room');
+      navigator.clipboard.writeText(shareLink).then(() => {
+        alert('The session link has been copied to your clipboard! Share it to start playing online.')
+      });
     });
     
     // error
