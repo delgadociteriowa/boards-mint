@@ -2,6 +2,7 @@ import { useRef, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { io, Socket } from "socket.io-client";
 import { useAppSelector, useAppDispatch } from "@/state/hooks";
+import { useRouter } from 'next/navigation';
 import {
   setSocketActive,
   setShareDelay,
@@ -31,6 +32,8 @@ export const useSocket = () => {
 
   const dispatch = useAppDispatch();
 
+  const router = useRouter();
+
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const room = params.get("room") ?? '';
@@ -42,12 +45,13 @@ export const useSocket = () => {
   }, [gameGrid]);
 
   useEffect(() => {
+    const sessionName = session?.user.username; 
     if (!hasJoined.current) {
       const params = new URLSearchParams(window.location.search);
       const room = params.get("room") ?? '';
       if (room) {
         hasJoined.current = true;
-        gJoinsGameRoom(room, session?.user.username ?? 'visitor')
+        gJoinsGameRoom(room, sessionName ?? 'visitor');
       }
     }
 
@@ -57,7 +61,7 @@ export const useSocket = () => {
         socketRef.current = null;
       }
     };
-  }, []);
+  }, [session]);
 
   // only one socket
   const initSocket = () => {
@@ -159,6 +163,14 @@ export const useSocket = () => {
     }, 800);
   }
 
+  const gLeavesGameRoom = () => {
+    const answer = window.confirm('Are you sure you want to leave the current game?');
+    if (!answer) return
+    socketRef.current?.disconnect();
+    alert('You have left the game. You will be redirected to the home page.');
+    router.push('/');
+  }
+
   const pSendsMove = (boardIdRoom: string) => {
     socketRef.current?.emit(
       'p-sends-move',
@@ -181,6 +193,7 @@ export const useSocket = () => {
 
   return {
     hCreatesGameRoom,
-    hDeletesGameRoom
+    hDeletesGameRoom,
+    gLeavesGameRoom
   }
 };

@@ -16,11 +16,12 @@ const SaveBoard = () => {
     socketActive,
     shareDelay
   }  = useAppSelector(state => state.board);
-  const { hCreatesGameRoom, hDeletesGameRoom } = useSocket();
+  const { hCreatesGameRoom, hDeletesGameRoom, gLeavesGameRoom } = useSocket();
 
   const dispatch = useAppDispatch();
   const searchParams = useSearchParams();
   const boardId = searchParams.get("id");
+  const roomId = searchParams.get("room");
   
   const handleClick = async () => {
     if (!boardId) {
@@ -37,25 +38,35 @@ const SaveBoard = () => {
     <div className='flex w-[90%] mb-14 landscape:w-[75%] mx-auto'>
       {session &&
         (<>
-          <button
-            className={`text-stone-100 px-6 py-1 rounded-xl ${styleByPhase}`}
-            onClick={handleClick}
-            disabled={phaseTwo}
-          >
-              {id ? "save" : "save"}
-          </button>
-          <button
-            className={`text-stone-100 px-6 py-1 rounded-xl ml-2 ${styleByShare}`}
-            onClick={!socketActive ? hCreatesGameRoom : hDeletesGameRoom}
-            disabled={phaseTwo || shareDelay}
-          >
-            {socketActive ? "stop sharing" : "share"}
-          </button>
-          {/* implementar correctamente: <span className="text-sm font-texts text-stone-600 my-auto ml-2">
-            share link: {window.location.origin}{window.location.pathname}?room={id}&host={session?.user.username}
-          </span> */}
           {id && (
-            <span className="ml-auto text-sm font-texts text-stone-500 my-auto mr-2">Last Saved: {updatedAt}</span>
+            <>
+              <button
+                className={`text-stone-100 px-6 py-1 rounded-xl ${styleByPhase}`}
+                onClick={handleClick}
+                disabled={phaseTwo}
+              >
+                  {id ? "save" : "save"}
+              </button>
+              <button
+                className={`text-stone-100 px-6 py-1 rounded-xl ml-2 ${styleByShare}`}
+                onClick={!socketActive ? hCreatesGameRoom : hDeletesGameRoom}
+                disabled={phaseTwo || shareDelay}
+              >
+                {socketActive ? "stop sharing" : "share"}
+              </button>
+            
+              <span className="ml-auto text-sm font-texts text-stone-500 my-auto mr-2">Last Saved: {updatedAt}</span>
+            </>
+          )}
+          {roomId && (
+            <>
+              <button
+                className={`text-stone-100 px-6 py-1 rounded-xl ${styleByPhase}`}
+                onClick={gLeavesGameRoom}
+              >
+                leave game
+              </button>
+            </>
           )}
         </>)
       }
