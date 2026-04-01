@@ -7,9 +7,12 @@ import {
   setShareDelay,
   setSocketHost,
   setSocketGuest,
-  setGameGrid
+  setGameGrid,
+  setChangeFromSocket,
+  setPhaseTwo,
+  setSelectedSqr
   } from "@/state/board/boardSlice";
-import { Grid } from "@/types/board";
+import { Grid, SelectedSquare } from "@/types/board";
 
 
 export const useSocket = () => {
@@ -21,7 +24,9 @@ export const useSocket = () => {
     id,
     socketActive,
     gameGrid,
+    selectedSqr,
     phaseTwo,
+    changeFromSocket
   }  = useAppSelector(state => state.board);
 
   const dispatch = useAppDispatch();
@@ -31,12 +36,8 @@ export const useSocket = () => {
     const room = params.get("room") ?? '';
     const identifier = id ? id : room;
 
-    if(socketActive && !phaseTwo){
-      if (!room) {
-        hSendsMove(identifier, JSON.stringify(gameGrid))
-      } else {
-        gSendsMove(identifier, JSON.stringify(gameGrid))
-      }
+    if(socketActive && !changeFromSocket){
+      pSendsMove(identifier)
     }
   }, [gameGrid]);
 
@@ -81,13 +82,11 @@ export const useSocket = () => {
       });
       
       // Only received by guest because .to
-      socket.on("h-sent-move", (board: Grid) => {
+      socket.on("p-sent-move", (board: Grid, phase: boolean, selected: SelectedSquare) => {
+        dispatch(setChangeFromSocket(true));
         dispatch(setGameGrid(board));
-      });
-      
-      // Only received by host because .to
-      socket.on("g-sent-move", (board: Grid) => {
-        dispatch(setGameGrid(board));
+        dispatch(setPhaseTwo(phase));
+        dispatch(setSelectedSqr(selected));
       });
 
       socketRef.current = socket;
@@ -160,14 +159,15 @@ export const useSocket = () => {
     }, 800);
   }
 
-  const hSendsMove = (boardIdRoom: string, board: string) => {
-    socketRef.current?.emit('h-sends-move', boardIdRoom, board);
+  const pSendsMove = (boardIdRoom: string) => {
+    socketRef.current?.emit(
+      'p-sends-move',
+      boardIdRoom,
+      JSON.stringify(gameGrid),
+      phaseTwo,
+      JSON.stringify(selectedSqr));
   }
   
-  const gSendsMove = (boardIdRoom: string, board: string) => {
-    socketRef.current?.emit('g-sends-move', boardIdRoom, board);
-  }
-
   const connectionError = (errorMessage: string, message: string) => {
     console.log("There was an error:", errorMessage);
     alert(message);

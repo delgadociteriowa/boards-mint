@@ -168,8 +168,9 @@ const initialState: BoardStateType = {
   updatedAt: '',
   socketActive: false,
   shareDelay: false,
-  socketHost: 'a',
-  socketGuest: 'b'
+  socketHost: '',
+  socketGuest: '',
+  changeFromSocket: false
 };
 
 const boardSlice = createSlice({
@@ -249,6 +250,15 @@ const boardSlice = createSlice({
     setGameGrid: (state, action: PayloadAction<Grid>) => {
       state.gameGrid = action.payload;
     },
+    setChangeFromSocket: (state, action: PayloadAction<boolean>) => {
+      state.changeFromSocket = action.payload;
+    },
+    setPhaseTwo: (state, action: PayloadAction<boolean>) => {
+      state.phaseTwo = action.payload;
+    },
+    setSelectedSqr: (state, action: PayloadAction<SelectedSquare>) => {
+      state.selectedSqr = action.payload;
+    },
   },
   extraReducers: (builder) => {
       builder
@@ -321,7 +331,10 @@ export const {
   setShareDelay,
   setSocketHost,
   setSocketGuest,
-  setGameGrid
+  setGameGrid,
+  setChangeFromSocket,
+  setPhaseTwo,
+  setSelectedSqr
 } = boardSlice.actions;
 
 export default boardSlice.reducer;
