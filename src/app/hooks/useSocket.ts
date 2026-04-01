@@ -3,6 +3,7 @@ import { useSession } from "next-auth/react";
 import { io, Socket } from "socket.io-client";
 import { useAppSelector, useAppDispatch } from "@/state/hooks";
 import { useRouter } from 'next/navigation';
+import { useSearchParams } from "next/navigation";
 import {
   setSocketActive,
   setShareDelay,
@@ -20,7 +21,6 @@ export const useSocket = () => {
   const { data: session } = useSession();
   const socketRef = useRef<Socket | null>(null);
   const hasJoined = useRef(false);
-
   const {
     id,
     socketActive,
@@ -29,38 +29,41 @@ export const useSocket = () => {
     phaseTwo,
     changeFromSocket
   }  = useAppSelector(state => state.board);
-
   const dispatch = useAppDispatch();
-
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const gameId = searchParams.get('id') ?? '';
+  const roomId = searchParams.get('room') ?? '';
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const room = params.get("room") ?? '';
-    const identifier = id ? id : room;
-
-    if(socketActive && !changeFromSocket){
-      pSendsMove(identifier)
-    }
-  }, [gameGrid]);
-
-  useEffect(() => {
-    const sessionName = session?.user.username; 
     if (!hasJoined.current) {
-      const params = new URLSearchParams(window.location.search);
-      const room = params.get("room") ?? '';
-      if (room) {
+      if (roomId) {
         hasJoined.current = true;
-        gJoinsGameRoom(room, sessionName ?? 'visitor');
+        gJoinsGameRoom(roomId, 'visitor');
       }
     }
-
+    
     return () => {
       if (socketRef.current) {
         socketRef.current.disconnect();
         socketRef.current = null;
       }
     };
+  }, []);
+
+  useEffect(() => {
+    const identifier = gameId || roomId;
+
+    if(socketActive && !changeFromSocket){
+      pSendsMove(identifier)
+    }
+  }, [gameGrid]);
+  
+  useEffect(() => {
+    if(session?.user.username && roomId) {
+      dispatch(setSocketGuest(session?.user.username))
+      gSendsUserName(roomId, session?.user.username); 
+    }
   }, [session]);
 
   // only one socket
@@ -76,9 +79,13 @@ export const useSocket = () => {
         socket.emit('h-shares-board', id, session?.user.username, gameGrid);
       });
       
+      socket.on("g-sent-user-name", (guestName: string) => {
+        dispatch(setSocketGuest(guestName));
+      });
+      
       // Only received by guest because .to
       socket.on("h-shared-board", (hostName: string, board: Grid) => {
-        dispatch(setSocketGuest(session?.user.username || 'visitor'));
+        dispatch(setSocketGuest('visitor'));
         dispatch(setSocketHost(hostName));
         dispatch(setGameGrid(board));
         dispatch(setSocketActive(true));
@@ -128,23 +135,7 @@ export const useSocket = () => {
     });
   }
 
-  // used by guest
-  const gJoinsGameRoom = (boardIdRoom: string, guestName: string) => {
-    const socket = initSocket();
-
-    const emitJoin = () => {
-      socket.emit('g-joins-game-room', boardIdRoom, guestName);
-      dispatch(setSocketActive(true));
-    };
-
-    if (socket.connected) {
-      emitJoin();
-    } else {
-      socket.once("connect", emitJoin);
-    }
-  }
-
-  // used by host
+    // used by host
   const hDeletesGameRoom = () => {
     const answer = window.confirm('Are you sure you want to finish the game session?');
 
@@ -163,12 +154,34 @@ export const useSocket = () => {
     }, 800);
   }
 
+  // used by guest
+  const gJoinsGameRoom = (boardIdRoom: string, guestName: string) => {
+    const socket = initSocket();
+
+    const emitJoin = () => {
+      socket.emit('g-joins-game-room', boardIdRoom, guestName);
+      dispatch(setSocketActive(true));
+    };
+
+    if (socket.connected) {
+      emitJoin();
+    } else {
+      socket.once("connect", emitJoin);
+    }
+  }
+
+  // used by guest
   const gLeavesGameRoom = () => {
     const answer = window.confirm('Are you sure you want to leave the current game?');
     if (!answer) return
     socketRef.current?.disconnect();
     alert('You have left the game. You will be redirected to the home page.');
     router.push('/');
+  }
+
+  // used by guest
+  const gSendsUserName = (boardIdRoom: string, guestName: string) => {
+    socketRef.current?.emit('g-sends-user-name', boardIdRoom, guestName);
   }
 
   const pSendsMove = (boardIdRoom: string) => {
