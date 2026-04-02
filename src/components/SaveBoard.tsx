@@ -58,18 +58,16 @@ const SaveBoard = () => {
               <span className="ml-auto text-sm font-texts text-stone-500 my-auto mr-2">Last Saved: {updatedAt}</span>
             </>
           )}
-          {roomId && (
-            <>
-              <button
-                className={`text-stone-100 px-6 py-1 rounded-xl ${styleByPhase}`}
-                onClick={gLeavesGameRoom}
-              >
-                leave game
-              </button>
-            </>
-          )}
         </>)
       }
+      {roomId && (
+        <button
+          className={`text-stone-100 px-6 py-1 rounded-xl ${styleByPhase}`}
+          onClick={gLeavesGameRoom}
+        >
+          leave game
+        </button>
+      )}
     </div>
   )
 };
