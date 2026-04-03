@@ -76,6 +76,7 @@ export const useSocket = () => {
       // Only received by host because .to
       socket.on("g-joined-game-room", (guestName: string) => {
         dispatch(setSocketGuest(guestName));
+        alert('Your guest has joined the game.')
         socket.emit('h-shares-board', id, session?.user.username, gameGrid);
       });
       
@@ -156,17 +157,18 @@ export const useSocket = () => {
 
   // used by guest
   const gJoinsGameRoom = (boardIdRoom: string, guestName: string) => {
-    const socket = initSocket();
+    initSocket();
+    if (socketRef.current === null) return
 
     const emitJoin = () => {
-      socket.emit('g-joins-game-room', boardIdRoom, guestName);
+      socketRef.current?.emit('g-joins-game-room', boardIdRoom, guestName);
       dispatch(setSocketActive(true));
     };
 
-    if (socket.connected) {
+    if (socketRef.current?.connected) {
       emitJoin();
     } else {
-      socket.once("connect", emitJoin);
+      socketRef.current?.once("connect", emitJoin);
     }
   }
 
