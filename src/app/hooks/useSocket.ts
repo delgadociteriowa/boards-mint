@@ -27,7 +27,8 @@ export const useSocket = () => {
     gameGrid,
     selectedSqr,
     phaseTwo,
-    changeFromSocket
+    changeFromSocket,
+    socketGuest
   }  = useAppSelector(state => state.board);
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -42,13 +43,6 @@ export const useSocket = () => {
         gJoinsGameRoom(roomId, 'visitor');
       }
     }
-    
-    return () => {
-      if (socketRef.current) {
-        socketRef.current.disconnect();
-        socketRef.current = null;
-      }
-    };
   }, []);
 
   useEffect(() => {
@@ -82,6 +76,13 @@ export const useSocket = () => {
       
       socket.on("g-sent-user-name", (guestName: string) => {
         dispatch(setSocketGuest(guestName));
+      });
+      
+      socket.on("g-left-game-room", (guestName: string) => {
+        if (!roomId) {
+          alert(`The guest ${guestName} has left the game.`)
+          dispatch(setSocketGuest('waiting'));
+        }
       });
       
       // Only received by guest because .to
@@ -176,7 +177,9 @@ export const useSocket = () => {
   const gLeavesGameRoom = () => {
     const answer = window.confirm('Are you sure you want to leave the current game?');
     if (!answer) return
-    socketRef.current?.disconnect();
+
+    socketRef.current?.emit('g-leaves-game-room', roomId, socketGuest);
+    // socketRef.current?.disconnect();
     alert('You have left the game. You will be redirected to the home page.');
     router.push('/');
   }
