@@ -70,7 +70,7 @@ export const useSocket = () => {
       // Only received by host because .to
       socket.on("g-joined-game-room", (guestName: string) => {
         dispatch(setSocketGuest(guestName));
-        alert('Your guest has joined the game.')
+        alert('The guest player has joined the game.')
         socket.emit('h-shares-board', id, session?.user.username, gameGrid);
       });
       
@@ -82,6 +82,15 @@ export const useSocket = () => {
         if (!roomId) {
           alert(`The guest ${guestName} has left the game.`)
           dispatch(setSocketGuest('waiting'));
+        }
+      });
+      
+      socket.on("h-deleted-game-room", () => {
+        if (!gameId) {
+          alert(`The host has finished the game session. You'll be redirected to the home page.`)
+          setTimeout(() => {
+            router.push('/');
+          }, 5000)
         }
       });
       
