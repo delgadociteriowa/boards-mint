@@ -28,7 +28,8 @@ export const useSocket = () => {
     selectedSqr,
     phaseTwo,
     changeFromSocket,
-    socketGuest
+    socketGuest,
+    socketHost
   }  = useAppSelector(state => state.board);
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -109,6 +110,20 @@ export const useSocket = () => {
         dispatch(setGameGrid(board));
         dispatch(setPhaseTwo(phase));
         dispatch(setSelectedSqr(selected));
+      });
+      
+
+      socket.on("p-disconnected", () => {
+        if(gameId) {
+          alert(`Your opponent is no longer connected to the game.`)
+          dispatch(setSocketGuest('waiting'));
+        }
+        if(roomId) {
+          alert(`The host is no longer connected to the game. You'll be redirected to the home page.`)
+          setTimeout(() => {
+            router.push('/');
+          }, 5000)
+        }
       });
 
       socketRef.current = socket;
