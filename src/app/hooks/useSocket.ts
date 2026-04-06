@@ -64,7 +64,7 @@ export const useSocket = () => {
   // only one socket
   const initSocket = () => {
     if (!socketRef.current) {
-      const socket = io("http://localhost:3001");
+      const socket = io("https://boards-ws.onrender.com");
       
       // Socket Listeners
 
