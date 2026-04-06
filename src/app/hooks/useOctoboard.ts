@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useAppSelector, useAppDispatch } from "@/state/hooks";
-import { buildSyncGrid, selectPiece, getBoard } from "@/state/board/boardSlice";
+import { buildSyncGrid, selectPiece, getBoard, setChangeFromSocket } from "@/state/board/boardSlice";
 import { Square } from "@/types/board";
 
 export const useOctoboard = () => {
@@ -32,9 +32,11 @@ export const useOctoboard = () => {
     if (!phaseTwo) {
       if(!cell.piece) return
       dispatch(selectPiece(cell.id));
+      dispatch(setChangeFromSocket(false));
       return
     }
-    dispatch(selectPiece(cell.id))
+    dispatch(selectPiece(cell.id));
+    dispatch(setChangeFromSocket(false));
   };
 
   return {

@@ -2,6 +2,7 @@
 
 import { createSquareStyle, createPieceStyle } from "@/utils/uiSquare";
 import { useOctoboard } from "@/app/hooks/useOctoboard";
+import { useSocket } from "@/app/hooks/useSocket";
 import LoadingComponent from "./LoadingComponent";
 import ErrorComponent from "./ErrorComponent";
 import BoardIdentifier from "./BoardIdentifier";
@@ -18,6 +19,8 @@ const Octoboard = () => {
     error,
     handleClickSqr
   } = useOctoboard();
+  
+  useSocket();
 
   return (
     <>
