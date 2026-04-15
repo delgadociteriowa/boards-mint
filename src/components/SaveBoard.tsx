@@ -38,24 +38,26 @@ const SaveBoard = () => {
   const styleByShare = !shareDelay || !phaseTwo ? "bg-sky-600 hover:bg-sky-500 cursor-pointer" : "bg-stone-600 cursor-not-allowed opacity-60"; 
 
   return (
-    <div className='flex w-[90%] mb-14 landscape:w-[75%] mx-auto'>
+    <div className='flex flex-wrap w-[90%] mb-14 landscape:w-[75%] mx-auto md:flex-nowrap'>
       {session &&
         (<>
           <button
-            className={`text-stone-100 px-6 py-1 rounded-xl ${styleByPhase}`}
+            className={`text-stone-100 px-6 py-1 rounded-xl w-[calc(50%-4px)] md:w-auto ${styleByPhase}`}
             onClick={handleClick}
             disabled={phaseTwo}
           >
             save
           </button>
           <button
-            className={`text-stone-100 px-6 py-1 rounded-xl ml-2 ${styleByShare}`}
+            className={`text-stone-100 px-6 py-1 rounded-xl ml-2 w-[calc(50%-4px)] md:w-auto ${styleByShare}`}
             onClick={!socketActive ? hCreatesGameRoom : hDeletesGameRoom}
             disabled={phaseTwo || shareDelay}
           >
             {socketActive ? "stop sharing" : "share"}
           </button>
-          <span className="ml-auto text-sm font-texts text-stone-500 my-auto mr-2">Last Saved: {updatedAt}</span> 
+          {updatedAt &&
+            (<span className="w-full text-center mt-3 text-sm font-texts text-stone-500 md:w-auto md:ml-auto md:mr-2 md:mt-0">Last Saved: {updatedAt}</span>)
+          } 
         </>)
       }
       {roomId && (
