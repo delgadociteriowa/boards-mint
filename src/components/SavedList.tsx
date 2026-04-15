@@ -13,7 +13,7 @@ interface SavedListProps {
 
 const SavedList = ({loading, error, boards, status, handleDelete}: SavedListProps) => {
   return (
-    <div className="py-5 flex flex-wrap gap-10 w-full mb-8">
+    <div className="py-10 flex flex-wrap gap-10 w-full mb-8">
       {loading &&  (
         <Spinner />
       )}

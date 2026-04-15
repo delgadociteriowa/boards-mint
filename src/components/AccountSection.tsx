@@ -20,6 +20,7 @@ const AccountSection = () => {
   
   return (
     <section className="w-[90%] mx-auto max-w-[500px] py-20 text-stone-700 flex flex-col gap-10">
+      <h3 className="text-3xl text-center ml-4 tracking-[2px] text-stone-600">account</h3>
       <div className="flex flex-col gap-2">
         <label className="text-stone-600 tracking-[1px] text-sm">user name</label>
         <div className="flex items-center justify-between">
@@ -91,7 +92,7 @@ const AccountSection = () => {
           href="/saved"
         className="bg-sky-600 hover:bg-sky-500 py-5 rounded-full text-center text-stone-100 text-xl tracking-[2px] mx-auto mt-5 shadow-xl/20  cursor-pointer w-[90%]"
       >
-        my saved games
+        saved games
       </Link>
       <button
         onClick={handleLogout}

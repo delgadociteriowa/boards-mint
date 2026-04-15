@@ -12,7 +12,7 @@ interface GameCardListProp {
 }
 
 const GameCardList = ({list}: GameCardListProp) => {
-  return (<div className="py-5 flex flex-wrap justify-start gap-10 w-[100%] mb-8">
+  return (<div className="py-10 flex flex-wrap justify-start gap-10 w-[100%] mb-8">
     {list.map((card: GameCard) => (
       <GameCard
         key={card.title}
