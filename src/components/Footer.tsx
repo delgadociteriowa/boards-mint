@@ -20,7 +20,7 @@ const Footer = () => {
   ];
   
   return (<footer className="bg-stone-800 text-stone-300">
-    <nav className="w-[90%] mx-auto max-w-[1200px] py-14 flex flex-col gap-8 items-center md:flex-row">
+    <nav className="w-[90%] mx-auto max-w-[1200px] py-6 flex flex-col gap-8 items-center md:flex-row">
       {navLinks.map(link => (
         <Link key={link.text} href={link.href} className={link.className} target={link.target}>{link.text}</Link>
       ))}
