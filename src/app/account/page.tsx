@@ -16,9 +16,6 @@ const Account = () => {
         <LoadingComponent />
         :
         <main>
-          <h3 className="text-center text-stone-600 text-5xl tracking-[2px] mt-10 mb-4">
-            Account
-          </h3>
           <AccountSection />
         </main>
       }

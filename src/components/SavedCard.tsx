@@ -11,7 +11,7 @@ interface SavedCardProps {
 }
 
 const SavedCard = ({game, gameId, createdAt, lastSaved, onDelete} : SavedCardProps) => (
-  <div className={`bg-game-${game} h-[250px] p-6 grow bg-stone-900 rounded-3xl bg-center bg-cover flex flex-col shadow-xl/30`}>
+  <div className={`bg-game-${game} h-[250px] p-6 grow md:grow-0 bg-stone-900 rounded-3xl bg-center bg-cover flex flex-col shadow-xl/30`}>
     <h3 className="uppercase text-stone-200 tracking-[2px] text-2xl mb-4 flex items-center justify-between">
       <span>{game}</span>
       <button type="button" aria-label="Delete" className="hover:text-stone-50 transition cursor-pointer" onClick={() => onDelete(gameId)}>

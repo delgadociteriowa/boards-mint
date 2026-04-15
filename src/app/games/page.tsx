@@ -18,7 +18,8 @@ const Games = () => {
       <Header/>
         <main className="min-h-[800px]">
           <section className="w-[90%] mx-auto max-w-[1200px] py-14 text-stone-600">
-            <h3 className="text-center text-4xl tracking-[2px] mb-8">Select a Game</h3>
+            <h3 className="text-3xl ml-4 tracking-[2px] mb-2">games</h3>
+            <div className="w-full h-px bg-stone-300"></div>
             <GameCardList list={games}/>
           </section>
         </main>

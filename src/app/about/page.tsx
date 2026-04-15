@@ -12,8 +12,9 @@ const About = () => {
     <>
       <Header/>
         <main>
-          <h3 className="text-center text-stone-600 text-6xl tracking-[2px] mt-10 mb-4">About</h3>
-          <section className="mx-auto max-w-[1200px] flex flex-wrap mb-10 mt-4">
+          <section className="mx-auto max-w-[1200px] flex flex-wrap mb-10 mt-10">
+            <h3 className="text-3xl ml-4 tracking-[2px] mb-2 text-stone-600">about</h3>
+            <div className="w-full h-px bg-stone-300 mb-10"></div>
             <AboutCard color="bg-teal-500" title="Welcome" paragraph={`Boards is an easy and free platform with\n your favorite board games in a virtual version.\nNo hassle, no sign-ups.\nJust pick a game and let the fun begin.`}/>
             <AboutImage image={AboutTop} alt="A chess board made of cristal"/>
             <AboutImage image={AboutCenter} alt="Laptop, tablet and phone floating in an empty space"/>
