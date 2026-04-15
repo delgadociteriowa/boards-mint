@@ -24,6 +24,9 @@ const SaveBoard = () => {
   const roomId = searchParams.get("room");
   
   const handleClick = async () => {
+    const answer = window.confirm('Do you want to save the current board?');
+    if (!answer) return
+
     if (!boardId) {
       await dispatch(addBoard({ gameGrid, selectedGame }));
     } else {
@@ -45,7 +48,7 @@ const SaveBoard = () => {
                 onClick={handleClick}
                 disabled={phaseTwo}
               >
-                  {id ? "save" : "save"}
+                save
               </button>
               <button
                 className={`text-stone-100 px-6 py-1 rounded-xl ml-2 ${styleByShare}`}
