@@ -1,11 +1,7 @@
 'use client';
 import { useAppSelector } from "@/state/hooks";
 
-interface BoardIdentifierProps {
-  queryParamId: string;
-}
-
-const BoardIdentifier = ({queryParamId}: BoardIdentifierProps) => {
+const BoardSocketPlayers = () => {
   const {
     socketActive,
     socketHost,
@@ -13,7 +9,7 @@ const BoardIdentifier = ({queryParamId}: BoardIdentifierProps) => {
   }  = useAppSelector(state => state.board);
   
   return (
-    <div className='flex w-[90%] landscape:w-[75%] mx-auto'>
+    <div className='flex w-[90%] landscape:w-[75%] mx-auto h-4 mb-4'>
       {socketActive &&
         (<>
           <span className="text-sm font-texts text-green-600 font-bold mr-1">host:</span>
@@ -22,10 +18,8 @@ const BoardIdentifier = ({queryParamId}: BoardIdentifierProps) => {
           <span className="text-sm font-texts text-stone-600">{socketGuest}</span>
         </>)
       }
-      
-      {queryParamId && (<span className="text-sm font-texts text-stone-500 ml-auto">ID: {queryParamId}</span>)}
     </div>
   )
 };
 
-export default BoardIdentifier;
+export default BoardSocketPlayers;

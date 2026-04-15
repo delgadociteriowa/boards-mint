@@ -5,13 +5,12 @@ import { useOctoboard } from "@/app/hooks/useOctoboard";
 import { useSocket } from "@/app/hooks/useSocket";
 import LoadingComponent from "./LoadingComponent";
 import ErrorComponent from "./ErrorComponent";
-import BoardIdentifier from "./BoardIdentifier";
+import BoardSocketPlayers from "./BoardSocketPlayers";
 import SaveBoard from "./SaveBoard";
 import OctoBoardSquare from "./OctoBoardSquare";
 
 const Octoboard = () => {
   const {
-    queryParamId,
     selectedGame,
     gameGrid,
     phaseTwo,
@@ -28,7 +27,7 @@ const Octoboard = () => {
       {error && <ErrorComponent error={error} />}
       {gameGrid.length && !loading && !error && (
         <main className="w-[100%] md:w-[90%] lg:w-[80%] my-0 mx-auto">
-          <BoardIdentifier queryParamId={queryParamId}/>
+          <BoardSocketPlayers/>
           <div className="grid w-[90%] rounded-2xl board-areas overflow-hidden mt-2 mb-4 mx-auto landscape:w-[75%] shadow-xl/20">
           {gameGrid.map((row) => (
             row.map((cell) =>{
