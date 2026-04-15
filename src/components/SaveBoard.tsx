@@ -41,26 +41,21 @@ const SaveBoard = () => {
     <div className='flex w-[90%] mb-14 landscape:w-[75%] mx-auto'>
       {session &&
         (<>
-          {id && (
-            <>
-              <button
-                className={`text-stone-100 px-6 py-1 rounded-xl ${styleByPhase}`}
-                onClick={handleClick}
-                disabled={phaseTwo}
-              >
-                save
-              </button>
-              <button
-                className={`text-stone-100 px-6 py-1 rounded-xl ml-2 ${styleByShare}`}
-                onClick={!socketActive ? hCreatesGameRoom : hDeletesGameRoom}
-                disabled={phaseTwo || shareDelay}
-              >
-                {socketActive ? "stop sharing" : "share"}
-              </button>
-            
-              <span className="ml-auto text-sm font-texts text-stone-500 my-auto mr-2">Last Saved: {updatedAt}</span>
-            </>
-          )}
+          <button
+            className={`text-stone-100 px-6 py-1 rounded-xl ${styleByPhase}`}
+            onClick={handleClick}
+            disabled={phaseTwo}
+          >
+            save
+          </button>
+          <button
+            className={`text-stone-100 px-6 py-1 rounded-xl ml-2 ${styleByShare}`}
+            onClick={!socketActive ? hCreatesGameRoom : hDeletesGameRoom}
+            disabled={phaseTwo || shareDelay}
+          >
+            {socketActive ? "stop sharing" : "share"}
+          </button>
+          <span className="ml-auto text-sm font-texts text-stone-500 my-auto mr-2">Last Saved: {updatedAt}</span> 
         </>)
       }
       {roomId && (

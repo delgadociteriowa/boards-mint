@@ -133,8 +133,12 @@ export const useSocket = () => {
   
   // used by host
   const hCreatesGameRoom = () => {
-    const answer = window.confirm('You are about to start an online room. Do you want to continue?');
+    if (!id) {
+      alert('You must save this board to start an online game room.');
+      return
+    }
 
+    const answer = window.confirm('You are about to start an online room. Do you want to continue?');
     if (!answer) return
 
     dispatch(setShareDelay(true));
