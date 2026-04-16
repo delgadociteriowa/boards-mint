@@ -1,5 +1,5 @@
 'use client';
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useAppSelector, useAppDispatch } from "@/state/hooks";
 import { buildSyncGrid, selectPiece, getBoard, setChangeFromSocket } from "@/state/board/boardSlice";
@@ -7,11 +7,12 @@ import { Square } from "@/types/board";
 
 export const useOctoboard = () => {
   const searchParams = useSearchParams();
-  const queryParamId = searchParams.get("id") || '';
+  const queryParamId = useRef(searchParams.get("id") || '').current;
   const router = useRouter();
   const { id, selectedGame, gameGrid, phaseTwo, loading, error }  = useAppSelector(state => state.board);
   const dispatch = useAppDispatch();
 
+  // Si no hay qpid hacer un board normal, cuando si hay lo pide.
   useEffect(() => {
     if (!queryParamId) {
       dispatch(buildSyncGrid());
@@ -20,6 +21,7 @@ export const useOctoboard = () => {
     } 
   }, [queryParamId, selectedGame, dispatch]);
 
+  // genera el queryparamid y lo coloca en el url
   useEffect(() => {
     if(!queryParamId && id) {
       const params = new URLSearchParams(searchParams.toString());

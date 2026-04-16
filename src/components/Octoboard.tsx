@@ -3,11 +3,11 @@
 import { createSquareStyle, createPieceStyle } from "@/utils/uiSquare";
 import { useOctoboard } from "@/app/hooks/useOctoboard";
 import { useSocket } from "@/app/hooks/useSocket";
-import LoadingComponent from "./LoadingComponent";
 import ErrorComponent from "./ErrorComponent";
 import BoardSocketPlayers from "./BoardSocketPlayers";
 import SaveBoard from "./SaveBoard";
 import OctoBoardSquare from "./OctoBoardSquare";
+import Spinner from "./Spinner";
 
 const Octoboard = () => {
   const {
@@ -23,7 +23,7 @@ const Octoboard = () => {
 
   return (
     <>
-      {(!gameGrid.length || loading) && !error && <LoadingComponent />}
+      {(!gameGrid.length || loading) && !error && <Spinner />}
       {error && <ErrorComponent error={error} />}
       {gameGrid.length && !loading && !error && (
         <main className="w-[100%] md:w-[90%] lg:w-[80%] my-0 mx-auto">
