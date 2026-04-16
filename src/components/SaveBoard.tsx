@@ -53,7 +53,7 @@ const SaveBoard = () => {
             onClick={!socketActive ? hCreatesGameRoom : hDeletesGameRoom}
             disabled={phaseTwo || shareDelay}
           >
-            {socketActive ? "stop sharing" : "share"}
+            {socketActive ? "go offline" : "online room"}
           </button>
           {updatedAt &&
             (<span className="w-full text-center mt-3 text-sm font-texts text-stone-500 md:w-auto md:ml-auto md:mr-2 md:mt-0">

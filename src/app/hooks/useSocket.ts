@@ -165,7 +165,7 @@ export const useSocket = () => {
     
     // error
     socketRef.current.on("connect_error", (err) => {
-      connectionError(err.message, "The room couldn't be created due to a connection error. Please, try again.")
+      connectionError(err.message, "The room couldn't be created now. Please, try again in a few seconds.")
     });
   }
 
@@ -231,13 +231,13 @@ export const useSocket = () => {
   }
   
   const connectionError = (errorMessage: string, message: string) => {
-    console.log("There was an error:", errorMessage);
+    console.log(errorMessage);
     alert(message);
     socketRef.current?.disconnect();
     socketRef.current = null;
     dispatch(setSocketActive(false));
     setTimeout(() => {
-    dispatch(setShareDelay(false));
+      dispatch(setShareDelay(false));
     }, 800);
   }
 
