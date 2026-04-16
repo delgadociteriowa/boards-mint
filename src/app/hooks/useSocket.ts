@@ -81,7 +81,7 @@ export const useSocket = () => {
       
       socket.on("g-left-game-room", (guestName: string) => {
         if (!roomId) {
-          alert(`The guest ${guestName} has left the game.`)
+          alert(`The guest player, ${guestName}, has left the game.`);
           dispatch(setSocketGuest('waiting'));
         }
       });
@@ -133,6 +133,14 @@ export const useSocket = () => {
   
   // used by host
   const hCreatesGameRoom = () => {
+    if (!id) {
+      alert('You must save this board to start an online game room.');
+      return
+    }
+
+    const answer = window.confirm('You are about to start an online room. Do you want to continue?');
+    if (!answer) return
+
     dispatch(setShareDelay(true));
     
     // connects
@@ -151,7 +159,7 @@ export const useSocket = () => {
       
       const shareLink = window.location.href.replace('?id', '?room');
       navigator.clipboard.writeText(shareLink).then(() => {
-        alert('The session link has been copied to your clipboard! Share it to start playing online.')
+        alert('The game room link has been copied to your clipboard! Share it to start playing online.')
       });
     });
     
@@ -163,7 +171,7 @@ export const useSocket = () => {
 
     // used by host
   const hDeletesGameRoom = () => {
-    const answer = window.confirm('Are you sure you want to finish the game session?');
+    const answer = window.confirm('Do you want to stop sharing this game room?');
 
     if (!answer) return
 
@@ -173,7 +181,7 @@ export const useSocket = () => {
     socketRef.current = null;
     dispatch(setSocketActive(false));
 
-    alert('The online game session has ben finished.')
+    alert('You have stopped sharing this game room.')
 
     setTimeout(() => {
       dispatch(setShareDelay(false));
