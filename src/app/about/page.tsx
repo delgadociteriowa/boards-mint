@@ -6,6 +6,7 @@ import AboutTop from "../../assets/about_1.jpg";
 import AboutCenter from "../../assets/about_2.jpg";
 import AboutBottom from "../../assets/about_3.jpg";
 import Link from "next/link";
+import SectionTitle from "@/components/SectionTitle";
 
 const About = () => {
   return (
@@ -13,8 +14,7 @@ const About = () => {
       <Header/>
         <main>
           <section className="mx-auto max-w-[1200px] flex flex-wrap mb-10 mt-10">
-            <h3 className="text-3xl ml-4 tracking-[2px] mb-2 text-stone-600">about</h3>
-            <div className="w-full h-px bg-stone-300 mb-10"></div>
+            <SectionTitle title="about"/>
             <AboutCard color="bg-teal-500" title="Welcome" paragraph={`Boards is an easy and free platform with\n your favorite board games in a virtual version.\nNo hassle, no sign-ups.\nJust pick a game and let the fun begin.`}/>
             <AboutImage image={AboutTop} alt="A chess board made of cristal"/>
             <AboutImage image={AboutCenter} alt="Laptop, tablet and phone floating in an empty space"/>

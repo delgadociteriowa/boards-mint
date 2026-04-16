@@ -2,6 +2,7 @@ import Spinner from "./Spinner";
 import { useLogin } from "@/app/hooks/useLogin";
 import GoogleLogo from '@/assets/b-google.png'
 import Image from "next/image";
+import SectionTitle from "./SectionTitle";
 
 const LoginForm = () => {
   
@@ -9,6 +10,9 @@ const LoginForm = () => {
   
   return (
      <form onSubmit={handleLogin} className="flex flex-col gap-8 flex-1">
+      <div className="flex flex-col gap-2 md:hidden">
+        <SectionTitle title="login"/>
+      </div>
       <div className="flex flex-col gap-2">
         <label className="text-stone-600 tracking-[1px] text-sm">
           username / email

@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import GameCardList from "@/components/GameCardList";
+import SectionTitle from "@/components/SectionTitle";
 
 const Games = () => {
   const games = [
@@ -18,8 +19,7 @@ const Games = () => {
       <Header/>
         <main className="min-h-[800px]">
           <section className="w-[90%] mx-auto max-w-[1200px] py-14 text-stone-600">
-            <h3 className="text-3xl ml-4 tracking-[2px] mb-2">games</h3>
-            <div className="w-full h-px bg-stone-300"></div>
+            <SectionTitle title="games"/>
             <GameCardList list={games}/>
           </section>
         </main>

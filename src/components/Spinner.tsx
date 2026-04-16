@@ -1,8 +1,8 @@
 'use client';
 
-const Spinner = () => {
+const Spinner = ({wrapperHeight = '100'}) => {
   return (
-    <div className="flex h-full w-full items-center justify-center p-20">
+    <div className="flex w-full items-center justify-center" style={{ height: `${wrapperHeight}px`}}>
       <div className="spinner"/>
     </div>
   );
