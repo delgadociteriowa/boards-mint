@@ -19,6 +19,7 @@ export interface BoardStateType {
   selectedSqr: SelectedSquare;
   phaseTwo: boolean;
   loading: boolean;
+  saving: boolean;
   error: string | null;
   createdAt: string;
   updatedAt: string;

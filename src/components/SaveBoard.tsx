@@ -8,13 +8,13 @@ import { addBoard, updateBoard } from "@/state/board/boardSlice";
 const SaveBoard = () => {
   const { data: session } = useSession();
   const {
-    id,
     phaseTwo,
     gameGrid,
     selectedGame,
     updatedAt,
     socketActive,
-    shareDelay
+    shareDelay,
+    saving
   }  = useAppSelector(state => state.board);
   const { hCreatesGameRoom, hDeletesGameRoom, gLeavesGameRoom } = useSocket();
 
@@ -56,7 +56,9 @@ const SaveBoard = () => {
             {socketActive ? "stop sharing" : "share"}
           </button>
           {updatedAt &&
-            (<span className="w-full text-center mt-3 text-sm font-texts text-stone-500 md:w-auto md:ml-auto md:mr-2 md:mt-0">Last Saved: {updatedAt}</span>)
+            (<span className="w-full text-center mt-3 text-sm font-texts text-stone-500 md:w-auto md:ml-auto md:mr-2 md:mt-0">
+              {saving ? 'Saving...' : `Last Saved: ${updatedAt}`}
+            </span>)
           } 
         </>)
       }

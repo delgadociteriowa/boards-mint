@@ -18,13 +18,12 @@ import {
   benchesAreFilled
 } from './boardSetup';
 import formatDate from "@/utils/formatDate";
+import { startPPRNavigation } from "next/dist/client/components/router-reducer/ppr-navigations";
 
 export const addBoard = createAsyncThunk<
   {
     id: string;
     owner: string;
-    gameGrid: Grid;
-    selectedGame: SelectedGame;
     createdAt: string;
     updatedAt: string;
   },                //returned
@@ -57,8 +56,6 @@ export const addBoard = createAsyncThunk<
       return {
         id: data._id,
         owner: data.owner,
-        selectedGame: data.selectedGame,
-        gameGrid: data.gameGrid ?? [],
         createdAt: formatDate(data.createdAt),
         updatedAt: formatDate(data.updatedAt),
       };
@@ -163,6 +160,7 @@ const initialState: BoardStateType = {
   selectedSqr: [null, null],
   phaseTwo: false,
   loading: false, //pending
+  saving: false,
   error: null,
   createdAt: '',
   updatedAt: '',
@@ -231,9 +229,15 @@ const boardSlice = createSlice({
       state.selectedSqr = [null, null];
       state.phaseTwo = false;
       state.loading = false;
+      state.saving = false;
       state.error = null;
       state.createdAt = '';
       state.updatedAt = '';
+      state.socketActive = false,
+      state.shareDelay = false,
+      state.socketHost = '',
+      state.socketGuest = '',
+      state.changeFromSocket = false
     },
     setSocketActive: (state, action: PayloadAction<boolean>) => {
       state.socketActive = action.payload
@@ -281,31 +285,29 @@ const boardSlice = createSlice({
         })
         // addBoard
         .addCase(addBoard.pending, (state) => {
-          state.loading = true;
+          state.saving = true;
         })
         .addCase(addBoard.fulfilled, (state, action) => {
           state.id = action.payload.id;
           state.owner = action.payload.owner;
-          state.selectedGame = action.payload.selectedGame;
-          state.gameGrid = action.payload.gameGrid;
           state.createdAt = action.payload.createdAt;
           state.updatedAt = action.payload.updatedAt;
-          state.loading = false;
+          state.saving = false;
         })
         .addCase(addBoard.rejected, (state, action) => {
-          state.loading = false;
+          state.saving = false;
           state.error = action.payload ?? "Unknown error";
         })
         // updateBoard
         .addCase(updateBoard.pending, (state) => {
-          state.loading = true;
+          state.saving = true;
         })
         .addCase(updateBoard.fulfilled, (state, action) => {
           state.updatedAt = action.payload.updatedAt;
-          state.loading = false;
+          state.saving = false;
         })
         .addCase(updateBoard.rejected, (state, action) => {
-          state.loading = false;
+          state.saving = false;
           state.error = action.payload ?? "Unknown error";
         })
         // deleteBoard
