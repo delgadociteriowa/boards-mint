@@ -1,11 +1,13 @@
+import { useState } from "react";
 import Spinner from "./Spinner";
 import { useLogin } from "@/app/hooks/useLogin";
+import { Eye, EyeOff } from "lucide-react";
 import GoogleLogo from '@/assets/b-google.png'
 import Image from "next/image";
 import SectionTitle from "./SectionTitle";
 
 const LoginForm = () => {
-  
+  const [showPassword, setShowPassword] = useState(false);
   const { dispatch, identifier, password, loading, error, handleLogin, signIn, setIdentifier, setPassword } = useLogin();
   
   return (
@@ -31,15 +33,24 @@ const LoginForm = () => {
         <label className="text-stone-600 tracking-[1px] text-sm">
           password
         </label>
-        <input
-          type="password"
-          required
-          maxLength={50}
-          value={password}
-          disabled={loading}
-          onChange={(e) => dispatch(setPassword(e.target.value))}
-          className="border border-stone-300 rounded-xl py-4 px-4 text-stone-700 focus:outline-none focus:ring-2 focus:ring-sky-500"
-        />
+        <div className="relative">
+          <input
+            type={showPassword ? "text" : "password"}
+            required
+            maxLength={50}
+            value={password}
+            disabled={loading}
+            onChange={(e) => dispatch(setPassword(e.target.value))}
+            className="w-full border border-stone-300 rounded-xl py-4 px-4 pr-12 text-stone-700 focus:outline-none focus:ring-2 focus:ring-sky-500"
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-stone-500 hover:text-stone-700 cursor-pointer"
+          >
+            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+          </button>
+        </div>
       </div>
       <p className="text-red-500 h-2 text-center">{error}</p>
       {!loading ? 
