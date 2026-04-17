@@ -23,7 +23,7 @@ const Octoboard = () => {
 
   return (
     <>
-      {(!gameGrid.length || loading) && !error && <Spinner />}
+      {(!gameGrid.length || loading) && !error && <Spinner wrapperHeight="800"/>}
       {error && <ErrorComponent error={error} />}
       {gameGrid.length && !loading && !error && (
         <main className="w-[100%] md:w-[90%] lg:w-[80%] my-0 mx-auto">
