@@ -117,14 +117,14 @@ export const authOptions: NextAuthOptions = {
 
       if (!user) return session;
 
-      session.user.id = token.id;
-      session.user.username = token.username;
-      session.user.firstname = user.firstname;
-      session.user.lastname = user.lastname;
-
-      if (token.email) {
-        session.user.email = token.email;
-      }
+      session.user = {
+        ...session.user,
+        id: token.id as string,
+        username: token.username as string,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        email: (token.email as string) ?? session.user?.email,
+      };
 
       return session;
     },
