@@ -21,3 +21,8 @@ export interface SyncUser {
   lastName: string;
   email: string;
 }
+
+export type UpdateUser = Partial<{
+  firstname: string;
+  lastname: string;
+}>;

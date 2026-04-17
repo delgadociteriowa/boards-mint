@@ -1,4 +1,4 @@
-import { UserStateType, LoginState, SyncUser } from "../../types/user";
+import { UserStateType, LoginState, SyncUser, UpdateUser } from "../../types/user";
 import { signIn, signOut } from "next-auth/react";
 
 import {
@@ -52,7 +52,7 @@ export const logout = createAsyncThunk<
 
 export const updateUser = createAsyncThunk<
   void,
-  string,
+  UpdateUser,
   { rejectValue: string }
 >(
     "user/update",
