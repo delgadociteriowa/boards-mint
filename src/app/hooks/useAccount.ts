@@ -41,13 +41,20 @@ export const useAccount = () => {
     dispatch(logout());
   };
 
-  const handleSave = async (field: string) => {
-    const payload = field;
+  const handleSave = async (field: "firstname" | "lastname") => {
+    const updateOptions = {
+      firstname: firstName,
+      lastname: lastName
+    } 
+    
+    const payload = {
+      [field]: updateOptions[field]
+    };
 
     await dispatch(updateUser(payload));
     await update();
 
-    setEditingField('')
+    setEditingField(null)
   };
 
   return {
