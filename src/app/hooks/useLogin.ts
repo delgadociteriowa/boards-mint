@@ -20,7 +20,9 @@ export const useLogin = () => {
   
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(login({identifier, password}));
+    const trimmedIdentifier = identifier.trim().slice(0, 50);
+    const trimmedPassword = password.trim().slice(0, 50);
+    dispatch(login({identifier: trimmedIdentifier, password: trimmedPassword}));
   };
   
   return {

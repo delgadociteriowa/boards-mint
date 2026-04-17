@@ -20,6 +20,7 @@ const LoginForm = () => {
         <input
           type="text"
           required
+          maxLength={50}
           value={identifier}
           disabled={loading}
           onChange={(e) => dispatch(setIdentifier(e.target.value))}
@@ -33,6 +34,7 @@ const LoginForm = () => {
         <input
           type="password"
           required
+          maxLength={50}
           value={password}
           disabled={loading}
           onChange={(e) => dispatch(setPassword(e.target.value))}
