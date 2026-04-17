@@ -43,6 +43,7 @@ const AccountSection = () => {
         onChange={(value) => dispatch(setFirstName(value))}
         onEdit={() => dispatch(setEditingField("firstname"))}
         onSave={() => handleSave("firstname")}
+        onCancel={() => dispatch(setEditingField(null))}
       />
       <Line/>
       <AccountEditableField
@@ -52,6 +53,7 @@ const AccountSection = () => {
         onChange={(value) => dispatch(setLastName(value))}
         onEdit={() => dispatch(setEditingField("lastname"))}
         onSave={() => handleSave("lastname")}
+        onCancel={() => dispatch(setEditingField(null))}
       />
       <Link
           href="/saved"

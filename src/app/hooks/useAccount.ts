@@ -48,13 +48,13 @@ export const useAccount = () => {
     } 
     
     const payload = {
-      [field]: updateOptions[field]
+      [field]: updateOptions[field].trim().slice(0, 50)
     };
-
+    
     await dispatch(updateUser(payload));
     await update();
 
-    setEditingField(null)
+    dispatch(setEditingField(null));
   };
 
   return {
