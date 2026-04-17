@@ -52,7 +52,9 @@ const LoginForm = () => {
           </button>
         </div>
       </div>
-      <p className="text-red-500 h-2 text-center">{error}</p>
+      <p className={`text-red-500 h-2 text-center transition-opacity duration-6000 ${
+        error ? "opacity-0" : "opacity-100"
+      }`}>{error}</p>
       {!loading ? 
         <>
           <button

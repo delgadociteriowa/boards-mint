@@ -98,6 +98,9 @@ const userSlice = createSlice({
       const trimPassword = action.payload.trim();
       state.password =  trimPassword;
     },
+    clearError: (state) => {
+      state.error = '';
+    },
     setFirstName: (state, action: PayloadAction<string>) => {
       const trimFirstName = action.payload.trim();
       state.firstName=  trimFirstName;
@@ -133,8 +136,6 @@ const userSlice = createSlice({
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload ?? "Unknown error";
-        state.identifier = '';
-        state.password = '';
       })
       // logout
       .addCase(logout.pending, (state) => {
@@ -162,6 +163,7 @@ const userSlice = createSlice({
 export const {
   setIdentifier,
   setPassword,
+  clearError,
   syncUserData,
   setFirstName,
   setLastName,
