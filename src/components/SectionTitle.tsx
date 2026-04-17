@@ -10,7 +10,7 @@ const SectionTitle = ({ title }: SectionTitleProps) => {
         text-center
         md:w-auto
         md:text-left
-        md:ml-4
+        md:ml-8
         text-3xl
         md:tracking-[2px]
         tracking-[4px]
@@ -22,7 +22,6 @@ const SectionTitle = ({ title }: SectionTitleProps) => {
         max-w-[97%]
         h-px
         bg-stone-300
-        mb-10
         mx-auto
       "></div>
     </>

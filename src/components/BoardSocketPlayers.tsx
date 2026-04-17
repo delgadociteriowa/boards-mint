@@ -9,13 +9,15 @@ const BoardSocketPlayers = () => {
   }  = useAppSelector(state => state.board);
   
   return (
-    <div className='flex w-[90%] landscape:w-[75%] mx-auto h-4 mb-4'>
+    <div className='flex items-center w-[90%] landscape:w-[75%] mx-auto h-6 px-4'>
       {socketActive &&
         (<>
-          <span className="text-sm font-texts text-green-600 font-bold mr-1">host:</span>
-          <span className="text-sm font-texts text-stone-600 mr-4">{socketHost}</span>
-          <span className="text-sm font-texts text-purple-600 font-bold mr-1">guest:</span>
-          <span className="text-sm font-texts text-stone-600">{socketGuest}</span>
+          <div className="flex-1 flex justify-start">
+            <h4 className="font-bold text-sky-500 tracking-[1px]">HOST <span className="font-normal ml-2 text-stone-600 tracking-[0px]">{socketHost}</span></h4>
+          </div>
+          <div className="flex-1 flex justify-end">
+            <h4 className="font-bold text-amber-500 tracking-[1px]">GUEST <span className="font-normal ml-2 text-stone-600 tracking-[0px]">{socketGuest}</span></h4>
+          </div>
         </>)
       }
     </div>
