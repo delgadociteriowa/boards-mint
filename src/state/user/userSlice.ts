@@ -1,4 +1,4 @@
-import { UserStateType, LoginState, SyncUser, UpdateUser } from "../../types/user";
+import { UserStateType, LoginState, SyncUser } from "../../types/user";
 import { signIn, signOut } from "next-auth/react";
 
 import {
@@ -52,7 +52,7 @@ export const logout = createAsyncThunk<
 
 export const updateUser = createAsyncThunk<
   void,
-  UpdateUser,
+  string,
   { rejectValue: string }
 >(
     "user/update",
@@ -80,8 +80,7 @@ const initialState: UserStateType = {
   email: '',
   firstName: '',
   lastName: '',
-  editingFirst: false,
-  editingLast: false,
+  editingField: null,
   loading: false,
   error: '',
 };
@@ -103,11 +102,11 @@ const userSlice = createSlice({
     },
     setFirstName: (state, action: PayloadAction<string>) => {
       const trimFirstName = action.payload.trim();
-      state.firstName=  trimFirstName;
+      state.firstName = trimFirstName;
     },
     setLastName: (state, action: PayloadAction<string>) => {
       const trimLastName = action.payload.trim();
-      state.lastName=  trimLastName;
+      state.lastName = trimLastName;
     },
     syncUserData: (state, action: PayloadAction<SyncUser>) => {
       state.userName = action.payload.userName; 
@@ -115,12 +114,9 @@ const userSlice = createSlice({
       state.lastName = action.payload.lastName;
       state.email = action.payload.email;
     },
-    setEditingFirst: (state, action: PayloadAction<boolean>) => {
-      state.editingFirst = action.payload;
-    },
-    setEditingLast: (state, action: PayloadAction<boolean>) => {
-      state.editingLast = action.payload;
-    },
+    setEditingField: (state, action: PayloadAction<"firstname" | "lastname" | null>) => {
+      state.editingField = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -148,8 +144,7 @@ const userSlice = createSlice({
         state.email =  '';
         state.firstName =  '';
         state.lastName =  '';
-        state.editingFirst =  false;
-        state.editingLast =  false;
+        state.editingField = null;
         state.loading =  false;
         state.error =  '';
       })
@@ -167,8 +162,7 @@ export const {
   syncUserData,
   setFirstName,
   setLastName,
-  setEditingFirst,
-  setEditingLast
+  setEditingField,
 } = userSlice.actions;
 
 export default userSlice.reducer;

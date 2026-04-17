@@ -1,5 +1,9 @@
 import Link from 'next/link';
 import { useAccount } from '@/app/hooks/useAccount';
+import AccountField from './AccountField';
+import AccountEditableField from './AccountEditableField';
+import Line from './Line';
+
 
 const AccountSection = () => {
   const { 
@@ -7,87 +11,48 @@ const AccountSection = () => {
     email,
     firstName,
     lastName,
-    editingFirst,
-    editingLast,
+    editingField,
     dispatch,
     setFirstName,
     setLastName,
     handleSave,
-    setEditingFirst,
-    setEditingLast,
+    setEditingField,
     handleLogout
   } = useAccount();
+
+  const isEditingFirst = editingField === "firstname";
+  const isEditingLast = editingField === "lastname";
   
   return (
     <section className="w-[90%] mx-auto max-w-[500px] py-20 text-stone-700 flex flex-col gap-10">
       <h3 className="text-3xl text-center ml-4 tracking-[2px] text-stone-600">account</h3>
-      <div className="flex flex-col gap-2">
-        <label className="text-stone-600 tracking-[1px] text-sm">user name</label>
-        <div className="flex items-center justify-between">
-          <p className="text-stone-700 text-lg">{userName ?? "-"}</p>
-        </div>
-      </div>
-      <div className="w-full h-px bg-stone-300"></div>
-      <div className="flex flex-col gap-2">
-        <label className="text-stone-600 tracking-[1px] text-sm">email</label>
-        <div className="flex items-center justify-between">
-          <p className="text-stone-700 text-lg">{email ?? "-"}</p>
-        </div>
-      </div>
-      <div className="w-full h-px bg-stone-300"></div>
-      <div className="flex flex-col gap-2">
-        <label className="text-stone-600 tracking-[1px] text-sm">
-          first name
-        </label>
-        <div className="flex items-center justify-between">
-          {editingFirst ? (
-            <input
-              className="border border-stone-300 rounded-xl py-3 px-4 text-stone-700 focus:outline-none focus:ring-2 focus:ring-sky-500 w-full"
-              value={firstName ??  "-"}
-              onChange={(e) => dispatch(setFirstName(e.target.value))}
-            />
-          ) : (
-            <p className="text-stone-700 text-lg">{firstName ??  "-"}</p>
-          )}
-
-          <button
-            className="bg-sky-600 hover:bg-sky-500 text-stone-100 px-5 py-2 rounded-xl ml-4 cursor-pointer"
-            onClick={() =>
-              editingFirst ? handleSave('firstname') : dispatch(setEditingFirst(true))
-            }
-          >
-            {editingFirst ? "save" : "edit"}
-          </button>
-        </div>
-      </div>
-      <div className="w-full h-px bg-stone-300"></div>
-      <div className="flex flex-col gap-2">
-        <label className="text-stone-600 tracking-[1px] text-sm">
-          last name
-        </label>
-        <div className="flex items-center justify-between">
-          {editingLast ? (
-            <input
-              className="border border-stone-300 rounded-xl py-3 px-4 text-stone-700 focus:outline-none focus:ring-2 focus:ring-sky-500 w-full"
-              value={lastName ?? "-"}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                dispatch(setLastName(e.target.value))
-              }
-            />
-          ) : (
-            <p className="text-stone-700 text-lg">{lastName ?? "-"}</p>
-          )}
-
-          <button
-            className="bg-sky-600 hover:bg-sky-500 text-stone-100 px-5 py-2 rounded-xl ml-4 cursor-pointer"
-            onClick={() =>
-              editingLast ? handleSave('lastname') : dispatch(setEditingLast(true))
-            }
-          >
-            {editingLast ? "save" : "edit"}
-          </button>
-        </div>
-      </div>
+      <AccountField
+        label="user name"
+        value={userName ?? "-"}
+      />
+      <Line/>
+      <AccountField
+        label="email"
+        value={email ?? "-"}
+      />
+      <Line/>
+      <AccountEditableField
+        label="first name"
+        value={firstName ?? "-"}
+        editing={isEditingFirst}
+        onChange={(value) => dispatch(setFirstName(value))}
+        onEdit={() => dispatch(setEditingField("firstname"))}
+        onSave={() => handleSave("firstname")}
+      />
+      <Line/>
+      <AccountEditableField
+        label="last name"
+        value={lastName ?? "-"}
+        editing={isEditingLast}
+        onChange={(value) => dispatch(setLastName(value))}
+        onEdit={() => dispatch(setEditingField("lastname"))}
+        onSave={() => handleSave("lastname")}
+      />
       <Link
           href="/saved"
         className="bg-sky-600 hover:bg-sky-500 py-5 rounded-full text-center text-stone-100 text-xl tracking-[2px] mx-auto mt-5 shadow-xl/20  cursor-pointer w-[90%]"

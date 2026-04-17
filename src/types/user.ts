@@ -5,8 +5,7 @@ export interface UserStateType {
   email: string;
   firstName: string;
   lastName: string;
-  editingFirst: boolean;
-  editingLast: boolean;
+  editingField: "firstname" | "lastname" | null;
   loading: boolean;
   error: string;
 }
@@ -22,8 +21,3 @@ export interface SyncUser {
   lastName: string;
   email: string;
 }
-
-export type UpdateUser = Partial<{
-  firstname: string;
-  lastname: string;
-}>;

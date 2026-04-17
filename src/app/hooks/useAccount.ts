@@ -4,16 +4,11 @@ import { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useAppSelector, useAppDispatch } from "@/state/hooks";
-import { syncUserData, logout, updateUser, setFirstName, setLastName, setEditingFirst, setEditingLast } from "@/state/user/userSlice";
-
-type UserPayload = Partial<{
-  firstname: string;
-  lastname: string;
-}>;
+import { syncUserData, logout, updateUser, setFirstName, setLastName, setEditingField } from "@/state/user/userSlice";
 
 export const useAccount = () => {
   const dispatch = useAppDispatch();
-  const { userName, email, firstName, lastName, editingFirst, editingLast }  = useAppSelector(state => state.user);
+  const { userName, email, firstName, lastName, editingField }  = useAppSelector(state => state.user);
 
   const { data: session, status, update } = useSession();
   const router = useRouter();
@@ -46,17 +41,13 @@ export const useAccount = () => {
     dispatch(logout());
   };
 
-  const handleSave = async (field: "firstname" | "lastname") => {
-    const payload: UserPayload = {
-      [field]: field === "firstname" ? firstName : lastName,
-    };
+  const handleSave = async (field: string) => {
+    const payload = field;
 
     await dispatch(updateUser(payload));
     await update();
 
-    field === "firstname"
-      ? dispatch(setEditingFirst(false))
-      : dispatch(setEditingLast(false));
+    setEditingField('')
   };
 
   return {
@@ -64,14 +55,12 @@ export const useAccount = () => {
     email,
     firstName,
     lastName,
-    editingFirst,
-    editingLast,
+    editingField,
     dispatch,
     setFirstName,
     setLastName,
     handleSave,
-    setEditingFirst,
-    setEditingLast,
+    setEditingField,
     handleLogout
   }
 }
