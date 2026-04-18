@@ -22,8 +22,7 @@ const AccountEditableField = ({
       <label className="text-stone-600 tracking-[1px] text-sm">
         {label}
       </label>
-
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between h-14">
         {editing ? (
           <input
             maxLength={50}
@@ -40,7 +39,7 @@ const AccountEditableField = ({
 
         {!editing ? (
           <button
-            className="bg-sky-600 hover:bg-sky-500 text-stone-100 px-5 py-2 rounded-xl ml-4 cursor-pointer"
+            className="bg-sky-600 hover:bg-sky-500 text-stone-100 px-5 py-2 rounded-full tracking-[1px] ml-4 shadow-md/20 cursor-pointer"
             onClick={onEdit}
           >
             edit
@@ -48,13 +47,13 @@ const AccountEditableField = ({
         ) : (
           <div className="flex items-center gap-1 shrink-0">
             <button
-              className="bg-sky-600 hover:bg-sky-500 text-stone-100 px-5 py-2 rounded-xl ml-4 cursor-pointer"
+              className="bg-sky-600 hover:bg-sky-500 text-stone-100 px-5 py-2 rounded-full tracking-[1px] ml-4 shadow-md/20 cursor-pointer"
               onClick={onSave}
             >
               save
             </button>
             <button
-              className="bg-rose-600 hover:bg-rose-500 text-stone-100 px-5 py-2 rounded-xl cursor-pointer"
+              className="bg-rose-600 hover:bg-rose-500 text-stone-100 px-5 py-2 rounded-full tracking-[1px] ml-2 shadow-md/20 cursor-pointer"
               onClick={onCancel}
             >
               cancel
