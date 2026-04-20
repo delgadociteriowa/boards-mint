@@ -5,9 +5,13 @@ export interface UserStateType {
   email: string;
   firstName: string;
   lastName: string;
-  editingField: "firstname" | "lastname" | null;
+  editingField: 'firstname' | 'lastname' | null;
   loading: boolean;
   error: string;
+}
+
+export interface SignUpState {
+  email: string;
 }
 
 export interface LoginState {

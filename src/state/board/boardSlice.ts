@@ -1,24 +1,19 @@
-import {
-  createSlice,
-  PayloadAction,
-  createAsyncThunk
-} from "@reduxjs/toolkit";
+import formatDate from '@/utils/formatDate';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   BoardStateType,
+  Grid,
   SelectedGame,
   SelectedSquare,
-  Grid
-} from "../../types/board";
+} from '../../types/board';
 import {
+  benchesAreFilled,
   buildGameGrid,
   selectSqrGrid,
-  targetedSelfGrid,
   targetedEmptyGrid,
   targetedPieceGrid,
-  benchesAreFilled
+  targetedSelfGrid,
 } from './boardSetup';
-import formatDate from "@/utils/formatDate";
-import { startPPRNavigation } from "next/dist/client/components/router-reducer/ppr-navigations";
 
 export const addBoard = createAsyncThunk<
   {
@@ -26,131 +21,119 @@ export const addBoard = createAsyncThunk<
     owner: string;
     createdAt: string;
     updatedAt: string;
-  },                //returned
-  { 
+  }, //returned
+  {
     gameGrid?: Grid;
     selectedGame: SelectedGame;
-   },           // received
+  }, // received
   { rejectValue: string }
->(
-  "board/addBoard",
-  async ({ gameGrid, selectedGame }, { rejectWithValue }) => {
-    try {
-      const res = await fetch(`/api/board/create`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          gameGrid,
-          selectedGame,
-        }),
-      });
+>('board/addBoard', async ({ gameGrid, selectedGame }, { rejectWithValue }) => {
+  try {
+    const res = await fetch(`/api/board/create`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        gameGrid,
+        selectedGame,
+      }),
+    });
 
-      if (!res.ok) {
-        throw new Error("Failed to create board");
-      }
-
-      const data = await res.json();
-
-      return {
-        id: data._id,
-        owner: data.owner,
-        createdAt: formatDate(data.createdAt),
-        updatedAt: formatDate(data.updatedAt),
-      };
-    } catch (error) {
-      return rejectWithValue(`${error}`);
+    if (!res.ok) {
+      throw new Error('Failed to create board');
     }
+
+    const data = await res.json();
+
+    return {
+      id: data._id,
+      owner: data.owner,
+      createdAt: formatDate(data.createdAt),
+      updatedAt: formatDate(data.updatedAt),
+    };
+  } catch (error) {
+    return rejectWithValue(`${error}`);
   }
-);
+});
 
 export const getBoard = createAsyncThunk<
-  BoardStateType,   // returnsboard
-  string,           // id
+  BoardStateType, // returnsboard
+  string, // id
   { rejectValue: string }
->(
-  "board/getBoard",
-  async (id, { rejectWithValue }) => {
-    try {
-      const res = await fetch(`/api/board/get/${id}`);
+>('board/getBoard', async (id, { rejectWithValue }) => {
+  try {
+    const res = await fetch(`/api/board/get/${id}`);
 
-      if (!res.ok) {
-        console.log(`Error. Response status: ${res.status}`)
-        throw new Error(`Failed to fetch the selected board`);
-      }
-
-      const data = await res.json();
-      console.log("RAW API DATA:", data);
-      return {
-        ...data,
-        id: data._id,
-        owner: data.owner,
-        selectedGame: data.selectedGame,
-        gameGrid: data.gameGrid,
-        createdAt: formatDate(data.createdAt),
-        updatedAt: formatDate(data.updatedAt),
-      };
-    } catch (error) {
-      return rejectWithValue(`${error}`);
+    if (!res.ok) {
+      console.log(`Error. Response status: ${res.status}`);
+      throw new Error(`Failed to fetch the selected board`);
     }
+
+    const data = await res.json();
+    console.log('RAW API DATA:', data);
+    return {
+      ...data,
+      id: data._id,
+      owner: data.owner,
+      selectedGame: data.selectedGame,
+      gameGrid: data.gameGrid,
+      createdAt: formatDate(data.createdAt),
+      updatedAt: formatDate(data.updatedAt),
+    };
+  } catch (error) {
+    return rejectWithValue(`${error}`);
   }
-);
+});
 
 export const updateBoard = createAsyncThunk<
-  { updatedAt: string },           // return updated date
-  { id: string; gameGrid: Grid },  // id, gameGrid
+  { updatedAt: string }, // return updated date
+  { id: string; gameGrid: Grid }, // id, gameGrid
   { rejectValue: string }
->(
-  "board/updateBoard",
-  async ({ id, gameGrid }, { rejectWithValue }) => {
-    try {
-      const res = await fetch(`/api/board/update/${id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ gameGrid }),
-      });
+>('board/updateBoard', async ({ id, gameGrid }, { rejectWithValue }) => {
+  try {
+    const res = await fetch(`/api/board/update/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ gameGrid }),
+    });
 
-      if (!res.ok) {
-        throw new Error("Failed to update board");
-      }
-
-      const data = await res.json();
-
-      return {
-        updatedAt: formatDate(data.updatedAt),
-      };
-    } catch (error) {
-      return rejectWithValue(`${error}`);
+    if (!res.ok) {
+      throw new Error('Failed to update board');
     }
+
+    const data = await res.json();
+
+    return {
+      updatedAt: formatDate(data.updatedAt),
+    };
+  } catch (error) {
+    return rejectWithValue(`${error}`);
   }
-);
+});
 
 export const deleteBoard = createAsyncThunk<
-  string,           // deleted id
-  string,           // gets id
+  string, // deleted id
+  string, // gets id
   { rejectValue: string }
->(
-  "board/deleteBoard",
-  async (id, { rejectWithValue }) => {
-    try {
-      const res = await fetch(`/api/board/delete/${id}`, {
-        method: "DELETE"
-      });
+>('board/deleteBoard', async (id, { rejectWithValue }) => {
+  try {
+    const res = await fetch(`/api/board/delete/${id}`, {
+      method: 'DELETE',
+    });
 
-      if (!res.ok) {
-        console.log(`Error. Response status: ${res.status}`)
-        throw new Error("Failed to delete the board");
-      }
-
-      return id;
-    } catch (error) {
-      return rejectWithValue(`${error}`);
+    if (!res.ok) {
+      console.log(`Error. Response status: ${res.status}`);
+      throw new Error('Failed to delete the board');
     }
+
+    return id;
+  } catch (error) {
+    return rejectWithValue(`${error}`);
   }
-);
+});
 
 const initialState: BoardStateType = {
   id: '',
@@ -168,16 +151,16 @@ const initialState: BoardStateType = {
   shareDelay: false,
   socketHost: '',
   socketGuest: '',
-  changeFromSocket: false
+  changeFromSocket: false,
 };
 
 const boardSlice = createSlice({
-  name: "board",
+  name: 'board',
   initialState,
-  reducers:{
+  reducers: {
     selectGame: (state, action: PayloadAction<SelectedGame>) => {
       // const newGrid = buildGameGrid(action.payload);
-      state.selectedGame =  action.payload;
+      state.selectedGame = action.payload;
       // state.gameGrid = newGrid;
     },
     buildSyncGrid: (state) => {
@@ -185,10 +168,14 @@ const boardSlice = createSlice({
       state.gameGrid = grid;
     },
     selectPiece: (state, action: PayloadAction<string>) => {
-      const [row, col] = action.payload.replace('sqr', '').split('-').map(n => Number(n));
+      const [row, col] = action.payload
+        .replace('sqr', '')
+        .split('-')
+        .map((n) => Number(n));
       const selectedPiece: SelectedSquare = [row, col];
-      const isSameSqr = row === state.selectedSqr[0] && col === state.selectedSqr[1];
-      const emptySqr: SelectedSquare = [null, null]; 
+      const isSameSqr =
+        row === state.selectedSqr[0] && col === state.selectedSqr[1];
+      const emptySqr: SelectedSquare = [null, null];
 
       if (!state.phaseTwo) {
         state.gameGrid = selectSqrGrid(selectedPiece, state.gameGrid);
@@ -205,7 +192,11 @@ const boardSlice = createSlice({
       }
 
       if (state.gameGrid[row][col].piece === '') {
-        state.gameGrid = targetedEmptyGrid(selectedPiece, state.selectedSqr, state.gameGrid);
+        state.gameGrid = targetedEmptyGrid(
+          selectedPiece,
+          state.selectedSqr,
+          state.gameGrid,
+        );
         state.selectedSqr = emptySqr;
         state.phaseTwo = false;
         return;
@@ -215,7 +206,11 @@ const boardSlice = createSlice({
         if (benchesAreFilled(state.gameGrid)) {
           state.gameGrid = targetedSelfGrid(state.selectedSqr, state.gameGrid);
         } else {
-          state.gameGrid = targetedPieceGrid(selectedPiece, state.selectedSqr, state.gameGrid);
+          state.gameGrid = targetedPieceGrid(
+            selectedPiece,
+            state.selectedSqr,
+            state.gameGrid,
+          );
         }
         state.selectedSqr = emptySqr;
         state.phaseTwo = false;
@@ -233,23 +228,23 @@ const boardSlice = createSlice({
       state.error = null;
       state.createdAt = '';
       state.updatedAt = '';
-      state.socketActive = false,
-      state.shareDelay = false,
-      state.socketHost = '',
-      state.socketGuest = '',
-      state.changeFromSocket = false
+      ((state.socketActive = false),
+        (state.shareDelay = false),
+        (state.socketHost = ''),
+        (state.socketGuest = ''),
+        (state.changeFromSocket = false));
     },
     setSocketActive: (state, action: PayloadAction<boolean>) => {
-      state.socketActive = action.payload
+      state.socketActive = action.payload;
     },
     setShareDelay: (state, action: PayloadAction<boolean>) => {
-      state.shareDelay = action.payload
+      state.shareDelay = action.payload;
     },
     setSocketHost: (state, action: PayloadAction<string>) => {
-      state.socketHost = action.payload
+      state.socketHost = action.payload;
     },
     setSocketGuest: (state, action: PayloadAction<string>) => {
-      state.socketGuest = action.payload
+      state.socketGuest = action.payload;
     },
     setGameGrid: (state, action: PayloadAction<Grid>) => {
       state.gameGrid = action.payload;
@@ -265,63 +260,63 @@ const boardSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-      builder
-        // getBoard
-        .addCase(getBoard.pending, (state) => {
-          state.loading = true;
-        })
-        .addCase(getBoard.fulfilled, (state, action) => {
-          state.id = action.payload.id;
-          state.owner = action.payload.owner;
-          state.selectedGame = action.payload.selectedGame;
-          state.gameGrid = action.payload.gameGrid;
-          state.createdAt = action.payload.createdAt;
-          state.updatedAt = action.payload.updatedAt;
-          state.loading = false;
-        })
-        .addCase(getBoard.rejected, (state, action) => {
-          state.loading = false;
-          state.error = action.payload ?? "Unknown error";
-        })
-        // addBoard
-        .addCase(addBoard.pending, (state) => {
-          state.saving = true;
-        })
-        .addCase(addBoard.fulfilled, (state, action) => {
-          state.id = action.payload.id;
-          state.owner = action.payload.owner;
-          state.createdAt = action.payload.createdAt;
-          state.updatedAt = action.payload.updatedAt;
-          state.saving = false;
-        })
-        .addCase(addBoard.rejected, (state, action) => {
-          state.saving = false;
-          state.error = action.payload ?? "Unknown error";
-        })
-        // updateBoard
-        .addCase(updateBoard.pending, (state) => {
-          state.saving = true;
-        })
-        .addCase(updateBoard.fulfilled, (state, action) => {
-          state.updatedAt = action.payload.updatedAt;
-          state.saving = false;
-        })
-        .addCase(updateBoard.rejected, (state, action) => {
-          state.saving = false;
-          state.error = action.payload ?? "Unknown error";
-        })
-        // deleteBoard
-        .addCase(deleteBoard.pending, (state) => {
-          state.loading = true;
-        })
-        .addCase(deleteBoard.fulfilled, (state) => {
-          state.loading = false;
-        })
-        .addCase(deleteBoard.rejected, (state, action) => {
-          state.loading = false;
-          state.error = action.payload ?? "Unknown error";
-        });
-  }
+    builder
+      // getBoard
+      .addCase(getBoard.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getBoard.fulfilled, (state, action) => {
+        state.id = action.payload.id;
+        state.owner = action.payload.owner;
+        state.selectedGame = action.payload.selectedGame;
+        state.gameGrid = action.payload.gameGrid;
+        state.createdAt = action.payload.createdAt;
+        state.updatedAt = action.payload.updatedAt;
+        state.loading = false;
+      })
+      .addCase(getBoard.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload ?? 'Unknown error';
+      })
+      // addBoard
+      .addCase(addBoard.pending, (state) => {
+        state.saving = true;
+      })
+      .addCase(addBoard.fulfilled, (state, action) => {
+        state.id = action.payload.id;
+        state.owner = action.payload.owner;
+        state.createdAt = action.payload.createdAt;
+        state.updatedAt = action.payload.updatedAt;
+        state.saving = false;
+      })
+      .addCase(addBoard.rejected, (state, action) => {
+        state.saving = false;
+        state.error = action.payload ?? 'Unknown error';
+      })
+      // updateBoard
+      .addCase(updateBoard.pending, (state) => {
+        state.saving = true;
+      })
+      .addCase(updateBoard.fulfilled, (state, action) => {
+        state.updatedAt = action.payload.updatedAt;
+        state.saving = false;
+      })
+      .addCase(updateBoard.rejected, (state, action) => {
+        state.saving = false;
+        state.error = action.payload ?? 'Unknown error';
+      })
+      // deleteBoard
+      .addCase(deleteBoard.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteBoard.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(deleteBoard.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload ?? 'Unknown error';
+      });
+  },
 });
 
 export const {
@@ -336,7 +331,7 @@ export const {
   setGameGrid,
   setChangeFromSocket,
   setPhaseTwo,
-  setSelectedSqr
+  setSelectedSqr,
 } = boardSlice.actions;
 
 export default boardSlice.reducer;

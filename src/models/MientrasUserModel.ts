@@ -14,7 +14,7 @@ const UserSchema = new Schema<IUser>(
   {
     firstname: {
       type: String,
-      required: false,
+      required: [true, 'Your first name is required'],
     },
     lastname: {
       type: String,
@@ -22,17 +22,13 @@ const UserSchema = new Schema<IUser>(
     },
     username: {
       type: String,
-      required: false,
+      required: [true, 'An Username is required'],
+      unique: [true, 'Username is not unique'],
     },
     email: {
       type: String,
       required: [true, 'An email is required'],
-      unique: [
-        true,
-        'The email has been already registered. Please, sign in or sign up with another email.',
-      ],
-      maxlength: 50,
-      match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Please enter a valid email'],
+      unique: [true, 'Username is not unique'],
     },
     password: {
       type: String,

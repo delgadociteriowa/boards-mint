@@ -1,77 +1,107 @@
-import { UserStateType, LoginState, SyncUser, UpdateUser } from "../../types/user";
-import { signIn, signOut } from "next-auth/react";
-
+import formatDate from '@/utils/formatDate';
+import { signIn, signOut } from 'next-auth/react';
 import {
-  createSlice,
-  PayloadAction,
-  createAsyncThunk
-} from "@reduxjs/toolkit";
+  LoginState,
+  SignUpState,
+  SyncUser,
+  UpdateUser,
+  UserStateType,
+} from '../../types/user';
+
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+export const signUp = createAsyncThunk<
+  {
+    id: string;
+    email: string;
+    createdAt: string;
+    updatedAt: string;
+  },
+  SignUpState,
+  { rejectValue: string }
+>('user/signUp', async (SignUpState, { rejectWithValue }) => {
+  const { email } = SignUpState;
+  try {
+    const res = await fetch(`/api/account/create`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email,
+      }),
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      return rejectWithValue(data.message);
+    }
+
+    return {
+      id: data._id,
+      email: data.email,
+      createdAt: formatDate(data.createdAt),
+      updatedAt: formatDate(data.updatedAt),
+    };
+  } catch (error) {
+    return rejectWithValue('Unexpected error');
+  }
+});
 
 export const login = createAsyncThunk<
-  void,           
-  LoginState,      
+  void,
+  LoginState,
   { rejectValue: string }
->(
-  "user/login",
-  async (LoginState, { rejectWithValue }) => {
-    const {identifier, password} = LoginState;
-    try {
-      const res = await signIn("credentials", {
-        identifier,
-        password,
-        redirect: false,
-      });
+>('user/login', async (LoginState, { rejectWithValue }) => {
+  const { identifier, password } = LoginState;
+  try {
+    const res = await signIn('credentials', {
+      identifier,
+      password,
+      redirect: false,
+    });
 
-      if (!res || !res.ok) {
-        throw new Error(`Login failed. Wrong username or password.`);
-      }
-    } catch (error) {
-      return rejectWithValue(`${error}`);
+    if (!res || !res.ok) {
+      throw new Error(`Login failed. Wrong username or password.`);
     }
+  } catch (error) {
+    return rejectWithValue(`${error}`);
   }
-);
+});
 
-export const logout = createAsyncThunk<
-  void,           
-  void,      
-  { rejectValue: string }
->(
-  "user/logout",
+export const logout = createAsyncThunk<void, void, { rejectValue: string }>(
+  'user/logout',
   async (_, { rejectWithValue }) => {
     try {
       const res = await signOut({ redirect: false });
-      
+
       if (!res || res.url === null) {
         throw new Error(`Logout failed.`);
       }
     } catch (error) {
       return rejectWithValue(`${error}`);
     }
-  }
+  },
 );
 
 export const updateUser = createAsyncThunk<
   void,
   UpdateUser,
   { rejectValue: string }
->(
-    "user/update",
-    async (UpdateUser, { rejectWithValue }) => {
-      try {
-        const res = await fetch("/api/account/update", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(UpdateUser),
-        });
-        if ( !res ) {
-          throw new Error(`Update failed failed.`);
-        }        
-      } catch (error) {
-        return rejectWithValue(`${error}`);
-      }
+>('user/update', async (UpdateUser, { rejectWithValue }) => {
+  try {
+    const res = await fetch('/api/account/update', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(UpdateUser),
+    });
+    if (!res) {
+      throw new Error(`Update failed failed.`);
     }
-  )
-
+  } catch (error) {
+    return rejectWithValue(`${error}`);
+  }
+});
 
 const initialState: UserStateType = {
   identifier: '',
@@ -86,16 +116,16 @@ const initialState: UserStateType = {
 };
 
 const userSlice = createSlice({
-  name: "user",
+  name: 'user',
   initialState,
-  reducers:{
+  reducers: {
     setIdentifier: (state, action: PayloadAction<string>) => {
       const trimIdentifier = action.payload.trim();
-      state.identifier =  trimIdentifier;
+      state.identifier = trimIdentifier;
     },
     setPassword: (state, action: PayloadAction<string>) => {
       const trimPassword = action.payload.trim();
-      state.password =  trimPassword;
+      state.password = trimPassword;
     },
     clearError: (state) => {
       state.error = '';
@@ -109,17 +139,33 @@ const userSlice = createSlice({
       state.lastName = trimLastName;
     },
     syncUserData: (state, action: PayloadAction<SyncUser>) => {
-      state.userName = action.payload.userName; 
+      state.userName = action.payload.userName;
       state.firstName = action.payload.firstName;
       state.lastName = action.payload.lastName;
       state.email = action.payload.email;
     },
-    setEditingField: (state, action: PayloadAction<"firstname" | "lastname" | null>) => {
+    setEditingField: (
+      state,
+      action: PayloadAction<'firstname' | 'lastname' | null>,
+    ) => {
       state.editingField = action.payload;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
+      // sign up
+      .addCase(signUp.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(signUp.fulfilled, (state) => {
+        state.loading = false;
+        alert('You have been signed up.');
+      })
+      .addCase(signUp.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload ?? 'Unknown error';
+        alert(`${state.error}`);
+      })
       // login
       .addCase(login.pending, (state) => {
         state.loading = true;
@@ -131,28 +177,28 @@ const userSlice = createSlice({
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload ?? "Unknown error";
+        state.error = action.payload ?? 'Unknown error';
       })
       // logout
       .addCase(logout.pending, (state) => {
         state.loading = true;
       })
       .addCase(logout.fulfilled, (state) => {
-        state.identifier =  '';
-        state.password =  '';
-        state.userName =  '';
-        state.email =  '';
-        state.firstName =  '';
-        state.lastName =  '';
+        state.identifier = '';
+        state.password = '';
+        state.userName = '';
+        state.email = '';
+        state.firstName = '';
+        state.lastName = '';
         state.editingField = null;
-        state.loading =  false;
-        state.error =  '';
+        state.loading = false;
+        state.error = '';
       })
       .addCase(logout.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload ?? "Unknown error";
-      })
-  }
+        state.error = action.payload ?? 'Unknown error';
+      });
+  },
 });
 
 export const {
