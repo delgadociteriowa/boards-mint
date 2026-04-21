@@ -97,6 +97,7 @@ const SignUpSection = () => {
       setFirstName('');
       setLastName('');
       setPassword('');
+      router.push('/login');
     }
   };
 
