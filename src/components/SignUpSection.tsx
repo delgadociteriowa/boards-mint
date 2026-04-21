@@ -6,6 +6,7 @@ import { useState } from 'react';
 import Line from './Line';
 import SectionTitle from './SectionTitle';
 import SignUpField from './SignUpField';
+import SignUpFieldPass from './SignUpFieldPass';
 
 const SignUpSection = () => {
   const { loading } = useAppSelector((state) => state.user);
@@ -16,6 +17,8 @@ const SignUpSection = () => {
   const [lastName, setLastName] = useState('');
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  // const [showRepeatPassword, setShowRepeatPassword] = useState(false);
 
   const dispatch = useAppDispatch();
 
@@ -139,16 +142,16 @@ const SignUpSection = () => {
             noNumber={true}
           />
           <Line />
-          <SignUpField
+          <SignUpFieldPass
             label='password*'
-            type='text'
+            type={showPassword ? 'text' : 'password'}
             required={true}
             maxLength={50}
             value={password}
             onChange={setPassword}
           />
           <Line />
-          <SignUpField
+          <SignUpFieldPass
             label='confirm password*'
             type='text'
             required={true}
