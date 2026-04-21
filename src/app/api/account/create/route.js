@@ -8,19 +8,24 @@ export async function POST(req) {
 
     const { email, username, firstname, lastname, password } = await req.json();
 
-    console.log(`
-      email: ${email},  
-      username: ${username},  
-      firstname: ${firstname},  
-      lastname: ${lastname},  
-      password: ${password},  
-    `);
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,50}$/;
 
     if (!email || !username || !firstname || !lastname || !password) {
       return Response.json(
         {
           message:
             "There are required fields that hasn't been found in the request.",
+        },
+        { status: 400 },
+      );
+    }
+
+    if (!passwordRegex.test(password)) {
+      return Response.json(
+        {
+          message:
+            'Password must contain uppercase, lowercase, number and special character',
         },
         { status: 400 },
       );
@@ -38,6 +43,7 @@ export async function POST(req) {
 
     return Response.json(newUser, { status: 201 });
   } catch (error) {
+    console.error('CREATE USER ERROR:', error);
     // check duplicated
     const mongoCode = error?.code || error?.cause?.code;
 

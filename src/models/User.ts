@@ -57,15 +57,8 @@ const UserSchema = new Schema<IUser>(
     },
     password: {
       type: String,
-      required: false,
+      required: true,
       select: false,
-      trim: true,
-      minLength: 8,
-      maxlength: 50,
-      match: [
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,50}$/,
-        'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character',
-      ],
     },
   },
   {

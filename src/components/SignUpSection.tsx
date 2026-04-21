@@ -15,6 +15,7 @@ const SignUpSection = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [password, setPassword] = useState('');
+  const [repeatPassword, setRepeatPassword] = useState('');
 
   const dispatch = useAppDispatch();
 
@@ -58,6 +59,13 @@ const SignUpSection = () => {
     if (!passwordRegex.test(trimmedPassword)) {
       alert(
         'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character',
+      );
+      return;
+    }
+
+    if (trimmedPassword !== repeatPassword) {
+      alert(
+        'To confirm your password you must write down the same one in the confirm password field.',
       );
       return;
     }
@@ -140,6 +148,14 @@ const SignUpSection = () => {
             onChange={setPassword}
           />
           <Line />
+          <SignUpField
+            label='confirm password*'
+            type='text'
+            required={true}
+            maxLength={50}
+            value={repeatPassword}
+            onChange={setRepeatPassword}
+          />
           <button
             type='submit'
             disabled={loading}
