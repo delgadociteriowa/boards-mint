@@ -4,7 +4,6 @@ import { useState } from 'react';
 
 interface AccountEditableFieldProps {
   label: string;
-  type?: string;
   required?: boolean;
   minLength?: number;
   maxLength?: number;
@@ -15,7 +14,6 @@ interface AccountEditableFieldProps {
 
 const SignUpFieldPass = ({
   label,
-  type = 'text',
   required = false,
   minLength = 3,
   maxLength = 50,
@@ -24,6 +22,7 @@ const SignUpFieldPass = ({
   noNumber = false,
 }: AccountEditableFieldProps) => {
   const [showPassword, setShowPassword] = useState(false);
+
   return (
     <div className='flex flex-col gap-2'>
       <label className='text-stone-600 tracking-[1px] text-sm'>{label}</label>

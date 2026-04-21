@@ -2,7 +2,9 @@
 
 import { useAppDispatch, useAppSelector } from '@/state/hooks';
 import { signUp } from '@/state/user/userSlice';
-import { useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import Line from './Line';
 import SectionTitle from './SectionTitle';
 import SignUpField from './SignUpField';
@@ -17,10 +19,16 @@ const SignUpSection = () => {
   const [lastName, setLastName] = useState('');
   const [password, setPassword] = useState('');
   const [repeatPassword, setRepeatPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  // const [showRepeatPassword, setShowRepeatPassword] = useState(false);
 
   const dispatch = useAppDispatch();
+  const { data: session } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (session) {
+      router.push('/account');
+    }
+  }, [session, router]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -144,7 +152,6 @@ const SignUpSection = () => {
           <Line />
           <SignUpFieldPass
             label='password*'
-            type={showPassword ? 'text' : 'password'}
             required={true}
             maxLength={50}
             value={password}
@@ -153,7 +160,6 @@ const SignUpSection = () => {
           <Line />
           <SignUpFieldPass
             label='confirm password*'
-            type='text'
             required={true}
             maxLength={50}
             value={repeatPassword}
@@ -162,24 +168,13 @@ const SignUpSection = () => {
           <button
             type='submit'
             disabled={loading}
-            className={`
-                w-[80%]
-                md:w-[40%]
-                mt-4
-                py-3
-                mx-auto
-                text-center
-                text-xl
-                tracking-[2px]
-                text-stone-100
-                rounded-full
-                shadow-md
-                ${
-                  loading
-                    ? 'bg-gray-600 cursor-not-allowed'
-                    : 'bg-sky-600 hover:bg-sky-500 cursor-pointer'
-                }
-              `}
+            className={`w-[80%] md:w-[40%] mt-4 py-3 mx-auto text-center text-xl tracking-[2px] text-stone-100 rounded-full shadow-md
+              ${
+                loading
+                  ? 'bg-gray-600 cursor-not-allowed'
+                  : 'bg-sky-600 hover:bg-sky-500 cursor-pointer'
+              }
+            `}
           >
             sign up
           </button>
