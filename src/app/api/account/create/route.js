@@ -6,9 +6,17 @@ export async function POST(req) {
   try {
     await connectDB();
 
-    const { email, username, firstName, lastName, password } = await req.json();
+    const { email, username, firstname, lastname, password } = await req.json();
 
-    if (!email || !username || !firstName || !lastName || !password) {
+    console.log(`
+      email: ${email},  
+      username: ${username},  
+      firstname: ${firstname},  
+      lastname: ${lastname},  
+      password: ${password},  
+    `);
+
+    if (!email || !username || !firstname || !lastname || !password) {
       return Response.json(
         {
           message:
@@ -23,8 +31,8 @@ export async function POST(req) {
     const newUser = await User.create({
       email,
       username,
-      firstName,
-      lastName,
+      firstname,
+      lastname,
       password: hashedPassword,
     });
 

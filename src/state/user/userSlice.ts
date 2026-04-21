@@ -1,4 +1,3 @@
-import formatDate from '@/utils/formatDate';
 import { signIn, signOut } from 'next-auth/react';
 import {
   LoginState,
@@ -11,19 +10,11 @@ import {
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export const signUp = createAsyncThunk<
-  {
-    id: string;
-    email: string;
-    username: string;
-    firstName: string;
-    lastName: string;
-    createdAt: string;
-    updatedAt: string;
-  },
+  void,
   SignUpState,
   { rejectValue: string }
 >('user/signUp', async (SignUpState, { rejectWithValue }) => {
-  const { email, username, firstName, lastName, password } = SignUpState;
+  const { email, username, firstname, lastname, password } = SignUpState;
   try {
     const res = await fetch(`/api/account/create`, {
       method: 'POST',
@@ -33,8 +24,8 @@ export const signUp = createAsyncThunk<
       body: JSON.stringify({
         email,
         username,
-        firstName,
-        lastName,
+        firstname,
+        lastname,
         password,
       }),
     });
@@ -45,15 +36,7 @@ export const signUp = createAsyncThunk<
       return rejectWithValue(data.message);
     }
 
-    return {
-      id: data._id,
-      email: data.email,
-      username: data.username,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      createdAt: formatDate(data.createdAt),
-      updatedAt: formatDate(data.updatedAt),
-    };
+    return;
   } catch (error) {
     return rejectWithValue('Unexpected error');
   }
@@ -119,8 +102,8 @@ const initialState: UserStateType = {
   password: '',
   userName: '',
   email: '',
-  firstName: '',
-  lastName: '',
+  firstname: '',
+  lastname: '',
   editingField: null,
   loading: false,
   error: '',
@@ -141,18 +124,18 @@ const userSlice = createSlice({
     clearError: (state) => {
       state.error = '';
     },
-    setFirstName: (state, action: PayloadAction<string>) => {
-      const trimFirstName = action.payload.trim();
-      state.firstName = trimFirstName;
+    setFirstname: (state, action: PayloadAction<string>) => {
+      const trimFirstname = action.payload.trim();
+      state.firstname = trimFirstname;
     },
-    setLastName: (state, action: PayloadAction<string>) => {
-      const trimLastName = action.payload.trim();
-      state.lastName = trimLastName;
+    setLastname: (state, action: PayloadAction<string>) => {
+      const trimLastname = action.payload.trim();
+      state.lastname = trimLastname;
     },
     syncUserData: (state, action: PayloadAction<SyncUser>) => {
       state.userName = action.payload.userName;
-      state.firstName = action.payload.firstName;
-      state.lastName = action.payload.lastName;
+      state.firstname = action.payload.firstname;
+      state.lastname = action.payload.lastname;
       state.email = action.payload.email;
     },
     setEditingField: (
@@ -199,8 +182,8 @@ const userSlice = createSlice({
         state.password = '';
         state.userName = '';
         state.email = '';
-        state.firstName = '';
-        state.lastName = '';
+        state.firstname = '';
+        state.lastname = '';
         state.editingField = null;
         state.loading = false;
         state.error = '';
@@ -217,8 +200,8 @@ export const {
   setPassword,
   clearError,
   syncUserData,
-  setFirstName,
-  setLastName,
+  setFirstname,
+  setLastname,
   setEditingField,
 } = userSlice.actions;
 

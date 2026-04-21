@@ -3,8 +3,8 @@ import { Document, Model, Schema, model, models } from 'mongoose';
 export interface IUser extends Document {
   email: string;
   username: string;
-  firstName: string;
-  lastName: string;
+  firstname: string;
+  lastname: string;
   password: string;
   createdAt: Date;
   updatedAt: Date;
@@ -33,7 +33,7 @@ const UserSchema = new Schema<IUser>(
         'Username can only contain letters, numbers, underscores and hyphens',
       ],
     },
-    firstName: {
+    firstname: {
       type: String,
       required: [true, 'A first name is required'],
       trim: true,
@@ -44,7 +44,7 @@ const UserSchema = new Schema<IUser>(
         'The first name can only contain letters, spaces, apostrophes and hyphens',
       ],
     },
-    lastName: {
+    lastname: {
       type: String,
       required: false,
       trim: true,

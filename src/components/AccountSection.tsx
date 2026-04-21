@@ -9,12 +9,12 @@ const AccountSection = () => {
   const {
     userName,
     email,
-    firstName,
-    lastName,
+    firstname,
+    lastname,
     editingField,
     dispatch,
-    setFirstName,
-    setLastName,
+    setFirstname,
+    setLastname,
     handleSave,
     setEditingField,
     handleLogout,
@@ -36,9 +36,9 @@ const AccountSection = () => {
           <Line />
           <AccountEditableField
             label='first name'
-            value={firstName ?? '-'}
+            value={firstname ?? '-'}
             editing={isEditingFirst}
-            onChange={(value) => dispatch(setFirstName(value))}
+            onChange={(value) => dispatch(setFirstname(value))}
             onEdit={() => dispatch(setEditingField('firstname'))}
             onSave={() => handleSave('firstname')}
             onCancel={() => dispatch(setEditingField(null))}
@@ -46,9 +46,9 @@ const AccountSection = () => {
           <Line />
           <AccountEditableField
             label='last name'
-            value={lastName ?? '-'}
+            value={lastname ?? '-'}
             editing={isEditingLast}
-            onChange={(value) => dispatch(setLastName(value))}
+            onChange={(value) => dispatch(setLastname(value))}
             onEdit={() => dispatch(setEditingField('lastname'))}
             onSave={() => handleSave('lastname')}
             onCancel={() => dispatch(setEditingField(null))}

@@ -1,10 +1,10 @@
-import Credentials from 'next-auth/providers/credentials';
-import GoogleProvider from 'next-auth/providers/google';
-import type { NextAuthOptions } from "next-auth";
-import bcrypt from 'bcryptjs';
 import connectDB from '@/config/database';
 import User from '@/models/User';
-import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from "./env";
+import bcrypt from 'bcryptjs';
+import type { NextAuthOptions } from 'next-auth';
+import Credentials from 'next-auth/providers/credentials';
+import GoogleProvider from 'next-auth/providers/google';
+import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from './env';
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -29,7 +29,7 @@ export const authOptions: NextAuthOptions = {
         const user = await User.findOne(
           isEmail
             ? { email: identifier.toLowerCase() }
-            : { username: identifier }
+            : { username: identifier },
         ).select('+password');
 
         if (!user || !user.password) return null;
@@ -52,10 +52,10 @@ export const authOptions: NextAuthOptions = {
         params: {
           prompt: 'consent',
           access_type: 'offline',
-          response_type: 'code'
-        }
-      }
-    })
+          response_type: 'code',
+        },
+      },
+    }),
   ],
   session: {
     strategy: 'jwt',
@@ -63,14 +63,14 @@ export const authOptions: NextAuthOptions = {
 
   callbacks: {
     async jwt({ token, user, account }) {
-      if (user && account?.provider === "credentials") {
+      if (user && account?.provider === 'credentials') {
         token.id = user.id;
         token.username = user.username;
         token.email = user.email;
         return token;
       }
 
-      if (account?.provider === "google") {
+      if (account?.provider === 'google') {
         await connectDB();
         const dbUser = await User.findOne({ email: token.email });
         if (dbUser) {
@@ -80,33 +80,33 @@ export const authOptions: NextAuthOptions = {
         }
       }
 
-      return token
+      return token;
     },
 
     async signIn({ profile, account }) {
-      if (account?.provider !== "google") return true;
+      if (account?.provider !== 'google') return true;
       if (!profile?.email) return false;
-      
+
       await connectDB();
 
-      const user = await User.findOne({ email: profile.email })
-      
+      const user = await User.findOne({ email: profile.email });
+
       if (!user) {
         const fullName = profile.name ?? '';
         const [firstname = '', lastname = ''] = fullName.split(' ');
 
-        const username = 
-          profile.name?.replace(/\s+/g, "").toLowerCase().slice(0, 20) ??
-          profile.email.split("@")[0];
+        const username =
+          profile.name?.replace(/\s+/g, '').toLowerCase().slice(0, 20) ??
+          profile.email.split('@')[0];
 
         await User.create({
           email: profile.email,
           username,
           firstname,
-          lastname
+          lastname,
         });
       }
-      return true
+      return true;
     },
 
     async session({ session, token }) {

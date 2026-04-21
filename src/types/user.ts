@@ -3,8 +3,8 @@ export interface UserStateType {
   password: string;
   userName: string;
   email: string;
-  firstName: string;
-  lastName: string;
+  firstname: string;
+  lastname: string;
   editingField: 'firstname' | 'lastname' | null;
   loading: boolean;
   error: string;
@@ -13,8 +13,8 @@ export interface UserStateType {
 export interface SignUpState {
   email: string;
   username: string;
-  firstName: string;
-  lastName: string;
+  firstname: string;
+  lastname: string;
   password: string;
 }
 
@@ -25,8 +25,8 @@ export interface LoginState {
 
 export interface SyncUser {
   userName: string;
-  firstName: string;
-  lastName: string;
+  firstname: string;
+  lastname: string;
   email: string;
 }
 

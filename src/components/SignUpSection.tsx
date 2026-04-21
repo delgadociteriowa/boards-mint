@@ -23,8 +23,8 @@ const SignUpSection = () => {
 
     const trimmedEmail = email.trim().slice(0, 50);
     const trimmedUsername = username.trim().slice(0, 50);
-    const trimmedFirstName = firstName.trim().slice(0, 20);
-    const trimmedLastName = lastName.trim().slice(0, 20);
+    const trimmedFirstname = firstName.trim().slice(0, 20);
+    const trimmedLastname = lastName.trim().slice(0, 20);
     const trimmedPassword = password.trim().slice(0, 50);
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -46,8 +46,8 @@ const SignUpSection = () => {
     }
 
     if (
-      !namesRegex.test(trimmedFirstName) ||
-      !namesRegex.test(trimmedLastName)
+      !namesRegex.test(trimmedFirstname) ||
+      !namesRegex.test(trimmedLastname)
     ) {
       alert(
         'A name can only contain letters, numbers, underscores and hyphens',
@@ -66,8 +66,8 @@ const SignUpSection = () => {
       signUp({
         email: trimmedEmail,
         username: trimmedUsername,
-        firstName: trimmedFirstName,
-        lastName: trimmedLastName,
+        firstname: trimmedFirstname,
+        lastname: trimmedLastname,
         password: trimmedPassword,
       }),
     );
@@ -133,7 +133,7 @@ const SignUpSection = () => {
           <Line />
           <SignUpField
             label='password*'
-            type='password'
+            type='text'
             required={true}
             maxLength={50}
             value={password}
