@@ -14,13 +14,16 @@ export const signUp = createAsyncThunk<
   {
     id: string;
     email: string;
+    username: string;
+    firstName: string;
+    lastName: string;
     createdAt: string;
     updatedAt: string;
   },
   SignUpState,
   { rejectValue: string }
 >('user/signUp', async (SignUpState, { rejectWithValue }) => {
-  const { email, username } = SignUpState;
+  const { email, username, firstName, lastName, password } = SignUpState;
   try {
     const res = await fetch(`/api/account/create`, {
       method: 'POST',
@@ -30,6 +33,9 @@ export const signUp = createAsyncThunk<
       body: JSON.stringify({
         email,
         username,
+        firstName,
+        lastName,
+        password,
       }),
     });
 
@@ -43,6 +49,9 @@ export const signUp = createAsyncThunk<
       id: data._id,
       email: data.email,
       username: data.username,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      password: data.password,
       createdAt: formatDate(data.createdAt),
       updatedAt: formatDate(data.updatedAt),
     };

@@ -6,6 +6,7 @@ interface AccountEditableFieldProps {
   maxLength?: number;
   value: string;
   onChange: (value: string) => void;
+  noNumber?: boolean;
 }
 
 const SignUpField = ({
@@ -16,6 +17,7 @@ const SignUpField = ({
   maxLength = 50,
   value,
   onChange,
+  noNumber = false,
 }: AccountEditableFieldProps) => {
   return (
     <div className='flex flex-col gap-2'>
@@ -26,7 +28,11 @@ const SignUpField = ({
         minLength={minLength}
         maxLength={maxLength}
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => {
+          onChange(
+            noNumber ? e.target.value.replace(/[0-9]/g, '') : e.target.value,
+          );
+        }}
         className='border border-stone-300 rounded-xl py-4 px-4 text-stone-700 focus:outline-none focus:ring-2 focus:ring-sky-500'
       />
     </div>

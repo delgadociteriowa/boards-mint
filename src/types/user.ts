@@ -13,6 +13,9 @@ export interface UserStateType {
 export interface SignUpState {
   email: string;
   username: string;
+  firstName: string;
+  lastName: string;
+  password: string;
 }
 
 export interface LoginState {

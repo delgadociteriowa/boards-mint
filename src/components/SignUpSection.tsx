@@ -12,6 +12,9 @@ const SignUpSection = () => {
 
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [password, setPassword] = useState('');
 
   const dispatch = useAppDispatch();
 
@@ -20,9 +23,15 @@ const SignUpSection = () => {
 
     const trimmedEmail = email.trim().slice(0, 50);
     const trimmedUsername = username.trim().slice(0, 50);
+    const trimmedFirstName = firstName.trim().slice(0, 20);
+    const trimmedLastName = lastName.trim().slice(0, 20);
+    const trimmedPassword = password.trim().slice(0, 50);
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const usernameRegex = /^[a-zA-Z0-9_-]+$/;
+    const namesRegex = /^[\p{L}' -]+$/u;
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,50}$/;
 
     if (!emailRegex.test(trimmedEmail)) {
       alert('Please enter a valid email');
@@ -36,13 +45,39 @@ const SignUpSection = () => {
       return;
     }
 
+    if (
+      !namesRegex.test(trimmedFirstName) ||
+      !namesRegex.test(trimmedLastName)
+    ) {
+      alert(
+        'A name can only contain letters, numbers, underscores and hyphens',
+      );
+      return;
+    }
+
+    if (!passwordRegex.test(trimmedPassword)) {
+      alert(
+        'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character',
+      );
+      return;
+    }
+
     const resultAction = await dispatch(
-      signUp({ email: trimmedEmail, username: trimmedUsername }),
+      signUp({
+        email: trimmedEmail,
+        username: trimmedUsername,
+        firstName: trimmedFirstName,
+        lastName: trimmedLastName,
+        password: trimmedPassword,
+      }),
     );
 
     if (signUp.fulfilled.match(resultAction)) {
       setEmail('');
       setUsername('');
+      setFirstName('');
+      setLastName('');
+      setPassword('');
     }
   };
 
@@ -74,6 +109,35 @@ const SignUpSection = () => {
             maxLength={10}
             value={username}
             onChange={setUsername}
+          />
+          <Line />
+          <SignUpField
+            label='first name*'
+            type='text'
+            required={true}
+            maxLength={20}
+            value={firstName}
+            onChange={setFirstName}
+            noNumber={true}
+          />
+          <Line />
+          <SignUpField
+            label='last name'
+            type='text'
+            required={true}
+            maxLength={20}
+            value={lastName}
+            onChange={setLastName}
+            noNumber={true}
+          />
+          <Line />
+          <SignUpField
+            label='password*'
+            type='password'
+            required={true}
+            maxLength={50}
+            value={password}
+            onChange={setPassword}
           />
           <Line />
           <button

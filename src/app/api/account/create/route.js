@@ -5,9 +5,9 @@ export async function POST(req) {
   try {
     await connectDB();
 
-    const { email, username } = await req.json();
+    const { email, username, firstName, lastName, password } = await req.json();
 
-    if (!email || !username) {
+    if (!email || !username || !firstName || !lastName || !password) {
       return Response.json(
         {
           message:
@@ -20,23 +20,13 @@ export async function POST(req) {
     const newUser = await User.create({
       email,
       username,
+      firstName,
+      lastName,
+      password,
     });
 
     return Response.json(newUser, { status: 201 });
   } catch (error) {
-    const mongoCode = error?.code || error?.cause?.code;
-
-    //implement already registered on change
-    // if (mongoCode === 11000) {
-    //   return Response.json(
-    //     {
-    //       message:
-    //         'The email has been already registered. Please sign in or sign up with another email.',
-    //     },
-    //     { status: 409 },
-    //   );
-    // }
-
     return Response.json(
       { message: 'Error creating user', error: error.message },
       { status: 500 },
