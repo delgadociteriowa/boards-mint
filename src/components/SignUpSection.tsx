@@ -11,24 +11,38 @@ const SignUpSection = () => {
   const { loading } = useAppSelector((state) => state.user);
 
   const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
+
   const dispatch = useAppDispatch();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const trimmedEmail = email.trim().slice(0, 50);
+    const trimmedUsername = username.trim().slice(0, 50);
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const usernameRegex = /^[a-zA-Z0-9_-]+$/;
 
     if (!emailRegex.test(trimmedEmail)) {
       alert('Please enter a valid email');
       return;
     }
 
-    const resultAction = await dispatch(signUp({ email: trimmedEmail }));
+    if (!usernameRegex.test(trimmedUsername)) {
+      alert(
+        'Username can only contain letters, numbers, underscores and hyphens',
+      );
+      return;
+    }
+
+    const resultAction = await dispatch(
+      signUp({ email: trimmedEmail, username: trimmedUsername }),
+    );
 
     if (signUp.fulfilled.match(resultAction)) {
       setEmail('');
+      setUsername('');
     }
   };
 
@@ -43,7 +57,7 @@ const SignUpSection = () => {
           onSubmit={(e) => handleSubmit(e)}
         >
           <p className='text-stone-600 tracking-[1px]'>
-            Fields with a * are requiered
+            Fields with a * are required
           </p>
           <SignUpField
             label='email*'
@@ -53,15 +67,15 @@ const SignUpSection = () => {
             onChange={setEmail}
           />
           <Line />
-          {/* <SignUpField label='user name' />
+          <SignUpField
+            label='username*'
+            type='text'
+            required={true}
+            maxLength={10}
+            value={username}
+            onChange={setUsername}
+          />
           <Line />
-          <SignUpField label='first name' />
-          <Line />
-          <SignUpField label='last name' />
-          <Line />
-          <SignUpField label='password' />
-          <Line />
-          <SignUpField label='confirm password' /> */}
           <button
             type='submit'
             disabled={loading}

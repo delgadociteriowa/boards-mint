@@ -2,6 +2,8 @@ interface AccountEditableFieldProps {
   label: string;
   type?: string;
   required?: boolean;
+  minLength?: number;
+  maxLength?: number;
   value: string;
   onChange: (value: string) => void;
 }
@@ -10,6 +12,8 @@ const SignUpField = ({
   label,
   type = 'text',
   required = false,
+  minLength = 3,
+  maxLength = 50,
   value,
   onChange,
 }: AccountEditableFieldProps) => {
@@ -19,7 +23,8 @@ const SignUpField = ({
       <input
         type={type}
         required={required}
-        maxLength={50}
+        minLength={minLength}
+        maxLength={maxLength}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         className='border border-stone-300 rounded-xl py-4 px-4 text-stone-700 focus:outline-none focus:ring-2 focus:ring-sky-500'

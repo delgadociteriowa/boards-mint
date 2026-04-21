@@ -12,6 +12,7 @@ export interface UserStateType {
 
 export interface SignUpState {
   email: string;
+  username: string;
 }
 
 export interface LoginState {

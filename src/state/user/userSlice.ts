@@ -20,7 +20,7 @@ export const signUp = createAsyncThunk<
   SignUpState,
   { rejectValue: string }
 >('user/signUp', async (SignUpState, { rejectWithValue }) => {
-  const { email } = SignUpState;
+  const { email, username } = SignUpState;
   try {
     const res = await fetch(`/api/account/create`, {
       method: 'POST',
@@ -29,8 +29,10 @@ export const signUp = createAsyncThunk<
       },
       body: JSON.stringify({
         email,
+        username,
       }),
     });
+
     const data = await res.json();
 
     if (!res.ok) {
@@ -40,6 +42,7 @@ export const signUp = createAsyncThunk<
     return {
       id: data._id,
       email: data.email,
+      username: data.username,
       createdAt: formatDate(data.createdAt),
       updatedAt: formatDate(data.updatedAt),
     };
