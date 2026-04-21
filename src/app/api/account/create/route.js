@@ -1,5 +1,6 @@
 import connectDB from '@/config/database';
 import User from '@/models/User';
+import bcrypt from 'bcryptjs';
 
 export async function POST(req) {
   try {
@@ -17,16 +18,34 @@ export async function POST(req) {
       );
     }
 
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const newUser = await User.create({
       email,
       username,
       firstName,
       lastName,
-      password,
+      password: hashedPassword,
     });
 
     return Response.json(newUser, { status: 201 });
   } catch (error) {
+    // check duplicated
+    const mongoCode = error?.code || error?.cause?.code;
+
+    if (mongoCode === 11000) {
+      const duplicatedField = Object.keys(
+        error?.keyPattern || error?.cause?.keyPattern || {},
+      )[0];
+
+      return Response.json(
+        {
+          message: `${duplicatedField} is already in use.`,
+        },
+        { status: 409 },
+      );
+    }
+
     return Response.json(
       { message: 'Error creating user', error: error.message },
       { status: 500 },

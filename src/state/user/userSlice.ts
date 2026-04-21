@@ -51,7 +51,6 @@ export const signUp = createAsyncThunk<
       username: data.username,
       firstName: data.firstName,
       lastName: data.lastName,
-      password: data.password,
       createdAt: formatDate(data.createdAt),
       updatedAt: formatDate(data.updatedAt),
     };
