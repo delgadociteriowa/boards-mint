@@ -6,6 +6,9 @@ export interface IUser extends Document {
   firstname: string;
   lastname: string;
   password: string;
+  emailVerified: boolean;
+  verificationToken: string;
+  verificationTokenExpires: Date;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -59,13 +62,26 @@ const UserSchema = new Schema<IUser>(
       required: true,
       select: false,
     },
+    emailVerified: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      default: null,
+    },
+    verificationTokenExpires: {
+      type: Date,
+      default: null,
+    },
   },
   {
     timestamps: true,
   },
 );
 
-// colocar select false en password para que al seleccionar un usuario no se tome su password automaticamente.
+// select false password: avoid selecting password auto when selecting user
+// emailV and verifications for verification process.
 
 const User: Model<IUser> = models.User || model('User', UserSchema);
 
