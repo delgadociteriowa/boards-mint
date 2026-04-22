@@ -2,6 +2,9 @@ import connectDB from '@/config/database';
 import User from '@/models/User';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
+import { Resend } from 'resend';
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req) {
   try {
@@ -48,9 +51,21 @@ export async function POST(req) {
       verificationTokenExpires: new Date(Date.now() + 1000 * 60 * 60),
     });
 
+    await resend.emails.send({
+      from: 'Acme <onboarding@resend.dev>',
+      to: 'delgadociteriowa@gmail.com',
+      subject: 'Confirm your account now!',
+      html: `
+        <h2>Bienvenido</h2>
+        <p>Haz click en el siguiente enlace para verificar tu cuenta:</p>
+        <a href="${process.env.NEXT_PUBLIC_APP_URL}/verify-email?token=${verificationToken}">
+          Confirmar email
+        </a>
+      `,
+    });
+
     return Response.json(newUser, { status: 201 });
   } catch (error) {
-    console.error('CREATE USER ERROR:', error);
     // check duplicated
     const mongoCode = error?.code || error?.cause?.code;
 
