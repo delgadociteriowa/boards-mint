@@ -11,7 +11,7 @@ export async function POST(req) {
     const passwordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,50}$/;
 
-    if (!email || !username || !firstname || !lastname || !password) {
+    if (!email || !username || !firstname || !password) {
       return Response.json(
         {
           message:

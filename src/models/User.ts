@@ -48,7 +48,6 @@ const UserSchema = new Schema<IUser>(
       type: String,
       required: false,
       trim: true,
-      minLength: 2,
       maxlength: 20,
       match: [
         /^[\p{L}' -]+$/u,
