@@ -1,6 +1,7 @@
 import connectDB from '@/config/database';
 import User from '@/models/User';
 import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
 
 export async function POST(req) {
   try {
@@ -33,12 +34,18 @@ export async function POST(req) {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    const verificationToken = crypto.randomBytes(32).toString('hex');
+
+    // token expires in one hour
     const newUser = await User.create({
       email,
       username,
       firstname,
       lastname,
       password: hashedPassword,
+      emailVerified: false,
+      verificationToken,
+      verificationTokenExpires: new Date(Date.now() + 1000 * 60 * 60),
     });
 
     return Response.json(newUser, { status: 201 });
