@@ -52,14 +52,14 @@ export async function POST(req) {
     });
 
     await resend.emails.send({
-      from: 'Acme <onboarding@resend.dev>',
+      from: 'Boards <noreply@boards-now.com>',
       to: 'delgadociteriowa@gmail.com',
       subject: 'Confirm your account now!',
       html: `
-        <h2>Bienvenido</h2>
-        <p>Haz click en el siguiente enlace para verificar tu cuenta:</p>
+        <h2>Welcome</h2>
+        <p>Please click the following link to verify your account:</p>
         <a href="${process.env.NEXT_PUBLIC_APP_URL}/verify-email?token=${verificationToken}">
-          Confirmar email
+          Verify email account
         </a>
       `,
     });
