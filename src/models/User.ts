@@ -7,8 +7,8 @@ export interface IUser extends Document {
   lastname: string;
   password: string;
   emailVerified: boolean;
-  verificationToken: string;
-  verificationTokenExpires: Date;
+  verificationToken: string | null;
+  verificationTokenExpires: Date | null;
   createdAt: Date;
   updatedAt: Date;
 }
