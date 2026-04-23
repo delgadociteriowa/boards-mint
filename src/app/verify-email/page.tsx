@@ -16,7 +16,7 @@ const VerifyEmail = async ({ searchParams }: Props) => {
 
   // there is no token. basic div must be changed to redirection no-token page
   if (!token) {
-    return <div>Verification token not provided</div>;
+    redirect('/verify-notoken');
   }
 
   await connectDB();
