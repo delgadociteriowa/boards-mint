@@ -93,7 +93,7 @@ export const useSignUp = () => {
       setFirstName('');
       setLastName('');
       setPassword('');
-      router.push('/login');
+      router.push('/checkinbox');
     }
   };
 
