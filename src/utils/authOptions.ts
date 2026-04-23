@@ -32,10 +32,18 @@ export const authOptions: NextAuthOptions = {
             : { username: identifier },
         ).select('+password');
 
-        if (!user || !user.password) return null;
+        if (!user || !user.password) {
+          throw new Error('Wrong username or password');
+        }
 
         const isValid = await bcrypt.compare(password, user.password);
-        if (!isValid) return null;
+        if (!isValid) {
+          throw new Error('Wrong username or password');
+        }
+
+        if (!user.emailVerified) {
+          throw new Error('Please verify your email before signing in');
+        }
 
         // what is returned here goes to session.user
         return {

@@ -48,18 +48,18 @@ export const login = createAsyncThunk<
   { rejectValue: string }
 >('user/login', async (LoginState, { rejectWithValue }) => {
   const { identifier, password } = LoginState;
-  try {
-    const res = await signIn('credentials', {
-      identifier,
-      password,
-      redirect: false,
-    });
+  const res = await signIn('credentials', {
+    identifier,
+    password,
+    redirect: false,
+  });
 
-    if (!res || !res.ok) {
-      throw new Error(`Login failed. Wrong username or password.`);
-    }
-  } catch (error) {
-    return rejectWithValue(`${error}`);
+  if (!res) {
+    return rejectWithValue('Unable to sign in. Please try again.');
+  }
+
+  if (!res?.ok) {
+    return rejectWithValue(res.error || 'Login failed');
   }
 });
 
@@ -153,7 +153,6 @@ const userSlice = createSlice({
       })
       .addCase(signUp.fulfilled, (state) => {
         state.loading = false;
-        alert('You have been signed up.');
       })
       .addCase(signUp.rejected, (state, action) => {
         state.loading = false;
