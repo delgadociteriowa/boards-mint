@@ -1,6 +1,7 @@
 import connectDB from '@/config/database';
 import User from '@/models/User';
 import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
 import type { NextAuthOptions } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
@@ -107,11 +108,19 @@ export const authOptions: NextAuthOptions = {
           profile.name?.replace(/\s+/g, '').toLowerCase().slice(0, 20) ??
           profile.email.split('@')[0];
 
+        const generateRandomPassword = () => {
+          return `Aa1!${crypto.randomBytes(8).toString('hex')}`;
+        };
+        const randomPassword = generateRandomPassword();
+        const hashedPassword = await bcrypt.hash(randomPassword, 10);
+
         await User.create({
           email: profile.email,
           username,
           firstname,
           lastname,
+          password: hashedPassword,
+          emailVerified: true,
         });
       }
       return true;

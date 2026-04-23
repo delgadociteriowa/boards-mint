@@ -30,7 +30,7 @@ const UserSchema = new Schema<IUser>(
       unique: [true, 'Username is not unique'],
       trim: true,
       minLength: 3,
-      maxlength: 10,
+      maxlength: 20,
       match: [
         /^[a-zA-Z0-9_-]+$/,
         'Username can only contain letters, numbers, underscores and hyphens',

@@ -51,7 +51,7 @@ export async function POST(req) {
       verificationTokenExpires: new Date(Date.now() + 1000 * 60 * 60),
     });
 
-    const { data, error } = await resend.emails.send({
+    await resend.emails.send({
       from: 'Boards <onboarding@resend.dev>',
       to: 'delgadociteriowa@gmail.com',
       subject: 'Confirm your account now!',
@@ -63,9 +63,6 @@ export async function POST(req) {
         </a>
       `,
     });
-
-    console.log('RESEND DATA:', data);
-    console.log('RESEND ERROR:', error);
 
     return Response.json(newUser, { status: 201 });
   } catch (error) {
