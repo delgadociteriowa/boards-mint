@@ -93,7 +93,7 @@ export const useSignUp = () => {
       setFirstName('');
       setLastName('');
       setPassword('');
-      router.push('/checkinbox');
+      router.push('/verify-inbox');
     }
   };
 

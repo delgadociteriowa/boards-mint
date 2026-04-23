@@ -28,7 +28,7 @@ const VerifyEmail = async ({ searchParams }: Props) => {
 
   // The token is invalid or expired. basic div must be changed to redirection to invalid-token page. also click to regenerate token.
   if (!user) {
-    return <div>Invalid or expired token</div>;
+    redirect('/verify-expired');
   }
 
   // the account gets verified, the verification token gets empty and the expiration too

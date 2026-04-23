@@ -3,7 +3,7 @@ import Header from '@/components/Header';
 import Image from 'next/image';
 import Mailbox from '../../assets/mailbox.svg';
 
-const CheckInbox = () => {
+const VerifyInbox = () => {
   return (
     <>
       <Header />
@@ -32,4 +32,4 @@ const CheckInbox = () => {
     </>
   );
 };
-export default CheckInbox;
+export default VerifyInbox;
