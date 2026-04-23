@@ -52,9 +52,9 @@ export async function POST(req) {
     });
 
     await resend.emails.send({
-      from: 'Boards <onboarding@resend.dev>',
-      to: 'delgadociteriowa@gmail.com',
-      subject: 'Confirm your account now!',
+      from: 'Boards <noreply@mail.boards-now.com>',
+      to: email,
+      subject: 'Verify your account',
       html: `
         <h2>Welcome</h2>
         <p>Please click the following link to verify your account:</p>
