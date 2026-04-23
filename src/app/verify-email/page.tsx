@@ -10,7 +10,7 @@ type Props = {
 
 // user gets here with email link
 
-export default async function VerifyEmail({ searchParams }: Props) {
+const VerifyEmail = async ({ searchParams }: Props) => {
   // verification token in db and email
   const { token } = await searchParams;
 
@@ -40,5 +40,7 @@ export default async function VerifyEmail({ searchParams }: Props) {
   await user.save();
 
   // everything ok. basic redirection must be changed to verified page with go to login button
-  redirect('/login');
-}
+  redirect('/verified-email');
+};
+
+export default VerifyEmail;
