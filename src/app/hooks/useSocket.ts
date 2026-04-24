@@ -42,8 +42,19 @@ export const useSocket = () => {
         gJoinsGameRoom(roomId, 'visitor');
       }
     }
+  }, []);
 
-    return () => pLeavesGameRoom();
+  // cleanup replacement
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      pLeavesGameRoom();
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
   }, []);
 
   useEffect(() => {
