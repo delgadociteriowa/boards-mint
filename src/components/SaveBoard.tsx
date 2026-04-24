@@ -1,9 +1,9 @@
 'use client';
-import { useSession } from "next-auth/react";
-import { useAppSelector, useAppDispatch } from "@/state/hooks";
-import { useSearchParams} from "next/navigation";
-import { useSocket } from "@/app/hooks/useSocket";
-import { addBoard, updateBoard } from "@/state/board/boardSlice";
+import { useSocket } from '@/app/hooks/useSocket';
+import { addBoard, updateBoard } from '@/state/board/boardSlice';
+import { useAppDispatch, useAppSelector } from '@/state/hooks';
+import { useSession } from 'next-auth/react';
+import { useSearchParams } from 'next/navigation';
 
 const SaveBoard = () => {
   const { data: session } = useSession();
@@ -14,64 +14,69 @@ const SaveBoard = () => {
     updatedAt,
     socketActive,
     shareDelay,
-    saving
-  }  = useAppSelector(state => state.board);
+    saving,
+  } = useAppSelector((state) => state.board);
   const { hCreatesGameRoom, hDeletesGameRoom, gLeavesGameRoom } = useSocket();
 
   const dispatch = useAppDispatch();
   const searchParams = useSearchParams();
-  const boardId = searchParams.get("id");
-  const roomId = searchParams.get("room");
-  
+  const boardId = searchParams.get('id');
+  const roomId = searchParams.get('room');
+
   const handleClick = async () => {
     const answer = window.confirm('Do you want to save the current board?');
-    if (!answer) return
+    if (!answer) return;
 
     if (!boardId) {
       await dispatch(addBoard({ gameGrid, selectedGame }));
     } else {
-      await dispatch(updateBoard({id: boardId, gameGrid: gameGrid}));
+      await dispatch(updateBoard({ id: boardId, gameGrid: gameGrid }));
     }
   };
 
-  const styleByPhase = !phaseTwo ? "bg-sky-600 hover:bg-sky-500 cursor-pointer" : "bg-stone-600 cursor-not-allowed opacity-60"; 
-  const styleByShare = !shareDelay || !phaseTwo ? "bg-sky-600 hover:bg-sky-500 cursor-pointer" : "bg-stone-600 cursor-not-allowed opacity-60"; 
+  const styleByPhase = !phaseTwo
+    ? 'bg-sky-600 hover:bg-sky-500 cursor-pointer'
+    : 'bg-stone-600 cursor-not-allowed opacity-60';
+  const styleByShare =
+    !shareDelay || !phaseTwo
+      ? 'bg-sky-600 hover:bg-sky-500 cursor-pointer'
+      : 'bg-stone-600 cursor-not-allowed opacity-60';
 
   return (
     <div className='flex flex-wrap w-[90%] mb-14 landscape:w-[75%] mx-auto md:flex-nowrap'>
-      {session &&
-        (<>
+      {session && (
+        <>
           <button
-            className={`text-stone-100 px-6 py-1 rounded-xl w-[calc(50%-4px)] md:w-auto ${styleByPhase}`}
+            className={`text-stone-100 px-6 py-1 rounded-full w-[calc(50%-4px)] md:w-auto ${styleByPhase}`}
             onClick={handleClick}
             disabled={phaseTwo}
           >
             save
           </button>
           <button
-            className={`text-stone-100 px-6 py-1 rounded-xl ml-2 w-[calc(50%-4px)] md:w-auto ${styleByShare}`}
+            className={`text-stone-100 px-6 py-1 rounded-full ml-2 w-[calc(50%-4px)] md:w-auto ${styleByShare}`}
             onClick={!socketActive ? hCreatesGameRoom : hDeletesGameRoom}
             disabled={phaseTwo || shareDelay}
           >
-            {socketActive ? "go offline" : "online room"}
+            {socketActive ? 'go offline' : 'online room'}
           </button>
-          {updatedAt &&
-            (<span className="w-full text-center mt-3 text-sm font-texts text-stone-500 md:w-auto md:ml-auto md:mr-2 md:mt-0">
+          {updatedAt && (
+            <span className='w-full text-center mt-3 text-sm font-texts text-stone-500 md:w-auto md:ml-auto md:mr-2 md:mt-0'>
               {saving ? 'Saving...' : `Last Saved: ${updatedAt}`}
-            </span>)
-          } 
-        </>)
-      }
+            </span>
+          )}
+        </>
+      )}
       {roomId && (
         <button
-          className={`text-stone-100 px-6 py-1 rounded-xl ${styleByPhase}`}
+          className={`text-stone-100 px-6 py-1 rounded-full ${styleByPhase}`}
           onClick={gLeavesGameRoom}
         >
           leave game
         </button>
       )}
     </div>
-  )
+  );
 };
 
 export default SaveBoard;

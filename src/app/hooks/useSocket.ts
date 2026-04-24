@@ -1,21 +1,19 @@
-import { useRef, useEffect } from "react";
-import { useSession } from "next-auth/react";
-import { io, Socket } from "socket.io-client";
-import { useAppSelector, useAppDispatch } from "@/state/hooks";
-import { useRouter } from 'next/navigation';
-import { useSearchParams } from "next/navigation";
 import {
-  setSocketActive,
-  setShareDelay,
-  setSocketHost,
-  setSocketGuest,
-  setGameGrid,
   setChangeFromSocket,
+  setGameGrid,
   setPhaseTwo,
-  setSelectedSqr
-  } from "@/state/board/boardSlice";
-import { Grid, SelectedSquare } from "@/types/board";
-
+  setSelectedSqr,
+  setShareDelay,
+  setSocketActive,
+  setSocketGuest,
+  setSocketHost,
+} from '@/state/board/boardSlice';
+import { useAppDispatch, useAppSelector } from '@/state/hooks';
+import { Grid, SelectedSquare } from '@/types/board';
+import { useSession } from 'next-auth/react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useRef } from 'react';
+import { io, Socket } from 'socket.io-client';
 
 export const useSocket = () => {
   const { data: session } = useSession();
@@ -29,8 +27,8 @@ export const useSocket = () => {
     phaseTwo,
     changeFromSocket,
     socketGuest,
-    socketHost
-  }  = useAppSelector(state => state.board);
+    socketHost,
+  } = useAppSelector((state) => state.board);
   const dispatch = useAppDispatch();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -44,85 +42,92 @@ export const useSocket = () => {
         gJoinsGameRoom(roomId, 'visitor');
       }
     }
+
+    return () => pLeavesGameRoom();
   }, []);
 
   useEffect(() => {
     const identifier = gameId || roomId;
 
-    if(socketActive && !changeFromSocket){
-      pSendsMove(identifier)
+    if (socketActive && !changeFromSocket) {
+      pSendsMove(identifier);
     }
   }, [gameGrid]);
-  
+
   useEffect(() => {
-    if(session?.user.username && roomId) {
-      dispatch(setSocketGuest(session?.user.username))
-      gSendsUserName(roomId, session?.user.username); 
+    if (session?.user.username && roomId) {
+      dispatch(setSocketGuest(session?.user.username));
+      gSendsUserName(roomId, session?.user.username);
     }
   }, [session]);
 
-  // only one socket
   const initSocket = () => {
     if (!socketRef.current) {
-      const socket = io("https://boards-ws.onrender.com");
-      
+      const socket = io('https://boards-ws.onrender.com');
+
       // Socket Listeners
 
       // Only received by host because .to
-      socket.on("g-joined-game-room", (guestName: string) => {
+      socket.on('g-joined-game-room', (guestName: string) => {
         dispatch(setSocketGuest(guestName));
-        alert('The guest player has joined the game.')
+        alert('The guest player has joined the game.');
         socket.emit('h-shares-board', id, session?.user.username, gameGrid);
       });
-      
-      socket.on("g-sent-user-name", (guestName: string) => {
+
+      socket.on('g-sent-user-name', (guestName: string) => {
         dispatch(setSocketGuest(guestName));
       });
-      
-      socket.on("g-left-game-room", (guestName: string) => {
+
+      socket.on('g-left-game-room', () => {
         if (!roomId) {
-          alert(`The guest player, ${guestName}, has left the game.`);
+          alert(`The guest player has left the game.`);
           dispatch(setSocketGuest('waiting'));
         }
       });
-      
-      socket.on("h-deleted-game-room", () => {
+
+      socket.on('h-deleted-game-room', () => {
         if (!gameId) {
-          alert(`The host has finished the game session. You'll be redirected to the home page.`)
+          alert(
+            `The host has finished the game session. You'll be redirected to the home page.`,
+          );
           setTimeout(() => {
             router.push('/');
-          }, 5000)
+          }, 5000);
         }
       });
-      
+
       // Only received by guest because .to
-      socket.on("h-shared-board", (hostName: string, board: Grid) => {
+      socket.on('h-shared-board', (hostName: string, board: Grid) => {
         dispatch(setSocketGuest('visitor'));
         dispatch(setSocketHost(hostName));
         dispatch(setGameGrid(board));
         dispatch(setSocketActive(true));
         // ojo loading
       });
-      
-      // Only received by guest because .to
-      socket.on("p-sent-move", (board: Grid, phase: boolean, selected: SelectedSquare) => {
-        dispatch(setChangeFromSocket(true));
-        dispatch(setGameGrid(board));
-        dispatch(setPhaseTwo(phase));
-        dispatch(setSelectedSqr(selected));
-      });
-      
 
-      socket.on("p-disconnected", () => {
-        if(gameId) {
-          alert(`Your opponent is no longer connected to the game.`)
+      // Only received by guest because .to
+      socket.on(
+        'p-sent-move',
+        (board: Grid, phase: boolean, selected: SelectedSquare) => {
+          dispatch(setChangeFromSocket(true));
+          dispatch(setGameGrid(board));
+          dispatch(setPhaseTwo(phase));
+          dispatch(setSelectedSqr(selected));
+        },
+      );
+
+      socket.on('p-disconnected', () => {
+        if (gameId) {
+          alert(`Your opponent is no longer connected to the game.`);
           dispatch(setSocketGuest('waiting'));
         }
-        if(roomId) {
-          alert(`The host is no longer connected to the game. You'll be redirected to the home page.`)
+        if (roomId) {
+          alert(
+            `The host is no longer connected to the game. You'll be redirected to the home page.`,
+          );
           setTimeout(() => {
             router.push('/');
-          }, 5000)
+          }, 5000);
         }
       });
 
@@ -130,25 +135,27 @@ export const useSocket = () => {
     }
     return socketRef.current;
   };
-  
+
   // used by host
   const hCreatesGameRoom = () => {
     if (!id) {
       alert('You must save this board to start an online game room.');
-      return
+      return;
     }
 
-    const answer = window.confirm('You are about to start an online room. Do you want to continue?');
-    if (!answer) return
+    const answer = window.confirm(
+      'You are about to start an online room. Do you want to continue?',
+    );
+    if (!answer) return;
 
     dispatch(setShareDelay(true));
-    
+
     // connects
     initSocket();
-    if (socketRef.current === null) return
+    if (socketRef.current === null) return;
 
     // OK
-    socketRef.current.on("connect", () => {
+    socketRef.current.on('connect', () => {
       socketRef.current?.emit('h-creates-game-room', id);
       dispatch(setSocketActive(true));
       dispatch(setSocketHost(session?.user.username ?? ''));
@@ -156,24 +163,31 @@ export const useSocket = () => {
       setTimeout(() => {
         dispatch(setShareDelay(false));
       }, 800);
-      
+
       const shareLink = window.location.href.replace('?id', '?room');
       navigator.clipboard.writeText(shareLink).then(() => {
-        alert('The game room link has been copied to your clipboard! Share it to start playing online.')
+        alert(
+          'The game room link has been copied to your clipboard! Share it to start playing online.',
+        );
       });
     });
-    
+
     // error
-    socketRef.current.on("connect_error", (err) => {
-      connectionError(err.message, "The room couldn't be created now. Please, try again in a few seconds.")
+    socketRef.current.on('connect_error', (err) => {
+      connectionError(
+        err.message,
+        "The room couldn't be created now. Please, try again in a few seconds.",
+      );
     });
-  }
+  };
 
-    // used by host
+  // used by host
   const hDeletesGameRoom = () => {
-    const answer = window.confirm('Do you want to stop sharing this game room?');
+    const answer = window.confirm(
+      'Do you want to stop sharing this game room?',
+    );
 
-    if (!answer) return
+    if (!answer) return;
 
     dispatch(setShareDelay(true));
     socketRef.current?.emit('h-deletes-game-room', id);
@@ -181,17 +195,30 @@ export const useSocket = () => {
     socketRef.current = null;
     dispatch(setSocketActive(false));
 
-    alert('You have stopped sharing this game room.')
+    alert('You have stopped sharing this game room.');
 
     setTimeout(() => {
       dispatch(setShareDelay(false));
     }, 800);
-  }
+  };
+
+  // player goes to other page
+  const pLeavesGameRoom = () => {
+    if (gameId) {
+      socketRef.current?.emit('h-deletes-game-room', id);
+      socketRef.current?.disconnect();
+      socketRef.current = null;
+      dispatch(setSocketActive(false));
+    }
+    if (roomId) {
+      socketRef.current?.emit('g-leaves-game-room', roomId, socketGuest);
+    }
+  };
 
   // used by guest
   const gJoinsGameRoom = (boardIdRoom: string, guestName: string) => {
     initSocket();
-    if (socketRef.current === null) return
+    if (socketRef.current === null) return;
 
     const emitJoin = () => {
       socketRef.current?.emit('g-joins-game-room', boardIdRoom, guestName);
@@ -201,25 +228,27 @@ export const useSocket = () => {
     if (socketRef.current?.connected) {
       emitJoin();
     } else {
-      socketRef.current?.once("connect", emitJoin);
+      socketRef.current?.once('connect', emitJoin);
     }
-  }
+  };
 
   // used by guest
   const gLeavesGameRoom = () => {
-    const answer = window.confirm('Are you sure you want to leave the current game?');
-    if (!answer) return
+    const answer = window.confirm(
+      'Are you sure you want to leave the current game?',
+    );
+    if (!answer) return;
 
     socketRef.current?.emit('g-leaves-game-room', roomId, socketGuest);
     // socketRef.current?.disconnect();
     alert('You have left the game. You will be redirected to the home page.');
     router.push('/');
-  }
+  };
 
   // used by guest
   const gSendsUserName = (boardIdRoom: string, guestName: string) => {
     socketRef.current?.emit('g-sends-user-name', boardIdRoom, guestName);
-  }
+  };
 
   const pSendsMove = (boardIdRoom: string) => {
     socketRef.current?.emit(
@@ -227,9 +256,10 @@ export const useSocket = () => {
       boardIdRoom,
       JSON.stringify(gameGrid),
       phaseTwo,
-      JSON.stringify(selectedSqr));
-  }
-  
+      JSON.stringify(selectedSqr),
+    );
+  };
+
   const connectionError = (errorMessage: string, message: string) => {
     console.log(errorMessage);
     alert(message);
@@ -239,11 +269,11 @@ export const useSocket = () => {
     setTimeout(() => {
       dispatch(setShareDelay(false));
     }, 800);
-  }
+  };
 
   return {
     hCreatesGameRoom,
     hDeletesGameRoom,
-    gLeavesGameRoom
-  }
+    gLeavesGameRoom,
+  };
 };
