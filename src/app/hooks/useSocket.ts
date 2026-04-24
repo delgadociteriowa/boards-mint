@@ -228,8 +228,8 @@ export const useSocket = () => {
         (response: { success: boolean; message?: string }) => {
           if (!response.success) {
             alert(response.message);
+            router.push('/');
           }
-          router.push('/');
         },
       );
 
