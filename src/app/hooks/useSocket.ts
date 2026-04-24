@@ -221,7 +221,18 @@ export const useSocket = () => {
     if (socketRef.current === null) return;
 
     const emitJoin = () => {
-      socketRef.current?.emit('g-joins-game-room', boardIdRoom, guestName);
+      socketRef.current?.emit(
+        'g-joins-game-room',
+        boardIdRoom,
+        guestName,
+        (response: { success: boolean; message?: string }) => {
+          if (!response.success) {
+            alert(response.message);
+          }
+          router.push('/');
+        },
+      );
+
       dispatch(setSocketActive(true));
     };
 
