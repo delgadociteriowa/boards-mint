@@ -67,11 +67,11 @@ export const useSocket = () => {
         socketRef.current = null;
       }
 
-      // if (gameId) {
-      //   socketRef.current?.emit('h-deletes-game-room', gameId);
-      //   socketRef.current?.disconnect();
-      //   socketRef.current = null;
-      // }
+      if (gameId) {
+        socketRef.current?.emit('h-deletes-game-room', gameId);
+        socketRef.current?.disconnect();
+        socketRef.current = null;
+      }
     };
   }, []);
 
@@ -106,7 +106,7 @@ export const useSocket = () => {
           );
           setTimeout(() => {
             router.push('/');
-          }, 8000);
+          }, 5000);
         }
       });
 
