@@ -45,17 +45,17 @@ export const useSocket = () => {
   }, []);
 
   // cleanup replacement
-  useEffect(() => {
-    const handleBeforeUnload = () => {
-      pLeavesGameRoom();
-    };
+  // useEffect(() => {
+  //   const handleBeforeUnload = () => {
+  //     pLeavesGameRoom();
+  //   };
 
-    window.addEventListener('beforeunload', handleBeforeUnload);
+  //   window.addEventListener('beforeunload', handleBeforeUnload);
 
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, []);
+  //   return () => {
+  //     window.removeEventListener('beforeunload', handleBeforeUnload);
+  //   };
+  // }, []);
 
   useEffect(() => {
     const identifier = gameId || roomId;
@@ -262,7 +262,7 @@ export const useSocket = () => {
     if (!answer) return;
 
     socketRef.current?.emit('g-leaves-game-room', roomId, socketGuest);
-    // socketRef.current?.disconnect();
+    socketRef.current?.disconnect();
     alert('You have left the game. You will be redirected to the home page.');
     router.push('/');
   };
