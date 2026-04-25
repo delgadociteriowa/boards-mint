@@ -228,11 +228,11 @@ const boardSlice = createSlice({
       state.error = null;
       state.createdAt = '';
       state.updatedAt = '';
-      ((state.socketActive = false),
-        (state.shareDelay = false),
-        (state.socketHost = ''),
-        (state.socketGuest = ''),
-        (state.changeFromSocket = false));
+      state.socketActive = false;
+      state.shareDelay = false;
+      state.socketHost = '';
+      state.socketGuest = '';
+      state.changeFromSocket = false;
     },
     setSocketActive: (state, action: PayloadAction<boolean>) => {
       state.socketActive = action.payload;
