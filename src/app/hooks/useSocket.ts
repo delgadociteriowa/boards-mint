@@ -44,19 +44,6 @@ export const useSocket = () => {
     }
   }, []);
 
-  // cleanup replacement
-  // useEffect(() => {
-  //   const handleBeforeUnload = () => {
-  //     pLeavesGameRoom();
-  //   };
-
-  //   window.addEventListener('beforeunload', handleBeforeUnload);
-
-  //   return () => {
-  //     window.removeEventListener('beforeunload', handleBeforeUnload);
-  //   };
-  // }, []);
-
   useEffect(() => {
     const identifier = gameId || roomId;
 
