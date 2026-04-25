@@ -103,7 +103,7 @@ export const useSocket = () => {
           );
           setTimeout(() => {
             router.push('/');
-          }, 5000);
+          }, 8000);
         }
       });
 
