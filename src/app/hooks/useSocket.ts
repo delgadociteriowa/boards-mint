@@ -19,6 +19,8 @@ export const useSocket = () => {
   const { data: session } = useSession();
   const socketRef = useRef<Socket | null>(null);
   const hasJoined = useRef(false);
+  const notAllowed = useRef(false);
+
   const {
     id,
     socketActive,
@@ -61,6 +63,12 @@ export const useSocket = () => {
 
   useEffect(() => {
     return () => {
+      if (notAllowed.current) {
+        socketRef.current?.disconnect();
+        socketRef.current = null;
+        return;
+      }
+
       if (roomId) {
         socketRef.current?.emit('g-leaves-game-room', roomId, socketGuest);
         socketRef.current?.disconnect();
@@ -242,12 +250,12 @@ export const useSocket = () => {
         (response: { success: boolean; message?: string }) => {
           if (!response.success) {
             alert(response.message);
+            notAllowed.current = true;
             router.push('/');
           }
+          dispatch(setSocketActive(true));
         },
       );
-
-      dispatch(setSocketActive(true));
     };
 
     if (socketRef.current?.connected) {
