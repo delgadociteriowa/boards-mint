@@ -59,6 +59,22 @@ export const useSocket = () => {
     }
   }, [session]);
 
+  useEffect(() => {
+    return () => {
+      if (roomId) {
+        socketRef.current?.emit('g-leaves-game-room', roomId, socketGuest);
+        socketRef.current?.disconnect();
+        socketRef.current = null;
+      }
+
+      // if (gameId) {
+      //   socketRef.current?.emit('h-deletes-game-room', gameId);
+      //   socketRef.current?.disconnect();
+      //   socketRef.current = null;
+      // }
+    };
+  }, []);
+
   const initSocket = () => {
     if (!socketRef.current) {
       const socket = io('https://boards-ws.onrender.com');
@@ -116,7 +132,7 @@ export const useSocket = () => {
 
       socket.on('p-disconnected', () => {
         if (gameId) {
-          alert(`Your opponent is no longer connected to the game.`);
+          alert(`The guest player has left the game.`);
           dispatch(setSocketGuest('waiting'));
         }
         if (roomId) {
