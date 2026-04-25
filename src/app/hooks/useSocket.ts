@@ -124,6 +124,7 @@ export const useSocket = () => {
         dispatch(setSocketHost(hostName));
         dispatch(setGameGrid(board));
         dispatch(setSocketActive(true));
+        alert(`Welcome to Boards. You have joined the game room.`);
         // ojo loading
       });
 
