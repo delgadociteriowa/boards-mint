@@ -42,6 +42,20 @@ const SaveBoard = ({
     }
   };
 
+  const handleShare = async () => {
+    const currentUrl = window.location.href;
+    const roomUrl = currentUrl.replace('id=', 'room=');
+    try {
+      await navigator.clipboard.writeText(roomUrl);
+      alert(
+        'The game room link has been copied to your clipboard! Share it to start playing online.',
+      );
+    } catch (error) {
+      alert('Could not copy the link');
+      console.error(error);
+    }
+  };
+
   const styleByPhase = !phaseTwo
     ? 'bg-sky-600 hover:bg-sky-500 cursor-pointer'
     : 'bg-stone-600 cursor-not-allowed opacity-60';
@@ -51,25 +65,46 @@ const SaveBoard = ({
       : 'bg-stone-600 cursor-not-allowed opacity-60';
 
   return (
-    <div className='flex flex-wrap w-[90%] mb-14 landscape:w-[75%] mx-auto md:flex-nowrap'>
-      {session && (
+    <div className='flex flex-wrap md:flex-nowrap gap-2 w-[90%] mb-14 landscape:w-[75%] mx-auto'>
+      {session && !roomId && (
         <>
           <button
-            className={`text-stone-100 px-6 py-1 rounded-full w-[calc(50%-4px)] md:w-auto ${styleByPhase}`}
+            className={`flex-1 md:flex-none text-stone-100 px-6 py-1 rounded-full w-[calc(50%-4px)] md:w-auto ${styleByPhase}`}
             onClick={handleClick}
             disabled={phaseTwo}
           >
             save
           </button>
+          {socketActive && (
+            <button
+              className={`flex-1 md:flex-none text-stone-100 px-6 py-1 rounded-full w-[calc(50%-4px)] md:w-auto ${styleByPhase}`}
+              onClick={handleShare}
+            >
+              share
+            </button>
+          )}
           <button
-            className={`text-stone-100 px-6 py-1 rounded-full ml-2 w-[calc(50%-4px)] md:w-auto ${styleByShare}`}
+            className={`flex-1 md:flex-none text-stone-100 px-6 py-1 rounded-full w-[calc(50%-4px)] md:w-auto ${styleByShare}`}
             onClick={!socketActive ? hCreatesGameRoom : hDeletesGameRoom}
             disabled={phaseTwo || shareDelay}
           >
-            {socketActive ? 'go offline' : 'online room'}
+            {socketActive ? 'end' : 'online room'}
           </button>
           {updatedAt && (
-            <span className='w-full text-center mt-3 text-sm font-texts text-stone-500 md:w-auto md:ml-auto md:mr-2 md:mt-0'>
+            <span
+              className='
+                w-full
+                md:w-auto
+                text-center
+                mt-3
+                md:mt-0
+                md:ml-auto
+                md:mr-2
+                text-sm
+                font-texts
+                text-stone-500
+              '
+            >
               {saving ? 'Saving...' : `Last Saved: ${updatedAt}`}
             </span>
           )}
@@ -77,7 +112,7 @@ const SaveBoard = ({
       )}
       {roomId && (
         <button
-          className={`text-stone-100 px-6 py-1 rounded-full ${styleByPhase}`}
+          className={`flex-1 text-stone-100 px-6 py-1 rounded-full ${styleByPhase}`}
           onClick={gLeavesGameRoom}
         >
           leave game
