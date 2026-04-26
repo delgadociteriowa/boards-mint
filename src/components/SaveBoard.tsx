@@ -1,11 +1,20 @@
 'use client';
-import { useSocket } from '@/app/hooks/useSocket';
 import { addBoard, updateBoard } from '@/state/board/boardSlice';
 import { useAppDispatch, useAppSelector } from '@/state/hooks';
 import { useSession } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
 
-const SaveBoard = () => {
+interface SaveBoardProps {
+  hCreatesGameRoom: () => void;
+  hDeletesGameRoom: () => void;
+  gLeavesGameRoom: () => void;
+}
+
+const SaveBoard = ({
+  hCreatesGameRoom,
+  hDeletesGameRoom,
+  gLeavesGameRoom,
+}: SaveBoardProps) => {
   const { data: session } = useSession();
   const {
     phaseTwo,
@@ -16,7 +25,6 @@ const SaveBoard = () => {
     shareDelay,
     saving,
   } = useAppSelector((state) => state.board);
-  const { hCreatesGameRoom, hDeletesGameRoom, gLeavesGameRoom } = useSocket();
 
   const dispatch = useAppDispatch();
   const searchParams = useSearchParams();
