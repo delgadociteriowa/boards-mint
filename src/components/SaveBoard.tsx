@@ -112,7 +112,7 @@ const SaveBoard = ({
       )}
       {roomId && (
         <button
-          className={`flex-1 text-stone-100 px-6 py-1 rounded-full ${styleByPhase}`}
+          className={`flex-1 md:flex-none text-stone-100 px-6 py-1 rounded-full ${styleByPhase}`}
           onClick={gLeavesGameRoom}
         >
           leave game
