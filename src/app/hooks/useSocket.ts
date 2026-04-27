@@ -41,7 +41,8 @@ export const useSocket = () => {
     if (!hasJoined.current) {
       if (roomId) {
         hasJoined.current = true;
-        gJoinsGameRoom(roomId, 'visitor');
+        dispatch(setSocketGuest(session?.user.username || 'visitor'));
+        gJoinsGameRoom(roomId, session?.user.username || 'visitor');
       }
     }
   }, []);
@@ -120,7 +121,6 @@ export const useSocket = () => {
 
       // Only received by guest because .to
       socket.on('h-shared-board', (hostName: string, board: Grid) => {
-        dispatch(setSocketGuest('visitor'));
         dispatch(setSocketHost(hostName));
         dispatch(setGameGrid(board));
         dispatch(setSocketActive(true));
