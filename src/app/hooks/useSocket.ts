@@ -55,12 +55,12 @@ export const useSocket = () => {
     }
   }, [gameGrid]);
 
-  // useEffect(() => {
-  //   if (session?.user.username && roomId) {
-  //     dispatch(setSocketGuest(session?.user.username));
-  //     gSendsUserName(roomId, session?.user.username);
-  //   }
-  // }, [session]);
+  useEffect(() => {
+    if (session?.user.username && roomId) {
+      // dispatch(setSocketGuest(session?.user.username));
+      gSendsUserName(roomId, session?.user.username);
+    }
+  }, [session]);
 
   useEffect(() => {
     return () => {
@@ -280,9 +280,9 @@ export const useSocket = () => {
   };
 
   // used by guest
-  // const gSendsUserName = (boardIdRoom: string, guestName: string) => {
-  //   socketRef.current?.emit('g-sends-user-name', boardIdRoom, guestName);
-  // };
+  const gSendsUserName = (boardIdRoom: string, guestName: string) => {
+    socketRef.current?.emit('g-sends-user-name', boardIdRoom, guestName);
+  };
 
   const pSendsMove = (boardIdRoom: string) => {
     socketRef.current?.emit(
