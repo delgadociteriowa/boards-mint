@@ -92,7 +92,7 @@ export const useSocket = () => {
 
       // Only received by host because .to
       socket.on('g-joined-game-room', (guestName: string) => {
-        if (!roomId) alert('The guest player has joined the game.');
+        if (!roomId) alert('The guest player has joined the game now.');
         dispatch(setSocketGuest(guestName));
         socket.emit('h-shares-board', id, session?.user.username, gameGrid);
       });
