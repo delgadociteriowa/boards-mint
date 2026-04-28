@@ -2,6 +2,7 @@
 
 import { useAppDispatch, useAppSelector } from '@/state/hooks';
 import {
+  deleteUser,
   logout,
   setEditingField,
   setFirstname,
@@ -65,6 +66,25 @@ export const useAccount = () => {
     dispatch(setEditingField(null));
   };
 
+  const handleDeleteUser = async () => {
+    const confirmed = window.confirm(
+      'Are you sure you want to delete your account? This action cannot be undone.',
+    );
+
+    if (!confirmed) return;
+
+    try {
+      const message = await dispatch(deleteUser()).unwrap();
+
+      alert(message);
+      setTimeout(() => {
+        dispatch(logout());
+      }, 3000);
+    } catch (error) {
+      alert(error);
+    }
+  };
+
   return {
     userName,
     email,
@@ -77,5 +97,6 @@ export const useAccount = () => {
     handleSave,
     setEditingField,
     handleLogout,
+    handleDeleteUser,
   };
 };

@@ -89,11 +89,35 @@ export const updateUser = createAsyncThunk<
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(UpdateUser),
     });
-    if (!res) {
+    if (!res.ok) {
       throw new Error(`Update failed failed.`);
     }
   } catch (error) {
     return rejectWithValue(`${error}`);
+  }
+});
+
+export const deleteUser = createAsyncThunk<
+  string,
+  void,
+  { rejectValue: string }
+>('user/delete', async (_, { rejectWithValue }) => {
+  try {
+    const res = await fetch('/api/account/delete', {
+      method: 'DELETE',
+    });
+
+    const data = await res.json().catch(() => null);
+
+    if (!res.ok) {
+      return rejectWithValue(data?.error || 'Failed to delete user data');
+    }
+
+    return data?.message || 'User deleted successfully';
+  } catch (error) {
+    return rejectWithValue(
+      error instanceof Error ? error.message : 'Unknown error',
+    );
   }
 });
 
@@ -188,6 +212,25 @@ const userSlice = createSlice({
         state.error = '';
       })
       .addCase(logout.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload ?? 'Unknown error';
+      })
+      // delete
+      .addCase(deleteUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(deleteUser.fulfilled, (state) => {
+        state.identifier = '';
+        state.password = '';
+        state.userName = '';
+        state.email = '';
+        state.firstname = '';
+        state.lastname = '';
+        state.editingField = null;
+        state.loading = false;
+        state.error = '';
+      })
+      .addCase(deleteUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload ?? 'Unknown error';
       });

@@ -18,6 +18,7 @@ const AccountSection = () => {
     handleSave,
     setEditingField,
     handleLogout,
+    handleDeleteUser,
   } = useAccount();
 
   const isEditingFirst = editingField === 'firstname';
@@ -100,6 +101,27 @@ const AccountSection = () => {
               '
             >
               log out
+            </button>
+            <button
+              onClick={handleDeleteUser}
+              className='
+                w-[80%]
+                md:w-[40%]
+                py-3
+                mx-auto
+                md:mx-0
+                text-center
+                text-xl
+                tracking-[2px]
+                text-stone-100
+                bg-red-600 
+                hover:bg-red-500
+                rounded-full
+                shadow-md/20
+                cursor-pointer
+              '
+            >
+              delete account
             </button>
           </div>
         </div>
