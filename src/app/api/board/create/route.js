@@ -1,7 +1,7 @@
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/utils/authOptions';
 import connectDB from '@/config/database';
 import Board from '@/models/Board';
+import { authOptions } from '@/utils/authOptions';
+import { getServerSession } from 'next-auth';
 
 export async function POST(req) {
   try {
@@ -13,6 +13,18 @@ export async function POST(req) {
     }
 
     const userId = session.user.id;
+
+    const boardsCount = await Board.countDocuments({ owner: userId });
+
+    if (boardsCount >= 4) {
+      return Response.json(
+        {
+          error:
+            'Board limit reached. By now, Boards only allows to save four boards.',
+        },
+        { status: 403 },
+      );
+    }
 
     const body = await req.json();
     const { gameGrid, selectedGame } = body;

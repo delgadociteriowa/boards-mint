@@ -10,6 +10,18 @@ export async function POST(req) {
   try {
     await connectDB();
 
+    const usersCount = await User.countDocuments();
+
+    if (usersCount >= 8) {
+      return Response.json(
+        {
+          message:
+            'User registration limit reached. By now, no more users can be created.',
+        },
+        { status: 403 },
+      );
+    }
+
     const { email, username, firstname, lastname, password } = await req.json();
 
     const passwordRegex =
