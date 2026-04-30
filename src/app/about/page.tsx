@@ -64,7 +64,7 @@ const About = () => {
             .
           </p>
           <p className='text-center text-xl text-stone-600 tracking-[2px] leading-relaxed w-[100%] mt-10'>
-            Boards v1.5.0
+            Boards v1.6.0
           </p>
         </section>
       </main>
