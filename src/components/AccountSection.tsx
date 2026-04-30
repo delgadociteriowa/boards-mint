@@ -12,11 +12,11 @@ const AccountSection = () => {
     firstname,
     lastname,
     editingField,
-    dispatch,
-    setFirstname,
-    setLastname,
+    updateFirstname,
+    updateLastname,
+    startEditing,
+    stopEditing,
     handleSave,
-    setEditingField,
     handleLogout,
     handleDeleteUser,
   } = useAccount();
@@ -39,20 +39,20 @@ const AccountSection = () => {
             label='first name'
             value={firstname ?? '-'}
             editing={isEditingFirst}
-            onChange={(value) => dispatch(setFirstname(value))}
-            onEdit={() => dispatch(setEditingField('firstname'))}
+            onChange={(value) => updateFirstname(value)}
+            onEdit={() => startEditing('firstname')}
             onSave={() => handleSave('firstname')}
-            onCancel={() => dispatch(setEditingField(null))}
+            onCancel={() => stopEditing()}
           />
           <Line />
           <AccountEditableField
             label='last name'
             value={lastname ?? '-'}
             editing={isEditingLast}
-            onChange={(value) => dispatch(setLastname(value))}
-            onEdit={() => dispatch(setEditingField('lastname'))}
+            onChange={(value) => updateLastname(value)}
+            onEdit={() => startEditing('lastname')}
             onSave={() => handleSave('lastname')}
-            onCancel={() => dispatch(setEditingField(null))}
+            onCancel={() => stopEditing()}
           />
           <Line />
           <div className='flex flex-col gap-5'>

@@ -46,8 +46,20 @@ export const useAccount = () => {
     syncSessionToState();
   }, [status, session, dispatch, router]);
 
-  const handleLogout = () => {
-    dispatch(logout());
+  const updateFirstname = (value: string) => {
+    dispatch(setFirstname(value));
+  };
+
+  const updateLastname = (value: string) => {
+    dispatch(setLastname(value));
+  };
+
+  const startEditing = (field: 'firstname' | 'lastname') => {
+    dispatch(setEditingField(field));
+  };
+
+  const stopEditing = () => {
+    dispatch(setEditingField(null));
   };
 
   const handleSave = async (field: 'firstname' | 'lastname') => {
@@ -64,6 +76,10 @@ export const useAccount = () => {
     await update();
 
     dispatch(setEditingField(null));
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
   };
 
   const handleDeleteUser = async () => {
@@ -91,11 +107,11 @@ export const useAccount = () => {
     firstname,
     lastname,
     editingField,
-    dispatch,
-    setFirstname,
-    setLastname,
+    updateFirstname,
+    updateLastname,
+    startEditing,
+    stopEditing,
     handleSave,
-    setEditingField,
     handleLogout,
     handleDeleteUser,
   };
