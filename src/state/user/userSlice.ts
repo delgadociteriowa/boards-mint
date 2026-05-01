@@ -85,7 +85,7 @@ export const updateUser = createAsyncThunk<
 >('user/update', async (UpdateUser, { rejectWithValue }) => {
   try {
     const res = await fetch('/api/account/update', {
-      method: 'POST',
+      method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(UpdateUser),
     });

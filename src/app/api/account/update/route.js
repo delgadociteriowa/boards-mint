@@ -1,9 +1,9 @@
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/utils/authOptions';
 import connectDB from '@/config/database';
 import User from '@/models/User';
+import { authOptions } from '@/utils/authOptions';
+import { getServerSession } from 'next-auth';
 
-export async function POST(req) {
+export async function PATCH(req) {
   await connectDB();
 
   const session = await getServerSession(authOptions);
@@ -19,7 +19,7 @@ export async function POST(req) {
       ...(firstname !== undefined && { firstname }),
       ...(lastname !== undefined && { lastname }),
     },
-    { new: true }
+    { new: true },
   );
 
   return Response.json({
