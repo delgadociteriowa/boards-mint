@@ -1,6 +1,7 @@
 import { useAccount } from '@/app/hooks/useAccount';
 import AccountFields from './AccountFields';
 import AccountOptions from './AccountOptions';
+import AccountPassword from './AccountPassword';
 import SectionTitle from './SectionTitle';
 
 const AccountSection = () => {
@@ -17,6 +18,7 @@ const AccountSection = () => {
     handleSave,
     handleLogout,
     handleDeleteUser,
+    handleUpdatePassword,
   } = useAccount();
 
   const isEditingFirst = editingField === 'firstname';
@@ -27,7 +29,7 @@ const AccountSection = () => {
       <section className='w-[90%] mx-auto max-w-[1200px] pt-14 pb-8 text-stone-600'>
         <SectionTitle title='account' />
       </section>
-      <section className='mx-auto w-[90%] max-w-[1200px] pt-1 pb-20 text-stone-700 md:mb-24'>
+      <section className='mx-auto w-[90%] max-w-[1200px] pt-1 pb-20 text-stone-700 md:mb-18'>
         <div className='flex flex-col lg:flex-row gap-8 lg:gap-12'>
           <div className='w-full lg:w-1/2 md:ml-8 flex flex-col gap-6'>
             <AccountFields
@@ -43,6 +45,7 @@ const AccountSection = () => {
               stopEditing={stopEditing}
               handleSave={handleSave}
             />
+            <AccountPassword handleUpdatePassword={handleUpdatePassword} />
           </div>
           <div className='w-full lg:w-1/2 md:ml-8'>
             <AccountOptions

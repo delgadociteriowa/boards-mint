@@ -34,3 +34,8 @@ export type UpdateUser = Partial<{
   firstname: string;
   lastname: string;
 }>;
+
+export interface UpdateUserPassword {
+  currentPassword: string;
+  newPassword: string;
+}

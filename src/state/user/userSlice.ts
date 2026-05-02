@@ -4,6 +4,7 @@ import {
   SignUpState,
   SyncUser,
   UpdateUser,
+  UpdateUserPassword,
   UserStateType,
 } from '../../types/user';
 
@@ -97,6 +98,29 @@ export const updateUser = createAsyncThunk<
   }
 });
 
+export const updateUserPassword = createAsyncThunk<
+  void,
+  UpdateUserPassword,
+  { rejectValue: string }
+>('user/updatePassword', async (data, { rejectWithValue }) => {
+  try {
+    const res = await fetch('/api/account/update-password', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      return rejectWithValue(errorData.error || 'Password update failed');
+    }
+
+    alert('Your password has been updated.');
+  } catch (error) {
+    return rejectWithValue('Network error');
+  }
+});
+
 export const deleteUser = createAsyncThunk<
   string,
   void,
@@ -179,6 +203,30 @@ const userSlice = createSlice({
         state.loading = false;
       })
       .addCase(signUp.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload ?? 'Unknown error';
+        alert(`${state.error}`);
+      })
+      // update user
+      .addCase(updateUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateUser.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload ?? 'Unknown error';
+        alert(`${state.error}`);
+      })
+      // update user password
+      .addCase(updateUserPassword.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateUserPassword.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(updateUserPassword.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload ?? 'Unknown error';
         alert(`${state.error}`);

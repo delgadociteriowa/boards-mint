@@ -9,7 +9,9 @@ import {
   setLastname,
   syncUserData,
   updateUser,
+  updateUserPassword,
 } from '@/state/user/userSlice';
+import { UpdateUserPassword } from '@/types/user';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -78,6 +80,11 @@ export const useAccount = () => {
     dispatch(setEditingField(null));
   };
 
+  const handleUpdatePassword = async (passwords: UpdateUserPassword) => {
+    await dispatch(updateUserPassword(passwords));
+    await update();
+  };
+
   const handleLogout = () => {
     dispatch(logout());
   };
@@ -114,5 +121,6 @@ export const useAccount = () => {
     handleSave,
     handleLogout,
     handleDeleteUser,
+    handleUpdatePassword,
   };
 };
