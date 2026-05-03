@@ -1,4 +1,5 @@
 import { UpdateUserPassword } from '@/types/user';
+import { Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
 
 interface AccountPasswordProps {
@@ -8,6 +9,8 @@ interface AccountPasswordProps {
 const AccountPassword = ({ handleUpdatePassword }: AccountPasswordProps) => {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,22 +32,44 @@ const AccountPassword = ({ handleUpdatePassword }: AccountPasswordProps) => {
         update password
       </label>
       <form onSubmit={onSubmit} className='flex flex-col gap-5'>
-        <input
-          type='text'
-          maxLength={50}
-          value={currentPassword}
-          onChange={(e) => setCurrentPassword(e.target.value)}
-          className='border border-stone-300 rounded-xl py-3 px-4 text-stone-700 focus:outline-none focus:ring-2 focus:ring-sky-500 w-[90%]'
-          placeholder='Enter old password'
-        />
-        <input
-          type='text'
-          maxLength={50}
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-          className='border border-stone-300 rounded-xl py-3 px-4 text-stone-700 focus:outline-none focus:ring-2 focus:ring-sky-500 w-[90%]'
-          placeholder='Enter new password'
-        />
+        <div className='relative'>
+          <input
+            type={showCurrentPassword ? 'text' : 'password'}
+            maxLength={50}
+            minLength={8}
+            required
+            value={currentPassword}
+            onChange={(e) => setCurrentPassword(e.target.value)}
+            className='border border-stone-300 rounded-xl py-3 px-4 text-stone-700 focus:outline-none focus:ring-2 focus:ring-sky-500 w-full'
+            placeholder='Enter old password'
+          />
+          <button
+            type='button'
+            onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+            className='absolute right-4 top-1/2 -translate-y-1/2 text-stone-500 hover:text-stone-700 cursor-pointer'
+          >
+            {showCurrentPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+          </button>
+        </div>
+        <div className='relative'>
+          <input
+            type='text'
+            maxLength={50}
+            minLength={8}
+            required
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            className='border border-stone-300 rounded-xl py-3 px-4 text-stone-700 focus:outline-none focus:ring-2 focus:ring-sky-500 w-full'
+            placeholder='Enter new password'
+          />
+          <button
+            type='button'
+            onClick={() => setShowNewPassword(!showNewPassword)}
+            className='absolute right-4 top-1/2 -translate-y-1/2 text-stone-500 hover:text-stone-700 cursor-pointer'
+          >
+            {showNewPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+          </button>
+        </div>
         <button
           type='submit'
           className='
