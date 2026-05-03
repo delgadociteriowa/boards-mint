@@ -5,7 +5,10 @@ import crypto from 'crypto';
 import type { NextAuthOptions } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import GoogleProvider from 'next-auth/providers/google';
+import { Resend } from 'resend';
 import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } from './env';
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -104,13 +107,30 @@ export const authOptions: NextAuthOptions = {
         const fullName = profile.name ?? '';
         const [firstname = '', lastname = ''] = fullName.split(' ');
 
-        const username =
+        let baseUsername =
           profile.name?.replace(/\s+/g, '').toLowerCase().slice(0, 20) ??
-          profile.email.split('@')[0];
+          profile.email.split('@')[0].toLowerCase().slice(0, 20);
+
+        let username = baseUsername;
+
+        const generateDigits = () => {
+          return Math.floor(1000 + Math.random() * 9000);
+        };
+
+        let usernameExists = await User.findOne({ username });
+
+        if (usernameExists) {
+          do {
+            const trimmed = baseUsername.slice(0, 15);
+            username = `${trimmed}${generateDigits()}`;
+            usernameExists = await User.findOne({ username });
+          } while (usernameExists);
+        }
 
         const generateRandomPassword = () => {
           return `Aa1!${crypto.randomBytes(8).toString('hex')}`;
         };
+
         const randomPassword = generateRandomPassword();
         const hashedPassword = await bcrypt.hash(randomPassword, 10);
 
@@ -121,6 +141,28 @@ export const authOptions: NextAuthOptions = {
           lastname,
           password: hashedPassword,
           emailVerified: true,
+        });
+
+        await resend.emails.send({
+          from: 'Boards <noreply@mail.boards-now.com>',
+          to: profile.email,
+          subject: 'Account created',
+          html: `
+            <h2>Welcome to Boards!</h2>
+            <p>You have been successfully signed up on boards-now.com</p>
+            <p>You can now:</p>
+            <ul>
+              <li>Save up to four games</li>
+              <li>Create online sessions to play online with friends</li>
+            </ul>
+            <p>To sign in from the login form, a new password has been assigned to your account:</p>
+            <p><b>${randomPassword}</b></p>
+            <p>For security reasons, you can change it in the "Account / Update Password" section.</p>
+            <p>Thank you for being part of this platform.</p>
+            <a href="boards-now.com" target="_blank">
+              Boards
+            </a>
+          `,
         });
       }
       return true;
