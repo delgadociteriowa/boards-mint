@@ -53,7 +53,7 @@ const AccountPassword = ({ handleUpdatePassword }: AccountPasswordProps) => {
         </div>
         <div className='relative'>
           <input
-            type='text'
+            type={showCurrentPassword ? 'text' : 'password'}
             maxLength={50}
             minLength={8}
             required
