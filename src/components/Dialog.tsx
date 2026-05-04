@@ -1,23 +1,23 @@
 interface DialogProps {
   children: React.ReactNode;
-  ref: React.RefObject<HTMLDialogElement | null>;
+  reference: React.RefObject<HTMLDialogElement | null>;
 }
 
-const Dialog = ({ children, ref }: DialogProps) => {
+const Dialog = ({ children, reference }: DialogProps) => {
   const closeModal = () => {
-    ref.current?.close();
+    reference.current?.close();
   };
 
   return (
     <dialog
-      ref={ref}
+      ref={reference}
       className='rounded-xl p-6 backdrop:bg-black/40 w-[90%] md:w-[500px] h-[75%] md:h-[700px] mx-auto my-18 overflow-hidden bg-stone-50 text-stone-600'
       onCancel={(e) => {
         e.preventDefault();
         closeModal();
       }}
       onClick={(e) => {
-        const dialog = ref.current;
+        const dialog = reference.current;
         if (!dialog) return;
 
         const rect = dialog.getBoundingClientRect();

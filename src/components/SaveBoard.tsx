@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from '@/state/hooks';
 import { useSession } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
 import { useRef } from 'react';
+import Dialog from './Dialog';
 import DialogHowto from './DialogHowto';
 
 interface SaveBoardProps {
@@ -17,7 +18,6 @@ const SaveBoard = ({
   hDeletesGameRoom,
   gLeavesGameRoom,
 }: SaveBoardProps) => {
-  const dialogRef = useRef<HTMLDialogElement | null>(null);
   const { data: session } = useSession();
   const {
     phaseTwo,
@@ -33,6 +33,8 @@ const SaveBoard = ({
   const searchParams = useSearchParams();
   const boardId = searchParams.get('id');
   const roomId = searchParams.get('room');
+
+  const dialogRef = useRef<HTMLDialogElement | null>(null);
 
   const handleClick = async () => {
     const answer = window.confirm('Do you want to save the current board?');
@@ -65,10 +67,6 @@ const SaveBoard = ({
 
     dialog.showModal();
     dialog.scrollTop = 0;
-  };
-
-  const closeModal = () => {
-    dialogRef.current?.close();
   };
 
   const styleByPhase = !phaseTwo
@@ -141,40 +139,9 @@ const SaveBoard = ({
           </button>
         )}
       </div>
-
-      <dialog
-        ref={dialogRef}
-        className='rounded-xl p-6 backdrop:bg-black/40 w-[90%] md:w-[500px] h-[75%] md:h-[700px] mx-auto my-18 overflow-hidden bg-stone-50 text-stone-600'
-        onCancel={(e) => {
-          e.preventDefault();
-          closeModal();
-        }}
-        onClick={(e) => {
-          const dialog = dialogRef.current;
-          if (!dialog) return;
-
-          const rect = dialog.getBoundingClientRect();
-          const isInDialog =
-            e.clientX >= rect.left &&
-            e.clientX <= rect.right &&
-            e.clientY >= rect.top &&
-            e.clientY <= rect.bottom;
-
-          if (!isInDialog) {
-            closeModal();
-          }
-        }}
-      >
-        <div className='h-full overflow-y-auto p-2'>
-          <DialogHowto />
-          <button
-            onClick={closeModal}
-            className='flex-none text-stone-100 px-6 py-1 rounded-full bg-sky-600 hover:bg-sky-500 cursor-pointer'
-          >
-            close
-          </button>
-        </div>
-      </dialog>
+      <Dialog reference={dialogRef}>
+        <DialogHowto />
+      </Dialog>
     </>
   );
 };
