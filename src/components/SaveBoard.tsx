@@ -3,7 +3,8 @@ import { addBoard, updateBoard } from '@/state/board/boardSlice';
 import { useAppDispatch, useAppSelector } from '@/state/hooks';
 import { useSession } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
+import { Toaster, toast } from 'sonner';
 import Dialog from './Dialog';
 import DialogHowto from './DialogHowto';
 
@@ -36,28 +37,56 @@ const SaveBoard = ({
 
   const dialogRef = useRef<HTMLDialogElement | null>(null);
 
-  const handleClick = async () => {
-    const answer = window.confirm('Do you want to save the current board?');
-    if (!answer) return;
+  const [activeToast, setActiveToast] = useState(false);
 
-    if (!boardId) {
-      await dispatch(addBoard({ gameGrid, selectedGame }));
-    } else {
-      await dispatch(updateBoard({ id: boardId, gameGrid: gameGrid }));
-    }
+  const handleClick = async () => {
+    setActiveToast(true);
+    const toastId = toast('Save board', {
+      description: 'Do you want to save the game?',
+      duration: Infinity,
+      action: {
+        label: 'Save',
+        onClick: async () => {
+          toast.dismiss(toastId);
+
+          const promise = !boardId
+            ? dispatch(addBoard({ gameGrid, selectedGame })).unwrap()
+            : dispatch(updateBoard({ id: boardId, gameGrid })).unwrap();
+
+          await toast.promise(promise, {
+            loading: 'Saving game...',
+            success: 'Game saved',
+            error: 'Failed to save game',
+          });
+
+          setActiveToast(false);
+        },
+      },
+      cancel: {
+        label: 'Cancel',
+        onClick: () => {
+          toast.dismiss(toastId);
+          setActiveToast(false);
+        },
+      },
+    });
   };
 
   const handleShare = async () => {
+    setActiveToast(true);
     const currentUrl = window.location.href;
     const roomUrl = currentUrl.replace('id=', 'room=');
     try {
       await navigator.clipboard.writeText(roomUrl);
-      alert(
-        'The game room link has been copied to your clipboard! Share it to start playing online.',
-      );
+      toast.success('Link copied', {
+        description:
+          'The game room link has been copied to your clipboard! Share it to start playing online.',
+      });
+      setActiveToast(false);
     } catch (error) {
-      alert('Could not copy the link');
+      toast.error('Could not copy the link');
       console.error(error);
+      setActiveToast(false);
     }
   };
 
@@ -83,6 +112,7 @@ const SaveBoard = ({
         <button
           className='flex-none text-stone-200 px-1 py-1 rounded-full w-[32px] h-[32px] bg-stone-400 hover:bg-stone-300 cursor-pointer'
           onClick={openModal}
+          disabled={activeToast}
         >
           ?
         </button>
@@ -91,7 +121,7 @@ const SaveBoard = ({
             <button
               className={`flex-1 md:flex-none text-stone-100 px-6 py-1 rounded-full w-[calc(50%-4px)] md:w-auto ${styleByPhase}`}
               onClick={handleClick}
-              disabled={phaseTwo}
+              disabled={phaseTwo || activeToast}
             >
               save
             </button>
@@ -99,6 +129,7 @@ const SaveBoard = ({
               <button
                 className={`flex-1 md:flex-none text-stone-100 px-6 py-1 rounded-full w-[calc(50%-4px)] md:w-auto ${styleByPhase}`}
                 onClick={handleShare}
+                disabled={activeToast}
               >
                 share
               </button>
@@ -106,25 +137,12 @@ const SaveBoard = ({
             <button
               className={`flex-1 md:flex-none text-stone-100 px-6 py-1 rounded-full w-[calc(50%-4px)] md:w-auto ${styleByShare}`}
               onClick={!socketActive ? hCreatesGameRoom : hDeletesGameRoom}
-              disabled={phaseTwo || shareDelay}
+              disabled={phaseTwo || shareDelay || activeToast}
             >
               {socketActive ? 'end' : 'online room'}
             </button>
             {updatedAt && (
-              <span
-                className='
-                w-full
-                md:w-auto
-                text-center
-                mt-3
-                md:mt-0
-                md:ml-auto
-                md:mr-2
-                text-sm
-                font-texts
-                text-stone-500
-              '
-              >
+              <span className='w-full md:w-auto text-center mt-3 md:mt-0 md:ml-auto md:mr-2 text-sm font-texts text-stone-500'>
                 {saving ? 'Saving...' : `Last Saved: ${updatedAt}`}
               </span>
             )}
@@ -142,6 +160,18 @@ const SaveBoard = ({
       <Dialog reference={dialogRef}>
         <DialogHowto />
       </Dialog>
+      <Toaster
+        position='top-center'
+        toastOptions={{
+          classNames: {
+            actionButton:
+              '!bg-green-600 !text-white hover:!bg-green-500 !rounded-full order-1',
+            cancelButton:
+              '!bg-sky-600 !text-white hover:!bg-sky-500 !rounded-full order-2 !ml-1',
+          },
+        }}
+        richColors
+      />
     </>
   );
 };
