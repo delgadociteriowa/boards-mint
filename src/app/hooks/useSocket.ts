@@ -243,24 +243,40 @@ export const useSocket = () => {
   };
 
   // used by host
-  const hDeletesGameRoom = () => {
-    const answer = window.confirm(
-      'Do you want to stop sharing this game room?',
-    );
+  const hDeletesGameRoom = (setToastState: (value: boolean) => void) => {
+    setToastState(true);
+    const toastId = toast('End online room', {
+      description: 'Do you want to stop sharing this game room?',
+      duration: Infinity,
+      action: {
+        label: 'continue',
+        onClick: async () => {
+          toast.dismiss(toastId);
+          setToastState(true); // important
 
-    if (!answer) return;
+          dispatch(setShareDelay(true));
+          socketRef.current?.emit('h-deletes-game-room', id);
+          socketRef.current?.disconnect();
+          socketRef.current = null;
+          dispatch(setSocketActive(false));
 
-    dispatch(setShareDelay(true));
-    socketRef.current?.emit('h-deletes-game-room', id);
-    socketRef.current?.disconnect();
-    socketRef.current = null;
-    dispatch(setSocketActive(false));
+          toast.success('You have stopped sharing this game room.');
 
-    alert('You have stopped sharing this game room.');
+          setTimeout(() => {
+            dispatch(setShareDelay(false));
+          }, 800);
 
-    setTimeout(() => {
-      dispatch(setShareDelay(false));
-    }, 800);
+          setToastState(false);
+        },
+      },
+      cancel: {
+        label: 'cancel',
+        onClick: () => {
+          toast.dismiss(toastId);
+          setToastState(false);
+        },
+      },
+    });
   };
 
   // player goes to other page

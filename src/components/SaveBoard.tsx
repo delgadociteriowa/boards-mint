@@ -11,7 +11,7 @@ import DialogHowto from './DialogHowto';
 
 interface SaveBoardProps {
   hCreatesGameRoom: (setToastState: (value: boolean) => void) => void;
-  hDeletesGameRoom: () => void;
+  hDeletesGameRoom: (setToastState: (value: boolean) => void) => void;
   gLeavesGameRoom: () => void;
 }
 
@@ -141,7 +141,7 @@ const SaveBoard = ({
               onClick={() =>
                 !socketActive
                   ? hCreatesGameRoom(setActiveToast)
-                  : hDeletesGameRoom()
+                  : hDeletesGameRoom(setActiveToast)
               }
               disabled={phaseTwo || shareDelay || activeToast}
             >
