@@ -178,22 +178,17 @@ export const useSocket = () => {
           toast.dismiss(toastId);
           setToastState(true); // important
 
-          try {
-            await createGameRoom(id);
-            toast.success('Online room created.', {
-              description:
-                'The game room link has been copied to your clipboard! Share it to start playing online.',
-              duration: 4000,
-            });
-          } catch (error: any) {
-            toast.error('Failed to create room', {
-              description:
-                "The room couldn't be created now. Please, try again in a few seconds.",
-            });
-            console.error(`Error: ${error?.message || 'Unknown'}`);
-          } finally {
-            setToastState(false);
-          }
+          const promise = createGameRoom(id);
+
+          await toast.promise(promise, {
+            loading: 'Creating online room...',
+            success:
+              'Online room created! The game room link has been copied to your clipboard! Share it to start playing online.',
+            error:
+              "The room couldn't be created now. Please, try again in a few seconds.",
+          });
+
+          setToastState(false);
         },
       },
       cancel: {
