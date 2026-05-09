@@ -14,6 +14,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
+import { toast } from 'sonner';
 
 export const useSocket = () => {
   const { data: session } = useSession();
@@ -159,47 +160,90 @@ export const useSocket = () => {
   };
 
   // used by host
-  const hCreatesGameRoom = () => {
+  const hCreatesGameRoom = (setToastState: (value: boolean) => void) => {
     if (!id) {
-      alert('You must save this board to start an online game room.');
+      toast.warning('Warning', {
+        description: 'You must save this board to start an online game.',
+      });
       return;
     }
+    setToastState(true);
+    const toastId = toast('Online room', {
+      description:
+        'You are about to start an online room. Do you want to continue?',
+      duration: Infinity,
+      action: {
+        label: 'Create room',
+        onClick: async () => {
+          toast.dismiss(toastId);
+          setToastState(true); // important
 
-    const answer = window.confirm(
-      'You are about to start an online room. Do you want to continue?',
-    );
-    if (!answer) return;
+          try {
+            await createGameRoom(id);
+            toast.success('Online room created.', {
+              description:
+                'The game room link has been copied to your clipboard! Share it to start playing online.',
+              duration: 4000,
+            });
+          } catch (error: any) {
+            toast.error('Failed to create room', {
+              description:
+                "The room couldn't be created now. Please, try again in a few seconds.",
+            });
+            console.error(`Error: ${error?.message || 'Unknown'}`);
+          } finally {
+            setToastState(false);
+          }
+        },
+      },
+      cancel: {
+        label: 'Cancel',
+        onClick: () => {
+          toast.dismiss(toastId);
+          setToastState(false);
+        },
+      },
+    });
+  };
 
-    dispatch(setShareDelay(true));
+  const createGameRoom = (boardId: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      dispatch(setShareDelay(true));
 
-    // connects
-    initSocket();
-    if (socketRef.current === null) return;
-
-    // OK
-    socketRef.current.on('connect', () => {
-      socketRef.current?.emit('h-creates-game-room', id);
-      dispatch(setSocketActive(true));
-      dispatch(setSocketHost(session?.user.username ?? ''));
-      dispatch(setSocketGuest('waiting'));
-      setTimeout(() => {
+      // connects
+      initSocket();
+      if (socketRef.current === null) {
         dispatch(setShareDelay(false));
-      }, 800);
+        reject(new Error('Socket inialization failed.'));
+        return;
+      }
 
-      const shareLink = window.location.href.replace('?id', '?room');
-      navigator.clipboard.writeText(shareLink).then(() => {
-        alert(
-          'The game room link has been copied to your clipboard! Share it to start playing online.',
+      // OK
+      socketRef.current.on('connect', () => {
+        socketRef.current?.emit('h-creates-game-room', boardId);
+        dispatch(setSocketActive(true));
+        dispatch(setSocketHost(session?.user.username ?? ''));
+        dispatch(setSocketGuest('waiting'));
+        setTimeout(() => {
+          dispatch(setShareDelay(false));
+        }, 800);
+
+        const shareLink = window.location.href.replace('?id', '?room');
+        navigator.clipboard.writeText(shareLink);
+
+        resolve();
+      });
+
+      // error
+      socketRef.current.on('connect_error', (err) => {
+        dispatch(setShareDelay(false));
+        reject(
+          new Error(
+            err?.message ||
+              "The room coudn't be created now. Please, try again in a few seconds.",
+          ),
         );
       });
-    });
-
-    // error
-    socketRef.current.on('connect_error', (err) => {
-      connectionError(
-        err.message,
-        "The room couldn't be created now. Please, try again in a few seconds.",
-      );
     });
   };
 

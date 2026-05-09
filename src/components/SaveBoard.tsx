@@ -9,7 +9,7 @@ import Dialog from './Dialog';
 import DialogHowto from './DialogHowto';
 
 interface SaveBoardProps {
-  hCreatesGameRoom: () => void;
+  hCreatesGameRoom: (setToastState: (value: boolean) => void) => void;
   hDeletesGameRoom: () => void;
   gLeavesGameRoom: () => void;
 }
@@ -136,7 +136,11 @@ const SaveBoard = ({
             )}
             <button
               className={`flex-1 md:flex-none text-stone-100 px-6 py-1 rounded-full w-[calc(50%-4px)] md:w-auto ${styleByShare}`}
-              onClick={!socketActive ? hCreatesGameRoom : hDeletesGameRoom}
+              onClick={() =>
+                !socketActive
+                  ? hCreatesGameRoom(setActiveToast)
+                  : hDeletesGameRoom()
+              }
               disabled={phaseTwo || shareDelay || activeToast}
             >
               {socketActive ? 'end' : 'online room'}
