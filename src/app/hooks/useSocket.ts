@@ -173,7 +173,7 @@ export const useSocket = () => {
         'You are about to start an online room. Do you want to continue?',
       duration: Infinity,
       action: {
-        label: 'Create room',
+        label: 'continue',
         onClick: async () => {
           toast.dismiss(toastId);
           setToastState(true); // important
@@ -197,7 +197,7 @@ export const useSocket = () => {
         },
       },
       cancel: {
-        label: 'Cancel',
+        label: 'cancel',
         onClick: () => {
           toast.dismiss(toastId);
           setToastState(false);
