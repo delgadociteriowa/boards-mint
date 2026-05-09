@@ -1,6 +1,7 @@
 'use client';
 import { addBoard, updateBoard } from '@/state/board/boardSlice';
 import { useAppDispatch, useAppSelector } from '@/state/hooks';
+import { Copy } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
 import { useRef, useState } from 'react';
@@ -127,11 +128,12 @@ const SaveBoard = ({
             </button>
             {socketActive && (
               <button
-                className={`flex-1 md:flex-none text-stone-100 px-6 py-1 rounded-full w-[calc(50%-4px)] md:w-auto ${styleByPhase}`}
+                className={`flex flex-1 md:flex-none items-center justify-center gap-2 text-stone-100 px-6 py-1 rounded-full w-[calc(50%-4px)] md:w-auto ${styleByPhase}`}
                 onClick={handleShare}
                 disabled={activeToast}
               >
                 share
+                <Copy size={16} />
               </button>
             )}
             <button
