@@ -1,7 +1,7 @@
 'use client';
 import { addBoard, updateBoard } from '@/state/board/boardSlice';
 import { useAppDispatch, useAppSelector } from '@/state/hooks';
-import { Copy } from 'lucide-react';
+import { CircleHelp, Copy } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
 import { useRef, useState } from 'react';
@@ -157,11 +157,11 @@ const SaveBoard = ({
           </button>
         )}
         <button
-          className='flex-none text-stone-200 px-1 py-1 rounded-full w-[31px] h-[31px] bg-stone-400 hover:bg-stone-300 cursor-pointer'
+          className='flex-none flex items-center justify-center text-stone-200 px-1 py-1 rounded-full w-[31px] h-[31px] bg-stone-400 hover:bg-stone-300 cursor-pointer'
           onClick={openModal}
           disabled={activeToast}
         >
-          ?
+          <CircleHelp className='w-10 h-10' />
         </button>
       </div>
       <Dialog reference={dialogRef}>
