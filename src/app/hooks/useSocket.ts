@@ -98,6 +98,7 @@ export const useSocket = () => {
       // Only received by host because .to
       socket.on('g-joined-game-room', (guestName: string) => {
         if (!roomId) toast.success('The guest player has joined the game.');
+        dispatch(setSocketGuest('visitor'));
         socket.emit('h-shares-board', id, session?.user.username, gameGrid);
       });
 
@@ -220,7 +221,7 @@ export const useSocket = () => {
       }
 
       // OK
-      socketRef.current.once('connect', async () => {
+      socketRef.current.on('connect', async () => {
         socketRef.current?.emit('h-creates-game-room', boardId);
         dispatch(setSocketActive(true));
         dispatch(setSocketHost(session?.user.username ?? ''));
@@ -244,7 +245,7 @@ export const useSocket = () => {
       });
 
       // error
-      socketRef.current.once('connect_error', (err) => {
+      socketRef.current.on('connect_error', (err) => {
         dispatch(setShareDelay(false));
         reject(
           new Error(
