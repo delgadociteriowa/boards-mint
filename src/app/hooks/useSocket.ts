@@ -16,6 +16,10 @@ import { useEffect, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { toast } from 'sonner';
 
+type CreateGameRoomResult = {
+  clipboardCopied: boolean;
+};
+
 export const useSocket = () => {
   const { data: session } = useSession();
   const socketRef = useRef<Socket | null>(null);
@@ -182,8 +186,10 @@ export const useSocket = () => {
 
           await toast.promise(promise, {
             loading: 'Creating online room...',
-            success:
-              'Online room created! The game room link has been copied to your clipboard! Share it to start playing online.',
+            success: ({ clipboardCopied }) =>
+              clipboardCopied
+                ? 'Online room created! The game room link has been copied to your clipboard! Share it to start playing online.'
+                : 'Online room created! Share it to start playing online.',
             error:
               "The room couldn't be created now. Please, try again in a few seconds.",
           });
@@ -201,7 +207,7 @@ export const useSocket = () => {
     });
   };
 
-  const createGameRoom = (boardId: string): Promise<void> => {
+  const createGameRoom = (boardId: string): Promise<CreateGameRoomResult> => {
     return new Promise((resolve, reject) => {
       dispatch(setShareDelay(true));
 
@@ -214,23 +220,31 @@ export const useSocket = () => {
       }
 
       // OK
-      socketRef.current.on('connect', () => {
+      socketRef.current.once('connect', async () => {
         socketRef.current?.emit('h-creates-game-room', boardId);
         dispatch(setSocketActive(true));
         dispatch(setSocketHost(session?.user.username ?? ''));
         dispatch(setSocketGuest('waiting'));
+
         setTimeout(() => {
           dispatch(setShareDelay(false));
         }, 800);
 
         const shareLink = window.location.href.replace('?id', '?room');
-        navigator.clipboard.writeText(shareLink);
 
-        resolve();
+        let clipboardCopied = false;
+        try {
+          await navigator.clipboard.writeText(shareLink);
+          clipboardCopied = true;
+        } catch {
+          clipboardCopied = false;
+        }
+
+        resolve({ clipboardCopied });
       });
 
       // error
-      socketRef.current.on('connect_error', (err) => {
+      socketRef.current.once('connect_error', (err) => {
         dispatch(setShareDelay(false));
         reject(
           new Error(

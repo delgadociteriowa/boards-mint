@@ -141,7 +141,7 @@ const SaveBoard = ({
               {socketActive ? 'end' : 'online room'}
             </button>
             {updatedAt && (
-              <span className='w-full md:w-auto text-center mt-3 md:mt-0 md:ml-auto md:mr-2 text-sm font-texts text-stone-500'>
+              <span className='w-full order-last md:w-auto text-center mt-3 md:mt-0 md:ml-auto md:mr-2 text-sm font-texts text-stone-500'>
                 {saving ? 'Saving...' : `Last Saved: ${updatedAt}`}
               </span>
             )}
