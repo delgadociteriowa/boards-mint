@@ -12,7 +12,7 @@ import DialogHowto from './DialogHowto';
 interface SaveBoardProps {
   hCreatesGameRoom: (setToastState: (value: boolean) => void) => void;
   hDeletesGameRoom: (setToastState: (value: boolean) => void) => void;
-  gLeavesGameRoom: () => void;
+  gLeavesGameRoom: (setToastState: (value: boolean) => void) => void;
 }
 
 const SaveBoard = ({
@@ -157,7 +157,8 @@ const SaveBoard = ({
         {roomId && (
           <button
             className={`flex-1 md:flex-none text-stone-100 px-6 py-1 rounded-full ${styleByPhase}`}
-            onClick={gLeavesGameRoom}
+            onClick={() => gLeavesGameRoom(setActiveToast)}
+            disabled={activeToast}
           >
             leave game
           </button>

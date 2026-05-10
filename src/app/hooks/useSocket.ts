@@ -93,7 +93,7 @@ export const useSocket = () => {
 
       // Only received by host because .to
       socket.on('g-joined-game-room', (guestName: string) => {
-        if (!roomId) alert('The guest player has joined the game.');
+        if (!roomId) toast.success('The guest player has joined the game.');
         socket.emit('h-shares-board', id, session?.user.username, gameGrid);
       });
 
@@ -103,14 +103,14 @@ export const useSocket = () => {
 
       socket.on('g-left-game-room', () => {
         if (!roomId) {
-          alert(`The guest player has left the game.`);
+          toast.warning('The guest player has left the game.');
           dispatch(setSocketGuest('waiting'));
         }
       });
 
       socket.on('h-deleted-game-room', () => {
         if (!gameId) {
-          alert(
+          toast.warning(
             `The host has finished the game session. You'll be redirected to the home page.`,
           );
           setTimeout(() => {
@@ -124,7 +124,7 @@ export const useSocket = () => {
         dispatch(setSocketHost(hostName));
         dispatch(setGameGrid(board));
         dispatch(setSocketActive(true));
-        alert(`Welcome to Boards. You have joined the game room.`);
+        toast.success(`Welcome to Boards. You have joined the game room.`);
         // ojo loading
       });
 
@@ -141,11 +141,11 @@ export const useSocket = () => {
 
       socket.on('p-disconnected', () => {
         if (gameId) {
-          alert(`The guest player has left the game.`);
+          toast.warning(`The guest player has left the game.`);
           dispatch(setSocketGuest('waiting'));
         }
         if (roomId) {
-          alert(
+          toast.warning(
             `The host is no longer connected to the game. You'll be redirected to the home page.`,
           );
           setTimeout(() => {
@@ -238,6 +238,7 @@ export const useSocket = () => {
               "The room coudn't be created now. Please, try again in a few seconds.",
           ),
         );
+        return;
       });
     });
   };
@@ -304,7 +305,7 @@ export const useSocket = () => {
         guestName,
         (response: { success: boolean; message?: string }) => {
           if (!response.success) {
-            alert(response.message);
+            toast.error(response.message);
             notAllowed.current = true;
             router.push('/');
           }
@@ -321,16 +322,37 @@ export const useSocket = () => {
   };
 
   // used by guest
-  const gLeavesGameRoom = () => {
-    const answer = window.confirm(
-      'Are you sure you want to leave the current game?',
-    );
-    if (!answer) return;
+  const gLeavesGameRoom = (setToastState: (value: boolean) => void) => {
+    setToastState(true);
+    const toastId = toast('Leave online room', {
+      description: 'Are you sure you want to leave the current game?',
+      duration: Infinity,
+      action: {
+        label: 'continue',
+        onClick: async () => {
+          toast.dismiss(toastId);
+          setToastState(true); // important
 
-    socketRef.current?.emit('g-leaves-game-room', roomId, socketGuest);
-    socketRef.current?.disconnect();
-    alert('You have left the game. You will be redirected to the home page.');
-    router.push('/');
+          socketRef.current?.emit('g-leaves-game-room', roomId, socketGuest);
+          socketRef.current?.disconnect();
+          toast.warning(
+            'You have left the game. You will be redirected to the home page.',
+          );
+          setTimeout(() => {
+            router.push('/');
+          }, 4000);
+
+          setToastState(false);
+        },
+      },
+      cancel: {
+        label: 'cancel',
+        onClick: () => {
+          toast.dismiss(toastId);
+          setToastState(false);
+        },
+      },
+    });
   };
 
   // used by guest
