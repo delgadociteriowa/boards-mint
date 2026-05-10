@@ -149,7 +149,9 @@ const SaveBoard = ({
         )}
         {roomId && (
           <button
-            className={`flex-1 md:flex-none text-stone-100 px-6 py-1 rounded-full ${styleByPhase}`}
+            className={
+              'flex-1 md:flex-none text-stone-100 px-6 py-1 rounded-full bg-sky-600 hover:bg-sky-500 cursor-pointer'
+            }
             onClick={() => gLeavesGameRoom(setActiveToast)}
             disabled={activeToast}
           >

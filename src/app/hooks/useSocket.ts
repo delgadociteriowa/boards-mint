@@ -65,7 +65,7 @@ export const useSocket = () => {
       dispatch(setSocketGuest(session?.user.username));
       gSendsUserName(roomId, session?.user.username);
     }
-  }, [session]);
+  }, [session?.user.username]);
 
   useEffect(() => {
     return () => {
