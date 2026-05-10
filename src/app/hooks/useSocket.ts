@@ -280,19 +280,6 @@ export const useSocket = () => {
     });
   };
 
-  // player goes to other page
-  const pLeavesGameRoom = () => {
-    if (gameId) {
-      socketRef.current?.emit('h-deletes-game-room', id);
-      socketRef.current?.disconnect();
-      socketRef.current = null;
-      dispatch(setSocketActive(false));
-    }
-    if (roomId) {
-      socketRef.current?.emit('g-leaves-game-room', roomId, socketGuest);
-    }
-  };
-
   // used by guest
   const gJoinsGameRoom = (boardIdRoom: string, guestName: string) => {
     initSocket();
@@ -368,6 +355,19 @@ export const useSocket = () => {
       phaseTwo,
       JSON.stringify(selectedSqr),
     );
+  };
+
+  // player goes to other page
+  const pLeavesGameRoom = () => {
+    if (gameId) {
+      socketRef.current?.emit('h-deletes-game-room', id);
+      socketRef.current?.disconnect();
+      socketRef.current = null;
+      dispatch(setSocketActive(false));
+    }
+    if (roomId) {
+      socketRef.current?.emit('g-leaves-game-room', roomId, socketGuest);
+    }
   };
 
   const connectionError = (errorMessage: string, message: string) => {

@@ -110,13 +110,6 @@ const SaveBoard = ({
   return (
     <>
       <div className='flex flex-wrap md:flex-nowrap gap-2 w-[90%] mb-14 landscape:w-[75%] mx-auto'>
-        <button
-          className='flex-none text-stone-200 px-1 py-1 rounded-full w-[32px] h-[32px] bg-stone-400 hover:bg-stone-300 cursor-pointer'
-          onClick={openModal}
-          disabled={activeToast}
-        >
-          ?
-        </button>
         {session && !roomId && (
           <>
             <button
@@ -163,6 +156,13 @@ const SaveBoard = ({
             leave game
           </button>
         )}
+        <button
+          className='flex-none text-stone-200 px-1 py-1 rounded-full w-[31px] h-[31px] bg-stone-400 hover:bg-stone-300 cursor-pointer'
+          onClick={openModal}
+          disabled={activeToast}
+        >
+          ?
+        </button>
       </div>
       <Dialog reference={dialogRef}>
         <DialogHowto />
