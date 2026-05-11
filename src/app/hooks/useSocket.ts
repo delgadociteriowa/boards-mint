@@ -98,13 +98,12 @@ export const useSocket = () => {
       // Only received by host because .to
       socket.on('g-joined-game-room', (guestName: string) => {
         if (!roomId) toast.success('The guest player has joined the game.');
-        dispatch(setSocketGuest(guestName || 'visitor'));
         socket.emit('h-shares-board', id, session?.user.username, gameGrid);
       });
 
       socket.on('g-sent-user-name', (guestName: string) => {
-        alert(`g sent its username ${guestName}`);
-        dispatch(setSocketGuest(guestName));
+        alert(`2. g sent its username ${guestName}`);
+        dispatch(setSocketGuest(guestName || 'visitor'));
       });
 
       socket.on('g-left-game-room', () => {
