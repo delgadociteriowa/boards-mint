@@ -103,6 +103,7 @@ export const useSocket = () => {
       });
 
       socket.on('g-sent-user-name', (guestName: string) => {
+        alert(`g sent its username ${guestName}`);
         dispatch(setSocketGuest(guestName));
       });
 
