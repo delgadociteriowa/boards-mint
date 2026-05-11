@@ -64,6 +64,8 @@ export const useSocket = () => {
     if (session?.user.username && roomId) {
       dispatch(setSocketGuest(session?.user.username));
       gSendsUserName(roomId, session?.user.username);
+    } else if (roomId) {
+      gSendsUserName(roomId, 'visitor');
     }
   }, [roomId, session?.user.username]);
 
