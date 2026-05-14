@@ -22,7 +22,7 @@ const HomeFeatures = () => {
       icon: HandHeartIcon,
       altText: 'A hand holding a heart icon',
       title: 'Totally Free',
-      paragraph: 'Easy access without subscriptions, without ads',
+      paragraph: 'Easy access without payments, without ads',
     },
     {
       icon: MobileIcon,
