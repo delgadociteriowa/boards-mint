@@ -6,8 +6,7 @@ const HomeMessageSection = () => (
       Available to everyone
     </h3>
     <p className='text-center text-xl mb-6'>
-      No registration required.
-      <br /> Just select a board and have fun!
+      Just select a board and have fun!
     </p>
     <Link
       href='/about'
