@@ -12,7 +12,7 @@ export async function POST(req) {
 
     const usersCount = await User.countDocuments();
 
-    if (usersCount >= 8) {
+    if (usersCount >= 10) {
       return Response.json(
         {
           message:

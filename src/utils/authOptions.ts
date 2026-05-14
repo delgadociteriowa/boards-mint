@@ -104,6 +104,13 @@ export const authOptions: NextAuthOptions = {
       const user = await User.findOne({ email: profile.email });
 
       if (!user) {
+        // Users limit
+        const usersCount = await User.countDocuments();
+
+        if (usersCount >= 10) {
+          throw new Error('User limit reached');
+        }
+
         const fullName = profile.name ?? '';
         const [firstname = '', lastname = ''] = fullName.split(' ');
 

@@ -18,9 +18,9 @@ const Navigation = () => {
     >
       <Link
         href='/'
-        className='mr-auto font-brand text-3xl text-stone-600 no-underline z-40'
+        className='mr-auto font-brand text-2xl text-stone-600 no-underline z-40'
       >
-        ♞BOARDS{' '}
+        ♞BOARDS-NOW{' '}
         <span className='inline font-texts ml-2 uppercase tracking-[2px] text-stone-600 text-[1rem] font-bold'>
           {selectedGame}
         </span>

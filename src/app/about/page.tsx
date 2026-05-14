@@ -40,10 +40,10 @@ const About = () => {
             alt='A robotic hand holding a chess piece'
           />
           <p className='text-left text-stone-600 leading-relaxed w-[100%] mt-10 mx-6'>
-            Boards is a totally free virtual board game app and a passion
+            Boards-now is a totally free virtual board game app and a passion
             project. It is not affiliated with or endorsed by any trademark.
           </p>
-          <p className='text-left text-stone-600 leading-relaxed w-[100%] mt- mx-6'>
+          <p className='text-left text-stone-600 leading-relaxed w-[100%] mx-6'>
             This site uses{' '}
             <a
               className='text-blue-600 hover:text-blue-500'
@@ -61,6 +61,18 @@ const About = () => {
             >
               privacy
             </Link>
+            .
+          </p>
+          <p className='text-left text-stone-600 leading-relaxed w-[100%] mx-6'>
+            This platform has been developed by{' '}
+            <a
+              className='text-blue-600 hover:text-blue-500'
+              href='https://delgadociteriowa.github.io/main/'
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              Carlos Delgado
+            </a>
             .
           </p>
           <p className='text-center text-xl text-stone-600 tracking-[2px] leading-relaxed w-[100%] mt-10'>
