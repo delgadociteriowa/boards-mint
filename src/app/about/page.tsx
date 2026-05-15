@@ -18,7 +18,7 @@ const About = () => {
           <AboutCard
             color='bg-teal-500'
             title='Welcome'
-            paragraph={`Boards is an easy and free platform with\n your favorite board games in a virtual version.\nNo hassle, no sign-ups.\nJust pick a game and let the fun begin.`}
+            paragraph={`Boards is an easy and free platform with\n your favorite board games in a virtual version.\nJust pick a game and let the fun begin.`}
           />
           <AboutImage image={AboutTop} alt='A chess board made of cristal' />
           <AboutImage

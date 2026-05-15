@@ -6,7 +6,10 @@ const HomeMessageSection = () => (
       Available to everyone
     </h3>
     <p className='text-center text-xl mb-6'>
-      Just select a board and have fun!
+      Boards is an easy and free platform with
+      <br /> your favorite board games in a virtual version.
+      <br />
+      Just pick a game and let the fun begin.
     </p>
     <Link
       href='/about'

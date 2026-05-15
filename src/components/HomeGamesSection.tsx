@@ -6,29 +6,25 @@ const HomeGamesSection = () => {
     {
       background: 'bg-game-chess',
       title: 'chess',
-      paragraph:
-        'A strategic board game where two players move pieces to checkmate the opponent’s king.',
+      paragraph: "Checkmate your opponent's king and master the game.",
       gameLink: 'chess',
     },
     {
       background: 'bg-game-checkers',
       title: 'checkers',
-      paragraph:
-        'A board game where players jump over and capture the opponent’s pieces.',
+      paragraph: 'Jump over pieces to claim the board and win the game.',
       gameLink: 'checkers',
+    },
+    {
+      background: 'bg-game-shogi',
+      title: 'shoji',
+      paragraph: 'Command armies of pieces to capture your opponent ones.',
+      gameLink: 'soon',
     },
     {
       background: 'bg-game-go',
       title: 'go',
-      paragraph:
-        'A game where players place stones to control the largest area on the board.',
-      gameLink: 'soon',
-    },
-    {
-      background: 'bg-game-backgammon',
-      title: 'backgammon',
-      paragraph:
-        'A board game for two players that combines luck with strategic knowledge.',
+      paragraph: 'Place stones to control the largest area on the board.',
       gameLink: 'soon',
     },
   ];
