@@ -19,7 +19,7 @@ const Games = () => {
     },
     {
       background: 'bg-game-shogi',
-      title: 'shogi',
+      title: 'shōgi',
       paragraph: 'Command armies of pieces to capture your opponent ones.',
       gameLink: 'soon',
     },

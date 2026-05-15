@@ -17,7 +17,7 @@ const HomeGamesSection = () => {
     },
     {
       background: 'bg-game-shogi',
-      title: 'shoji',
+      title: 'shōgi',
       paragraph: 'Command armies of pieces to capture your opponent ones.',
       gameLink: 'soon',
     },
