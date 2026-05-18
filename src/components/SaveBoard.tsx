@@ -1,7 +1,7 @@
 'use client';
-import { addBoard, updateBoard } from '@/state/board/boardSlice';
+import { addBoard, buildSyncGrid, updateBoard } from '@/state/board/boardSlice';
 import { useAppDispatch, useAppSelector } from '@/state/hooks';
-import { CircleHelp, Copy } from 'lucide-react';
+import { CircleHelp, Copy, RefreshCcw } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
@@ -126,6 +126,30 @@ const SaveBoard = ({
     dialog.scrollTop = 0;
   };
 
+  const handleRestart = async () => {
+    setActiveToast(true);
+    const toastId = toast('Restart board', {
+      description: 'Do you want to restart the game?',
+      duration: Infinity,
+      action: {
+        label: 'Restart',
+        onClick: async () => {
+          toast.dismiss(toastId);
+          dispatch(buildSyncGrid());
+          toast.success('The game has been restarted');
+          setActiveToast(false);
+        },
+      },
+      cancel: {
+        label: 'Cancel',
+        onClick: () => {
+          toast.dismiss(toastId);
+          setActiveToast(false);
+        },
+      },
+    });
+  };
+
   const styleByPhase = !phaseTwo
     ? 'bg-sky-600 hover:bg-sky-500 cursor-pointer'
     : 'bg-stone-600 cursor-not-allowed opacity-60';
@@ -165,7 +189,14 @@ const SaveBoard = ({
               }
               disabled={phaseTwo || shareDelay || activeToast}
             >
-              {socketActive ? 'end' : 'online room'}
+              {socketActive ? 'end' : 'online'}
+            </button>
+            <button
+              className='flex-none flex items-center justify-center text-stone-200 px-1 py-1 rounded-full w-[31px] h-[31px] bg-stone-400 hover:bg-stone-300 cursor-pointer'
+              disabled={activeToast}
+              onClick={handleRestart}
+            >
+              <RefreshCcw className='w-5 h-5' />
             </button>
             {updatedAt && (
               <span className='w-full order-last md:w-auto text-center mt-3 md:mt-0 md:ml-auto md:mr-2 text-sm font-texts text-stone-500'>
@@ -185,6 +216,7 @@ const SaveBoard = ({
             leave game
           </button>
         )}
+
         <button
           className='flex-none flex items-center justify-center text-stone-200 px-1 py-1 rounded-full w-[31px] h-[31px] bg-stone-400 hover:bg-stone-300 cursor-pointer'
           onClick={openModal}
