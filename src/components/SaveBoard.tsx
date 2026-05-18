@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '@/state/hooks';
 import { CircleHelp, Copy } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Toaster, toast } from 'sonner';
 import Dialog from './Dialog';
 import DialogHowto from './DialogHowto';
@@ -39,6 +39,33 @@ const SaveBoard = ({
   const dialogRef = useRef<HTMLDialogElement | null>(null);
 
   const [activeToast, setActiveToast] = useState(false);
+
+  useEffect(() => {
+    if (!boardId || !socketActive) return;
+
+    const autoSave = async () => {
+      try {
+        const promise = dispatch(
+          updateBoard({
+            id: boardId,
+            gameGrid,
+          }),
+        ).unwrap();
+
+        await toast.promise(promise, {
+          error: 'Failed to auto save game',
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    const interval = setInterval(autoSave, 300000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [boardId, socketActive, gameGrid, dispatch]);
 
   const handleClick = async () => {
     setActiveToast(true);
