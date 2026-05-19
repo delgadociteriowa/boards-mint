@@ -223,7 +223,21 @@ export const useSocket = () => {
 
       // OK
       socketRef.current.on('connect', async () => {
-        socketRef.current?.emit('h-creates-game-room', boardId);
+        socketRef.current?.emit(
+          'h-creates-game-room',
+          boardId,
+          async (response: any) => {
+            if (response.error) {
+              reject(
+                new Error(
+                  response.error ||
+                    "The room coudn't be created now. Please, try again in a few seconds.",
+                ),
+              );
+            }
+          },
+        );
+
         dispatch(setSocketActive(true));
         dispatch(setSocketHost(session?.user.username ?? ''));
         dispatch(setSocketGuest('waiting'));
