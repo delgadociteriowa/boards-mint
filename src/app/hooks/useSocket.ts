@@ -179,7 +179,7 @@ export const useSocket = () => {
         'You are about to start an online room. Do you want to continue?',
       duration: Infinity,
       action: {
-        label: 'continue',
+        label: 'Continue',
         onClick: async () => {
           toast.dismiss(toastId);
           setToastState(true); // important
@@ -200,7 +200,7 @@ export const useSocket = () => {
         },
       },
       cancel: {
-        label: 'cancel',
+        label: 'Cancel',
         onClick: () => {
           toast.dismiss(toastId);
           setToastState(false);
@@ -266,7 +266,7 @@ export const useSocket = () => {
       description: 'Do you want to stop sharing this game room?',
       duration: Infinity,
       action: {
-        label: 'continue',
+        label: 'Continue',
         onClick: async () => {
           toast.dismiss(toastId);
           setToastState(true); // important
@@ -287,7 +287,7 @@ export const useSocket = () => {
         },
       },
       cancel: {
-        label: 'cancel',
+        label: 'Cancel',
         onClick: () => {
           toast.dismiss(toastId);
           setToastState(false);
@@ -331,7 +331,7 @@ export const useSocket = () => {
       description: 'Are you sure you want to leave the current game?',
       duration: Infinity,
       action: {
-        label: 'continue',
+        label: 'Leave',
         onClick: async () => {
           toast.dismiss(toastId);
           setToastState(true); // important
@@ -349,7 +349,7 @@ export const useSocket = () => {
         },
       },
       cancel: {
-        label: 'cancel',
+        label: 'Cancel',
         onClick: () => {
           toast.dismiss(toastId);
           setToastState(false);

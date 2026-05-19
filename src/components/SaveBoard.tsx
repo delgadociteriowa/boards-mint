@@ -6,6 +6,7 @@ import {
   Copy,
   Globe,
   GlobeOff,
+  LogOut,
   RefreshCcw,
   Save,
 } from 'lucide-react';
@@ -164,7 +165,7 @@ const SaveBoard = ({
           <>
             <button
               title='Save game'
-              className='flex-none flex items-center justify-center text-stone-200 p-1 rounded-full w-[31px] h-[31px] bg-sky-600 hover:bg-sky-500 cursor-pointer'
+              className='flex-none flex items-center justify-center text-stone-200 p-1 rounded-full w-[31px] h-[31px] bg-sky-600 hover:bg-sky-500 cursor-pointer shadow-md'
               onClick={handleSave}
               disabled={activeToast}
             >
@@ -173,7 +174,7 @@ const SaveBoard = ({
 
             <button
               title={socketActive ? 'Go offline' : 'Online game'}
-              className='flex-none flex items-center justify-center text-stone-200 p-1 rounded-full w-[31px] h-[31px] bg-sky-600 hover:bg-sky-500 cursor-pointer'
+              className='flex-none flex items-center justify-center text-stone-200 p-1 rounded-full w-[31px] h-[31px] bg-sky-600 hover:bg-sky-500 cursor-pointer shadow-md'
               onClick={() =>
                 !socketActive
                   ? hCreatesGameRoom(setActiveToast)
@@ -190,21 +191,14 @@ const SaveBoard = ({
             {socketActive && (
               <button
                 title='Share game'
-                className='flex-none flex items-center justify-center text-stone-200 p-1 rounded-full w-[31px] h-[31px] bg-sky-600 hover:bg-sky-500 cursor-pointer'
+                className='flex-none flex items-center justify-center text-stone-200 p-1 rounded-full w-[31px] h-[31px] bg-sky-600 hover:bg-sky-500 cursor-pointer shadow-md'
                 onClick={handleShare}
                 disabled={activeToast}
               >
                 <Copy className='w-4 h-4' />
               </button>
             )}
-            <button
-              title='Restart game'
-              className='flex-none flex items-center justify-center text-stone-200 p-1 rounded-full w-[31px] h-[31px] bg-sky-600 hover:bg-sky-500 cursor-pointer'
-              disabled={activeToast}
-              onClick={handleRestart}
-            >
-              <RefreshCcw className='w-5 h-5' />
-            </button>
+
             {updatedAt && (
               <span className='w-full order-last md:w-auto text-center mt-3 md:mt-0 md:ml-auto md:mr-2 text-sm font-texts text-stone-500'>
                 {saving ? 'Saving...' : `Last Saved: ${updatedAt}`}
@@ -212,22 +206,30 @@ const SaveBoard = ({
             )}
           </>
         )}
+        {!roomId && (
+          <button
+            title='Restart game'
+            className='flex-none flex items-center justify-center text-stone-200 p-1 rounded-full w-[31px] h-[31px] bg-sky-600 hover:bg-sky-500 cursor-pointer shadow-md'
+            disabled={activeToast}
+            onClick={handleRestart}
+          >
+            <RefreshCcw className='w-5 h-5' />
+          </button>
+        )}
         {roomId && (
           <button
             title='Leave game'
-            className={
-              'flex-1 md:flex-none text-stone-100 px-6 py-1 rounded-full bg-sky-600 hover:bg-sky-500 cursor-pointer'
-            }
+            className='flex-none flex items-center justify-center text-stone-200 px-1 py-1 rounded-full w-[31px] h-[31px] bg-sky-600 hover:bg-sky-500 cursor-pointer shadow-md'
             onClick={() => gLeavesGameRoom(setActiveToast)}
             disabled={activeToast}
           >
-            leave game
+            <LogOut className='w-5 h-5' />
           </button>
         )}
 
         <button
           title='Help'
-          className='flex-none flex items-center justify-center text-stone-200 px-1 py-1 rounded-full w-[31px] h-[31px] bg-sky-600 hover:bg-sky-500 cursor-pointer'
+          className='flex-none flex items-center justify-center text-stone-200 px-1 py-1 rounded-full w-[31px] h-[31px] bg-sky-600 hover:bg-sky-500 cursor-pointer shadow-md'
           onClick={openModal}
           disabled={activeToast}
         >
