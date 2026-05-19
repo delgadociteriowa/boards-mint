@@ -36,7 +36,10 @@ const DialogHowto = () => {
       <ul className='list-disc pl-5 mb-6'>
         <li>You can save up to four games to continue later.</li>
         <li>You’ll need to create a free account to use this feature.</li>
-        <li>To save a game, just click the Save button below the board.</li>
+        <li>
+          To save a game, just click the save button (floppy disk icon) below
+          the board.
+        </li>
         <li>
           You can continue later by going to “account / more options / saved
           games.”
@@ -48,19 +51,18 @@ const DialogHowto = () => {
         <li>You’ll need to create a free account to use this feature.</li>
         <li>To start an online session, you’ll need to save the game first.</li>
         <li>
-          Then, once your game is saved, click on “online room” to start an
-          online session.
+          Then, once your game is saved, click on the globe icon button to start
+          an online session.
         </li>
         <li>
           A share link will be copied to your clipboard. If it isn’t, click the
-          "share" button below the board to copy it and then send it to a
-          friend.
+          copy button below the board to copy it and then send it to a friend.
         </li>
         <li>
           Once your friend opens the link you sent, you can start playing
           online.
         </li>
-        <li>To end the online session, just click the “end” button.</li>
+        <li>To end the online session, just click on the disconnect button.</li>
       </ul>
     </>
   );

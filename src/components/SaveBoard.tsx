@@ -1,7 +1,14 @@
 'use client';
 import { addBoard, buildSyncGrid, updateBoard } from '@/state/board/boardSlice';
 import { useAppDispatch, useAppSelector } from '@/state/hooks';
-import { CircleHelp, Copy, RefreshCcw } from 'lucide-react';
+import {
+  CircleHelp,
+  Copy,
+  Globe,
+  GlobeOff,
+  RefreshCcw,
+  Save,
+} from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
@@ -67,7 +74,7 @@ const SaveBoard = ({
     };
   }, [boardId, socketActive, gameGrid, dispatch]);
 
-  const handleClick = async () => {
+  const handleSave = async () => {
     setActiveToast(true);
     const toastId = toast('Save board', {
       description: 'Do you want to save the game?',
@@ -150,38 +157,23 @@ const SaveBoard = ({
     });
   };
 
-  const styleByPhase = !phaseTwo
-    ? 'bg-sky-600 hover:bg-sky-500 cursor-pointer'
-    : 'bg-stone-600 cursor-not-allowed opacity-60';
-  const styleByShare =
-    !shareDelay || !phaseTwo
-      ? 'bg-sky-600 hover:bg-sky-500 cursor-pointer'
-      : 'bg-stone-600 cursor-not-allowed opacity-60';
-
   return (
     <>
-      <div className='flex flex-wrap md:flex-nowrap gap-2 w-[90%] mb-14 landscape:w-[75%] mx-auto'>
+      <div className='flex flex-wrap justify-center md:justify-start md:flex-nowrap gap-4 md:gap-2 w-[90%] mb-14 landscape:w-[75%] mx-auto'>
         {session && !roomId && (
           <>
             <button
-              className={`flex-1 md:flex-none text-stone-100 px-6 py-1 rounded-full w-[calc(50%-4px)] md:w-auto ${styleByPhase}`}
-              onClick={handleClick}
-              disabled={phaseTwo || activeToast}
+              title='Save game'
+              className='flex-none flex items-center justify-center text-stone-200 p-1 rounded-full w-[31px] h-[31px] bg-sky-600 hover:bg-sky-500 cursor-pointer'
+              onClick={handleSave}
+              disabled={activeToast}
             >
-              save
+              <Save className='w-5 h-5' />
             </button>
-            {socketActive && (
-              <button
-                className={`flex flex-1 md:flex-none items-center justify-center gap-2 text-stone-100 px-6 py-1 rounded-full w-[calc(50%-4px)] md:w-auto ${styleByPhase}`}
-                onClick={handleShare}
-                disabled={activeToast}
-              >
-                share
-                <Copy size={16} />
-              </button>
-            )}
+
             <button
-              className={`flex-1 md:flex-none text-stone-100 px-6 py-1 rounded-full w-[calc(50%-4px)] md:w-auto ${styleByShare}`}
+              title={socketActive ? 'Go offline' : 'Online game'}
+              className='flex-none flex items-center justify-center text-stone-200 p-1 rounded-full w-[31px] h-[31px] bg-sky-600 hover:bg-sky-500 cursor-pointer'
               onClick={() =>
                 !socketActive
                   ? hCreatesGameRoom(setActiveToast)
@@ -189,10 +181,25 @@ const SaveBoard = ({
               }
               disabled={phaseTwo || shareDelay || activeToast}
             >
-              {socketActive ? 'end' : 'online'}
+              {socketActive ? (
+                <GlobeOff className='w-5 h-5' />
+              ) : (
+                <Globe className='w-5 h-5' />
+              )}
             </button>
+            {socketActive && (
+              <button
+                title='Share game'
+                className='flex-none flex items-center justify-center text-stone-200 p-1 rounded-full w-[31px] h-[31px] bg-sky-600 hover:bg-sky-500 cursor-pointer'
+                onClick={handleShare}
+                disabled={activeToast}
+              >
+                <Copy className='w-4 h-4' />
+              </button>
+            )}
             <button
-              className='flex-none flex items-center justify-center text-stone-200 px-1 py-1 rounded-full w-[31px] h-[31px] bg-stone-400 hover:bg-stone-300 cursor-pointer'
+              title='Restart game'
+              className='flex-none flex items-center justify-center text-stone-200 p-1 rounded-full w-[31px] h-[31px] bg-sky-600 hover:bg-sky-500 cursor-pointer'
               disabled={activeToast}
               onClick={handleRestart}
             >
@@ -207,6 +214,7 @@ const SaveBoard = ({
         )}
         {roomId && (
           <button
+            title='Leave game'
             className={
               'flex-1 md:flex-none text-stone-100 px-6 py-1 rounded-full bg-sky-600 hover:bg-sky-500 cursor-pointer'
             }
@@ -218,7 +226,8 @@ const SaveBoard = ({
         )}
 
         <button
-          className='flex-none flex items-center justify-center text-stone-200 px-1 py-1 rounded-full w-[31px] h-[31px] bg-stone-400 hover:bg-stone-300 cursor-pointer'
+          title='Help'
+          className='flex-none flex items-center justify-center text-stone-200 px-1 py-1 rounded-full w-[31px] h-[31px] bg-sky-600 hover:bg-sky-500 cursor-pointer'
           onClick={openModal}
           disabled={activeToast}
         >
