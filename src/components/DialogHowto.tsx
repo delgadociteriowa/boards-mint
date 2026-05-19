@@ -1,3 +1,5 @@
+import { Copy, Globe, GlobeOff, LogOut, RefreshCcw, Save } from 'lucide-react';
+
 const DialogHowto = () => {
   return (
     <>
@@ -31,14 +33,23 @@ const DialogHowto = () => {
           You can also move pieces to and from the bench. There are no
           restrictions.
         </li>
+        <li>
+          To restart the game, just click on the restart button:{' '}
+          <span className='m-3 flex items-center justify-center text-stone-200 p-1 rounded-full w-[31px] h-[31px] bg-sky-600 shadow-md'>
+            <RefreshCcw className='w-5 h-5' />
+          </span>{' '}
+          (This option is not available for guests in online rooms).
+        </li>
       </ul>
       <h2 className='text-xl mb-2'>Saving a game</h2>
       <ul className='list-disc pl-5 mb-6'>
         <li>You can save up to four games to continue later.</li>
         <li>You’ll need to create a free account to use this feature.</li>
         <li>
-          To save a game, just click the save button (floppy disk icon) below
-          the board.
+          To save a game, just click the save button:{' '}
+          <span className='m-3 flex items-center justify-center text-stone-200 p-1 rounded-full w-[31px] h-[31px] bg-sky-600 shadow-md'>
+            <Save className='w-5 h-5' />
+          </span>{' '}
         </li>
         <li>
           You can continue later by going to “account / more options / saved
@@ -51,18 +62,37 @@ const DialogHowto = () => {
         <li>You’ll need to create a free account to use this feature.</li>
         <li>To start an online session, you’ll need to save the game first.</li>
         <li>
-          Then, once your game is saved, click on the globe icon button to start
-          an online session.
+          Then, once your game is saved, click on the globe button to start an
+          online session:{' '}
+          <span className='m-3 flex items-center justify-center text-stone-200 p-1 rounded-full w-[31px] h-[31px] bg-sky-600 shadow-md'>
+            <Globe className='w-5 h-5' />
+          </span>{' '}
         </li>
         <li>
           A share link will be copied to your clipboard. If it isn’t, click the
-          copy button below the board to copy it and then send it to a friend.
+          copy button:{' '}
+          <span className='m-3 flex items-center justify-center text-stone-200 p-1 rounded-full w-[31px] h-[31px] bg-sky-600 shadow-md'>
+            <Copy className='w-4 h-4' />
+          </span>{' '}
+          to copy it and then send it to a friend.
         </li>
         <li>
           Once your friend opens the link you sent, you can start playing
           online.
         </li>
-        <li>To end the online session, just click on the disconnect button.</li>
+        <li>
+          To end the online session, just click on the disconnect button:{' '}
+          <span className='m-3 flex items-center justify-center text-stone-200 p-1 rounded-full w-[31px] h-[31px] bg-sky-600 shadow-md'>
+            <GlobeOff className='w-5 h-5' />
+          </span>{' '}
+        </li>
+        <li>
+          If you’re playing as a guest and want to leave the game, just click
+          the exit button:{' '}
+          <span className='m-3 flex items-center justify-center text-stone-200 p-1 rounded-full w-[31px] h-[31px] bg-sky-600 shadow-md'>
+            <LogOut className='w-5 h-5' />
+          </span>{' '}
+        </li>
       </ul>
     </>
   );
