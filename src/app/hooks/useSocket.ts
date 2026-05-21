@@ -192,8 +192,12 @@ export const useSocket = () => {
               clipboardCopied
                 ? 'Online room created! The game room link has been copied to your clipboard! Share it to start playing online.'
                 : 'Online room created! Share it to start playing online.',
-            error:
-              "The room couldn't be created now. Please, try again in a few seconds.",
+            error: (error: unknown) => {
+              if (error instanceof Error) {
+                return `Error: ${error.message}. Please try again in a few seconds.`;
+              }
+              return "The room couldn't be created now. Please try again in a few seconds.";
+            },
           });
 
           setToastState(false);
@@ -213,30 +217,38 @@ export const useSocket = () => {
     return new Promise((resolve, reject) => {
       dispatch(setShareDelay(true));
 
-      // connects
       initSocket();
-      if (socketRef.current === null) {
+
+      if (!socketRef.current) {
         dispatch(setShareDelay(false));
         reject(new Error('Socket inialization failed.'));
         return;
       }
 
+      const socket = socketRef.current;
+
+      const cleanup = () => {
+        socket.off('connect');
+        socket.off('connect_error');
+      };
+
       // OK
-      socketRef.current.on('connect', async () => {
-        socketRef.current?.emit(
-          'h-creates-game-room',
-          boardId,
-          async (response: any) => {
-            if (response.error) {
-              reject(
-                new Error(
-                  response.error ||
-                    "The room coudn't be created now. Please, try again in a few seconds.",
-                ),
-              );
-            }
-          },
-        );
+      socket.on('connect', async () => {
+        socket.emit('h-creates-game-room', boardId, async (response: any) => {
+          if (response.error) {
+            cleanup();
+            dispatch(setShareDelay(false));
+
+            reject(
+              new Error(
+                response.error ||
+                  "Error: The room coudn't be created now. Please, try again in a few seconds.",
+              ),
+            );
+
+            return;
+          }
+        });
 
         dispatch(setSocketActive(true));
         dispatch(setSocketHost(session?.user.username ?? ''));
@@ -249,6 +261,7 @@ export const useSocket = () => {
         const shareLink = window.location.href.replace('?id', '?room');
 
         let clipboardCopied = false;
+
         try {
           await navigator.clipboard.writeText(shareLink);
           clipboardCopied = true;
@@ -260,12 +273,17 @@ export const useSocket = () => {
       });
 
       // error
-      socketRef.current.on('connect_error', (err) => {
+      socket.on('connect_error', (err) => {
+        cleanup();
+        socket.disconnect();
+        socketRef.current = null;
+
         dispatch(setShareDelay(false));
+
         reject(
           new Error(
             err?.message ||
-              "The room coudn't be created now. Please, try again in a few seconds.",
+              'Error: Connection error. Please, try again in a few seconds.',
           ),
         );
         return;
