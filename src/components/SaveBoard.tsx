@@ -68,12 +68,12 @@ const SaveBoard = ({
       }
     };
 
-    const interval = setInterval(autoSave, 300000);
+    const interval = setInterval(autoSave, 180000); //3 mins
 
     return () => {
       clearInterval(interval);
     };
-  }, [boardId, socketActive, gameGrid, dispatch]);
+  }, [boardId, socketActive]);
 
   const handleSave = async () => {
     setActiveToast(true);
