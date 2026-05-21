@@ -24,7 +24,7 @@ const Octoboard = () => {
       {gameGrid.length && !loading && !error && (
         <main className='w-[100%] md:w-[90%] lg:w-[80%] my-0 mx-auto'>
           <BoardSocketPlayers />
-          <div className='grid w-[90%] rounded-2xl board-areas overflow-hidden mt-2 mb-4 mx-auto landscape:w-[75%] shadow-xl/20'>
+          <div className='grid w-[90%] rounded-2xl board-areas overflow-hidden mt-2 mb-4 mx-auto landscape:w-[75%] shadow-md'>
             {gameGrid.map((row) =>
               row.map((cell) => {
                 const squareStyle = createSquareStyle(

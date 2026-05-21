@@ -1,5 +1,10 @@
 'use client';
-import { addBoard, buildSyncGrid, updateBoard } from '@/state/board/boardSlice';
+import {
+  addBoard,
+  buildSyncGrid,
+  setChangeFromSocket,
+  updateBoard,
+} from '@/state/board/boardSlice';
 import { useAppDispatch, useAppSelector } from '@/state/hooks';
 import {
   CircleHelp,
@@ -7,7 +12,7 @@ import {
   Globe,
   GlobeOff,
   LogOut,
-  RefreshCcw,
+  RotateCcw,
   Save,
 } from 'lucide-react';
 import { useSession } from 'next-auth/react';
@@ -156,6 +161,7 @@ const SaveBoard = ({
         },
       },
     });
+    dispatch(setChangeFromSocket(false));
   };
 
   return (
@@ -213,7 +219,7 @@ const SaveBoard = ({
             disabled={activeToast}
             onClick={handleRestart}
           >
-            <RefreshCcw className='w-5 h-5' />
+            <RotateCcw className='w-5 h-5' />
           </button>
         )}
         {roomId && (
