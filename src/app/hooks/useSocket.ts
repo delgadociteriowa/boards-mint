@@ -93,10 +93,90 @@ export const useSocket = () => {
 
   const initSocket = () => {
     if (!socketRef.current) {
-      const socket = io('https://boards-ws.onrender.com');
+      const socket = io('https://boards-ws.onrender.com', {
+        transports: ['websocket'],
+        reconnection: true,
+        reconnectionAttempts: Infinity,
+        reconnectionDelay: 40000,
+        reconnectionDelayMax: 50000,
+        randomizationFactor: 0.5,
+        timeout: 50000,
+      });
 
       // Socket Listeners
 
+      // socket.on('connect', () => {
+      //   toast.success('Connected to server.');
+      // });
+
+      // socket.on('disconnect', (reason) => {
+      //   toast.error(`Connection lost: ${reason}`, {
+      //     duration: 5000,
+      //   });
+      // });
+
+      socket.io.on('reconnect_attempt', () => {
+        toast.error('Connection lost');
+        toast.loading('Reconnecting to server...');
+      });
+
+      socket.io.on('reconnect', () => {
+        toast.dismiss();
+        toast.success('Reconnected successfully.');
+        if (gameId) {
+          socket.emit('h-creates-game-room', gameId, async (response: any) => {
+            if (response.error) {
+              socket.off('connect');
+              socket.off('connect_error');
+              dispatch(setShareDelay(false));
+
+              return new Error(
+                response.error ||
+                  "Error: The room coudn't be created now. Please, try again in a few seconds.",
+              );
+            }
+          });
+        }
+
+        if (roomId) {
+          socket.emit(
+            'g-joins-game-room',
+            roomId,
+            session?.user.username || 'visitor',
+            (response: { success: boolean; message?: string }) => {
+              if (!response.success) {
+                toast.error(response.message);
+                notAllowed.current = true;
+                router.push('/');
+              }
+              dispatch(setSocketActive(true));
+            },
+          );
+        }
+      });
+
+      socket.io.on('reconnect_error', () => {
+        toast.dismiss();
+        toast.error('Failed reconnect attempt.');
+
+        socket.disconnect();
+        socket.off('connect');
+        socket.off('connect_error');
+        dispatch(setSocketActive(false));
+
+        if (roomId) {
+          setTimeout(() => {
+            router.push('/');
+          }, 5000);
+        }
+      });
+
+      socket.io.on('reconnect_failed', () => {
+        toast.dismiss();
+        toast.error('Could not reconnect to server.');
+      });
+
+      // Socket events
       // Only received by host because .to
       socket.on('g-joined-game-room', (guestName: string) => {
         if (!roomId) toast.success('The guest player has joined the game.');
