@@ -94,13 +94,14 @@ export const useSocket = () => {
   const initSocket = () => {
     if (!socketRef.current) {
       const socket = io('https://boards-ws.onrender.com', {
-        transports: ['websocket'],
         reconnection: true,
         reconnectionAttempts: Infinity,
-        reconnectionDelay: 40000,
-        reconnectionDelayMax: 50000,
-        randomizationFactor: 0.5,
-        timeout: 50000,
+        reconnectionDelay: 5000,
+        reconnectionDelayMax: 30000,
+        randomizationFactor: 0.25,
+        timeout: 30000,
+        upgrade: true,
+        rememberUpgrade: false,
       });
 
       // Socket Listeners
