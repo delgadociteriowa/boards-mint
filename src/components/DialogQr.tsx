@@ -1,5 +1,6 @@
 import { Copy } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import DialogQrCode from './DialogQrCode';
 
 const DialogQr = () => {
   const [linkCopied, setLinkCopied] = useState(false);
@@ -21,7 +22,8 @@ const DialogQr = () => {
   return (
     <>
       <h1 className='text-2xl mb-6'>QR Code</h1>
-      <h2 className='text-xl mb-2'>Share this QR code with the guest player</h2>
+      <h2 className='text-xl mb-4'>Share this QR code with the guest player</h2>
+      <DialogQrCode url={window.location.href.replace('id=', 'room=')} />
       <h2 className='text-xl mb-2'>Or share the game room link</h2>
       <button
         title='Share game'
