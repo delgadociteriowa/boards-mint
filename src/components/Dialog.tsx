@@ -1,3 +1,6 @@
+import { X } from 'lucide-react';
+import Line from './Line';
+
 interface DialogProps {
   children: React.ReactNode;
   reference: React.RefObject<HTMLDialogElement | null>;
@@ -11,7 +14,7 @@ const Dialog = ({ children, reference }: DialogProps) => {
   return (
     <dialog
       ref={reference}
-      className='rounded-xl p-6 backdrop:bg-black/40 w-[90%] md:w-[500px] h-[75%] md:h-[700px] mx-auto my-18 overflow-hidden bg-stone-50 text-stone-600'
+      className='rounded-xl p-6 backdrop:bg-black/40 w-[90%] md:w-[500px] h-[75%] md:h-[600px] mx-auto my-18 overflow-hidden bg-stone-50 text-stone-600'
       onCancel={(e) => {
         e.preventDefault();
         closeModal();
@@ -32,13 +35,15 @@ const Dialog = ({ children, reference }: DialogProps) => {
         }
       }}
     >
-      <div className='h-full overflow-y-auto p-2'>
-        {children}
+      <div className='h-full overflow-y-auto p-2 flex flex-col'>
+        <div className='flex-1 overflow-y-auto'>{children}</div>
+        <Line />
         <button
+          title='Close'
+          className='mt-4 ml-auto mr-2 flex items-center justify-center text-stone-200 px-1 py-1 rounded-full w-[31px] h-[31px] bg-sky-600 hover:bg-sky-500 cursor-pointer shadow-md'
           onClick={closeModal}
-          className='flex-none text-stone-100 px-6 py-1 rounded-full bg-sky-600 hover:bg-sky-500 cursor-pointer'
         >
-          close
+          <X className='w-10 h-10' />
         </button>
       </div>
     </dialog>

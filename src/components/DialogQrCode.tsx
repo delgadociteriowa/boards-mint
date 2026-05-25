@@ -13,7 +13,7 @@ const DialogQrCode = ({ url }: DialogQrCodeProps) => {
         value={url}
         size={200}
         bgColor='#ffffff'
-        fgColor='#000000'
+        fgColor='#0369A1'
         level='H'
       />
     </div>
