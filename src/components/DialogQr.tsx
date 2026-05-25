@@ -9,7 +9,7 @@ const DialogQr = () => {
     if (linkCopied) {
       setTimeout(() => {
         setLinkCopied(false);
-      }, 8000);
+      }, 5000);
     }
   }, [linkCopied]);
 
@@ -22,12 +22,12 @@ const DialogQr = () => {
   return (
     <>
       <h1 className='text-2xl mb-6'>QR Code</h1>
-      <h2 className='text-xl mb-4'>Share this QR code with the guest player</h2>
+      <p className='block mb-4 text-center'>Share this code to play online</p>
       <DialogQrCode url={window.location.href.replace('id=', 'room=')} />
-      <h2 className='text-xl mb-2'>Or share the game room link</h2>
+      <p className='block text-center'>Or share the game room link</p>
       <button
         title='Share game'
-        className='flex-none flex items-center justify-center text-stone-200 p-1 rounded-full w-auto h-[31px] bg-sky-600 hover:bg-sky-500 cursor-pointer shadow-md mt-4 mb-8 px-6'
+        className='flex-none flex items-center justify-center text-stone-200 p-1 rounded-full w-auto h-[31px] bg-teal-600 hover:bg-teal-500 cursor-pointer shadow-md mt-2 mb-14 px-6 mx-auto'
         onClick={handleShare}
         disabled={linkCopied}
       >

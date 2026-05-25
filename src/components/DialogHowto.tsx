@@ -1,4 +1,11 @@
-import { Copy, Globe, GlobeOff, LogOut, RefreshCcw, Save } from 'lucide-react';
+import {
+  Globe,
+  GlobeOff,
+  LogOut,
+  QrCode,
+  RefreshCcw,
+  Save,
+} from 'lucide-react';
 
 const DialogHowto = () => {
   return (
@@ -70,15 +77,19 @@ const DialogHowto = () => {
         </li>
         <li>
           A share link will be copied to your clipboard. If it isn’t, click the
-          copy button:{' '}
+          QR code button:{' '}
           <span className='m-3 flex items-center justify-center text-stone-200 p-1 rounded-full w-[31px] h-[31px] bg-sky-600 shadow-md'>
-            <Copy className='w-4 h-4' />
+            <QrCode className='w-5 h-5' />
           </span>{' '}
-          to copy it and then send it to a friend.
+          to share the game session.
         </li>
         <li>
-          Once your friend opens the link you sent, you can start playing
-          online.
+          A QR code will be displayed that your guest must scan. It will
+          redirect them to the game room.
+        </li>
+        <li>Once your guest opens the link, you can start playing online.</li>
+        <li>
+          You can also simply copy the link to the online room and share it.
         </li>
         <li>
           To end the online session, just click on the disconnect button:{' '}
