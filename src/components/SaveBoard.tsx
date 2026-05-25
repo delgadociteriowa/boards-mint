@@ -8,10 +8,10 @@ import {
 import { useAppDispatch, useAppSelector } from '@/state/hooks';
 import {
   CircleHelp,
-  Copy,
   Globe,
   GlobeOff,
   LogOut,
+  QrCode,
   RotateCcw,
   Save,
 } from 'lucide-react';
@@ -21,6 +21,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Toaster, toast } from 'sonner';
 import Dialog from './Dialog';
 import DialogHowto from './DialogHowto';
+import DialogQr from './DialogQr';
 
 interface SaveBoardProps {
   hCreatesGameRoom: (setToastState: (value: boolean) => void) => void;
@@ -49,7 +50,8 @@ const SaveBoard = ({
   const boardId = searchParams.get('id');
   const roomId = searchParams.get('room');
 
-  const dialogRef = useRef<HTMLDialogElement | null>(null);
+  const dialogHowToRef = useRef<HTMLDialogElement | null>(null);
+  const dialogQrRef = useRef<HTMLDialogElement | null>(null);
 
   const [activeToast, setActiveToast] = useState(false);
 
@@ -131,8 +133,16 @@ const SaveBoard = ({
     }
   };
 
-  const openModal = () => {
-    const dialog = dialogRef.current;
+  const openHowToModal = () => {
+    const dialog = dialogHowToRef.current;
+    if (!dialog) return;
+
+    dialog.showModal();
+    dialog.scrollTop = 0;
+  };
+
+  const openQrModal = () => {
+    const dialog = dialogQrRef.current;
     if (!dialog) return;
 
     dialog.showModal();
@@ -195,13 +205,21 @@ const SaveBoard = ({
               )}
             </button>
             {socketActive && (
+              // <button
+              //   title='Share game'
+              //   className='flex-none flex items-center justify-center text-stone-200 p-1 rounded-full w-[31px] h-[31px] bg-sky-600 hover:bg-sky-500 cursor-pointer shadow-md'
+              //   onClick={handleShare}
+              //   disabled={activeToast}
+              // >
+              //   <Copy className='w-4 h-4' />
+              // </button>
               <button
                 title='Share game'
                 className='flex-none flex items-center justify-center text-stone-200 p-1 rounded-full w-[31px] h-[31px] bg-sky-600 hover:bg-sky-500 cursor-pointer shadow-md'
-                onClick={handleShare}
+                onClick={openQrModal}
                 disabled={activeToast}
               >
-                <Copy className='w-4 h-4' />
+                <QrCode className='w-5 h-5' />
               </button>
             )}
 
@@ -236,15 +254,21 @@ const SaveBoard = ({
         <button
           title='Help'
           className='flex-none flex items-center justify-center text-stone-200 px-1 py-1 rounded-full w-[31px] h-[31px] bg-sky-600 hover:bg-sky-500 cursor-pointer shadow-md'
-          onClick={openModal}
+          onClick={openHowToModal}
           disabled={activeToast}
         >
           <CircleHelp className='w-10 h-10' />
         </button>
       </div>
-      <Dialog reference={dialogRef}>
+
+      <Dialog reference={dialogHowToRef}>
         <DialogHowto />
       </Dialog>
+
+      <Dialog reference={dialogQrRef}>
+        <DialogQr />
+      </Dialog>
+
       <Toaster
         position='top-center'
         toastOptions={{
