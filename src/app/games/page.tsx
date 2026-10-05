@@ -18,6 +18,18 @@ const Games = () => {
       gameLink: 'checkers',
     },
     {
+      background: 'bg-game-reversi',
+      title: 'reversi',
+      paragraph: 'Flip your opponent pieces with strategy and logic.',
+      gameLink: 'reversi',
+    },
+    {
+      background: 'bg-game-tic-tac-toe',
+      title: 'tic-tac-toe',
+      paragraph: 'Defeat your rivals by forming lines. A classic.',
+      gameLink: 'tic-tac-toe',
+    },
+    {
       background: 'bg-game-shogi',
       title: 'shōgi',
       paragraph: 'Command armies of pieces to capture your opponent ones.',
@@ -34,18 +46,6 @@ const Games = () => {
       title: 'backgammon',
       paragraph: "You'll need strategy and some luck to succeed in this game.",
       gameLink: 'soon',
-    },
-    {
-      background: 'bg-game-reversi',
-      title: 'reversi',
-      paragraph: 'Flip your opponent pieces with strategy and logic.',
-      gameLink: 'reversi',
-    },
-    {
-      background: 'bg-game-tic',
-      title: 'tic-tac-toe',
-      paragraph: 'Defeat your rivals by forming lines. A classic.',
-      gameLink: 'tic-tac-toe',
     },
     {
       background: 'bg-game-mills',

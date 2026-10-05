@@ -28,9 +28,9 @@
   --background-image-game-reversi:
     linear-gradient(180deg, #535353c1 0%, #0000005f 100%),
     url('../assets/game_reversi.jpg');
-  --background-image-game-tic:
+  --background-image-game-tic-tac-toe:
     linear-gradient(180deg, #535353c1 0%, #0000005f 100%),
-    url('../assets/game_tic.jpg');
+    url('../assets/game_tic-tac-toe.jpg');
   --background-image-game-mills:
     linear-gradient(180deg, #535353c1 0%, #0000005f 100%),
     url(../assets/game_mills.jpg);

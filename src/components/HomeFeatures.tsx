@@ -33,7 +33,7 @@ const HomeFeatures = () => {
   ];
 
   return (
-    <section className='w-[90%] mt-8 mx-auto max-w-[1200px] pt-8 pb-14 text-stone-600 appear__main__element'>
+    <section className='w-[90%] mt-8 mx-auto max-w-300 pt-8 pb-14 text-stone-600 appear__main__element'>
       <h3 className='text-center text-4xl tracking-[1px] mb-8 text-stone-700'>
         Boards makes it easy
       </h3>
