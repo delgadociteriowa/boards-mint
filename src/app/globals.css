@@ -1,7 +1,7 @@
 @import 'tailwindcss';
 
-:root {
-}
+/* :root {
+} */
 
 @theme inline {
   --font-brand: 'Georgia', 'Times New Roman', serif;
@@ -437,6 +437,20 @@
 }
 
 .board-areas-reversi > div {
+  grid-area: auto;
+}
+
+.board-areas-tictactoe {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-areas: none;
+  grid-auto-flow: row;
+  width: min(90vw, 64vh, 32rem);
+  max-width: 100%;
+  aspect-ratio: 1;
+  background-color: #d6d3d1;
+}
+
+.board-areas-tictactoe > div {
   grid-area: auto;
 }
 

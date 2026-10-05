@@ -45,7 +45,7 @@ const Games = () => {
       background: 'bg-game-tic',
       title: 'tic-tac-toe',
       paragraph: 'Defeat your rivals by forming lines. A classic.',
-      gameLink: 'soon',
+      gameLink: 'tic-tac-toe',
     },
     {
       background: 'bg-game-mills',

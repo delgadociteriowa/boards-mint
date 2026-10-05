@@ -108,6 +108,21 @@ const buildReversiGrid = (): Grid => {
     );
 };
 
+const buildTicTacToeGrid = (): Grid =>
+  Array(3)
+    .fill(null)
+    .map((_, rowIndex) =>
+      Array(3)
+        .fill(null)
+        .map((_, colIndex) => ({
+          id: `sqr${rowIndex}-${colIndex}`,
+          piece: '',
+          pieceType: '',
+          selected: false,
+          reversiFlipped: false,
+        })),
+    );
+
 const buildGameGrid = (selectedGame: SelectedGame): Grid => {
   if (selectedGame === 'chess') {
     return buildChessGrid();
@@ -117,6 +132,9 @@ const buildGameGrid = (selectedGame: SelectedGame): Grid => {
   }
   if (selectedGame === 'reversi') {
     return buildReversiGrid();
+  }
+  if (selectedGame === 'tic-tac-toe') {
+    return buildTicTacToeGrid();
   }
   return [];
 };

@@ -174,21 +174,27 @@ const boardSlice = createSlice({
     selectGame: (state, action: PayloadAction<SelectedGame>) => {
       // const newGrid = buildGameGrid(action.payload);
       state.selectedGame = action.payload;
-      state.reversiNextPiece = 'two';
+      state.reversiNextPiece =
+        action.payload === 'tic-tac-toe' ? 'one' : 'two';
       // state.gameGrid = newGrid;
     },
     buildSyncGrid: (state) => {
       const grid = buildGameGrid(state.selectedGame);
       state.gameGrid = grid;
-      state.reversiNextPiece = 'two';
+      state.reversiNextPiece =
+        state.selectedGame === 'tic-tac-toe' ? 'one' : 'two';
     },
     selectPiece: (state, action: PayloadAction<string>) => {
-      if (state.selectedGame === 'reversi') {
+      if (
+        state.selectedGame === 'reversi' ||
+        state.selectedGame === 'tic-tac-toe'
+      ) {
         const [row, col] = action.payload
           .replace('sqr', '')
           .split('-')
           .map((n) => Number(n));
-        const square = state.gameGrid[row - 2]?.[col];
+        const gridRow = state.selectedGame === 'reversi' ? row - 2 : row;
+        const square = state.gameGrid[gridRow]?.[col];
 
         if (!square) return;
 
@@ -201,13 +207,22 @@ const boardSlice = createSlice({
         );
 
         if (square.piece === '') {
-          square.piece = 'checker';
+          square.piece =
+            state.selectedGame === 'tic-tac-toe'
+              ? state.reversiNextPiece === 'one'
+                ? 'tic-x'
+                : 'tic-circle'
+              : 'checker';
           square.pieceType = state.reversiNextPiece;
           square.reversiFlipped = false;
           state.reversiNextPiece =
             state.reversiNextPiece === 'one' ? 'two' : 'one';
         } else if (!square.reversiFlipped) {
           square.pieceType = square.pieceType === 'one' ? 'two' : 'one';
+          if (state.selectedGame === 'tic-tac-toe') {
+            square.piece =
+              square.pieceType === 'one' ? 'tic-x' : 'tic-circle';
+          }
           square.reversiFlipped = true;
         } else {
           square.piece = '';

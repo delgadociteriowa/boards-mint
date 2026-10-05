@@ -25,7 +25,7 @@ const Octoboard = () => {
         <main className='w-full md:w-[90%] lg:w-[80%] my-0 mx-auto'>
           <BoardSocketPlayers />
           <div
-            className={`grid w-[90%] rounded-2xl board-areas ${selectedGame === 'reversi' ? 'board-areas-reversi' : ''} overflow-hidden mt-2 mb-4 mx-auto landscape:w-[75%] shadow-md`}
+            className={`grid w-[90%] rounded-2xl board-areas ${selectedGame === 'reversi' ? 'board-areas-reversi' : ''} ${selectedGame === 'tic-tac-toe' ? 'board-areas-tictactoe' : ''} overflow-hidden mt-2 mb-4 mx-auto landscape:w-[75%] shadow-md`}
           >
             {gameGrid.map((row) =>
               row.map((cell) => {
@@ -41,6 +41,7 @@ const Octoboard = () => {
                     cell={cell}
                     squareStyle={squareStyle}
                     pieceStyle={pieceStyle}
+                    isTicTacToe={selectedGame === 'tic-tac-toe'}
                     onClickPiece={handleClickSqr}
                   />
                 );

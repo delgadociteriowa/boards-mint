@@ -1,7 +1,22 @@
 export type PieceType = 'one' | 'two' | '';
 export type ReversiPieceType = Exclude<PieceType, ''>;
-export type Piece = '♟' |'♜' | '♞' | '♝' | '♛' | '♚' | 'checker' | '' ;
-export type SelectedGame = 'chess' | 'checkers' | 'reversi' | '';
+export type Piece =
+  | '♟'
+  | '♜'
+  | '♞'
+  | '♝'
+  | '♛'
+  | '♚'
+  | 'checker'
+  | 'tic-x'
+  | 'tic-circle'
+  | '';
+export type SelectedGame =
+  | 'chess'
+  | 'checkers'
+  | 'reversi'
+  | 'tic-tac-toe'
+  | '';
 export type Grid = Square[][];
 export type SelectedSquare = [number, number] | [null, null];
 
