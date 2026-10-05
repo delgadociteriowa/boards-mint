@@ -187,7 +187,7 @@ const SaveBoard = ({
           <>
             <button
               title='Save game'
-              className='flex-none flex items-center justify-center text-stone-200 p-1 rounded-full w-[31px] h-[31px] bg-sky-600 hover:bg-sky-500 cursor-pointer shadow-md'
+              className='flex-none flex items-center justify-center text-stone-200 p-1 rounded-full w-7.75 h-7.75 bg-sky-600 hover:bg-sky-500 cursor-pointer shadow-md'
               onClick={handleSave}
               disabled={activeToast}
             >
@@ -196,7 +196,7 @@ const SaveBoard = ({
 
             <button
               title={socketActive ? 'Go offline' : 'Online game'}
-              className='flex-none flex items-center justify-center text-stone-200 p-1 rounded-full w-[31px] h-[31px] bg-sky-600 hover:bg-sky-500 cursor-pointer shadow-md'
+              className='flex-none flex items-center justify-center text-stone-200 p-1 rounded-full w-7.75 h-7.75 bg-sky-600 hover:bg-sky-500 cursor-pointer shadow-md'
               onClick={() =>
                 !socketActive
                   ? hCreatesGameRoom(setActiveToast)
@@ -211,17 +211,9 @@ const SaveBoard = ({
               )}
             </button>
             {socketActive && (
-              // <button
-              //   title='Share game'
-              //   className='flex-none flex items-center justify-center text-stone-200 p-1 rounded-full w-[31px] h-[31px] bg-sky-600 hover:bg-sky-500 cursor-pointer shadow-md'
-              //   onClick={handleShare}
-              //   disabled={activeToast}
-              // >
-              //   <Copy className='w-4 h-4' />
-              // </button>
               <button
                 title='Share game'
-                className='flex-none flex items-center justify-center text-stone-200 p-1 rounded-full w-[31px] h-[31px] bg-sky-600 hover:bg-sky-500 cursor-pointer shadow-md'
+                className='flex-none flex items-center justify-center text-stone-200 p-1 rounded-full w-7.75 h-7.75 bg-sky-600 hover:bg-sky-500 cursor-pointer shadow-md'
                 onClick={openQrModal}
                 disabled={activeToast}
               >
@@ -239,7 +231,7 @@ const SaveBoard = ({
         {!roomId && (
           <button
             title='Restart game'
-            className='flex-none flex items-center justify-center text-stone-200 p-1 rounded-full w-[31px] h-[31px] bg-sky-600 hover:bg-sky-500 cursor-pointer shadow-md'
+            className='flex-none flex items-center justify-center text-stone-200 p-1 rounded-full w-7.75 h-7.75 bg-sky-600 hover:bg-sky-500 cursor-pointer shadow-md'
             disabled={activeToast}
             onClick={handleRestart}
           >
@@ -249,7 +241,7 @@ const SaveBoard = ({
         {roomId && (
           <button
             title='Leave game'
-            className='flex-none flex items-center justify-center text-stone-200 px-1 py-1 rounded-full w-[31px] h-[31px] bg-sky-600 hover:bg-sky-500 cursor-pointer shadow-md'
+            className='flex-none flex items-center justify-center text-stone-200 px-1 py-1 rounded-full w-7.75 h-7.75 bg-sky-600 hover:bg-sky-500 cursor-pointer shadow-md'
             onClick={() => gLeavesGameRoom(setActiveToast)}
             disabled={activeToast}
           >
@@ -259,7 +251,7 @@ const SaveBoard = ({
 
         <button
           title='Help'
-          className='flex-none flex items-center justify-center text-stone-200 px-1 py-1 rounded-full w-[31px] h-[31px] bg-sky-600 hover:bg-sky-500 cursor-pointer shadow-md'
+          className='flex-none flex items-center justify-center text-stone-200 px-1 py-1 rounded-full w-7.75 h-7.75 bg-sky-600 hover:bg-sky-500 cursor-pointer shadow-md'
           onClick={openHowToModal}
           disabled={activeToast}
         >

@@ -58,8 +58,8 @@ const Games = () => {
   return (
     <>
       <Header />
-      <main className='min-h-[800px]'>
-        <section className='w-[90%] mx-auto max-w-[1200px] py-14 text-stone-600'>
+      <main className='min-h-200'>
+        <section className='w-[90%] mx-auto max-w-300 py-14 text-stone-600'>
           <SectionTitle title='games' />
           <GameCardList list={games} />
         </section>
