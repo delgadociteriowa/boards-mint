@@ -41,6 +41,7 @@ const Octoboard = () => {
                     cell={cell}
                     squareStyle={squareStyle}
                     pieceStyle={pieceStyle}
+                    isChess={selectedGame === 'chess'}
                     isTicTacToe={selectedGame === 'tic-tac-toe'}
                     onClickPiece={handleClickSqr}
                   />

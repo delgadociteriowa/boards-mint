@@ -73,6 +73,12 @@ export const createSquareStyle = (cell: Square, game: SelectedGame, secondPhase:
 };
 
 export const createPieceStyle = (cell: Square, game: SelectedGame): string => {
+  if (game === 'chess') {
+    return `w-[75%] h-[75%] ${
+      cell.pieceType === 'one' ? 'text-stone-800' : 'text-stone-50'
+    } drop-shadow-sm`;
+  }
+
   if (game === 'tic-tac-toe') {
     return `w-[70%] h-[70%] ${
       cell.piece === 'tic-x' ? 'text-rose-600' : 'text-cyan-600'
