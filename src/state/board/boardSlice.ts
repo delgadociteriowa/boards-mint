@@ -3,12 +3,14 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   BoardStateType,
   Grid,
+  ReversiPieceType,
   SelectedGame,
   SelectedSquare,
 } from '../../types/board';
 import {
   benchesAreFilled,
   buildGameGrid,
+  getNextReversiPiece,
   selectSqrGrid,
   targetedEmptyGrid,
   targetedPieceGrid,
@@ -21,13 +23,15 @@ export const addBoard = createAsyncThunk<
     owner: string;
     createdAt: string;
     updatedAt: string;
+    reversiNextPiece: ReversiPieceType;
   }, //returned
   {
     gameGrid?: Grid;
     selectedGame: SelectedGame;
+    reversiNextPiece: ReversiPieceType;
   }, // received
   { rejectValue: string }
->('board/addBoard', async ({ gameGrid, selectedGame }, { rejectWithValue }) => {
+>('board/addBoard', async ({ gameGrid, selectedGame, reversiNextPiece }, { rejectWithValue }) => {
   try {
     const res = await fetch(`/api/board/create`, {
       method: 'POST',
@@ -37,6 +41,7 @@ export const addBoard = createAsyncThunk<
       body: JSON.stringify({
         gameGrid,
         selectedGame,
+        reversiNextPiece,
       }),
     });
 
@@ -51,6 +56,7 @@ export const addBoard = createAsyncThunk<
       owner: data.owner,
       createdAt: formatDate(data.createdAt),
       updatedAt: formatDate(data.updatedAt),
+      reversiNextPiece,
     };
   } catch (error) {
     return rejectWithValue(`${error}`);
@@ -80,6 +86,8 @@ export const getBoard = createAsyncThunk<
       gameGrid: data.gameGrid,
       createdAt: formatDate(data.createdAt),
       updatedAt: formatDate(data.updatedAt),
+      reversiNextPiece:
+        data.reversiNextPiece ?? getNextReversiPiece(data.gameGrid),
     };
   } catch (error) {
     return rejectWithValue(`${error}`);
@@ -88,16 +96,20 @@ export const getBoard = createAsyncThunk<
 
 export const updateBoard = createAsyncThunk<
   { updatedAt: string }, // return updated date
-  { id: string; gameGrid: Grid }, // id, gameGrid
+  {
+    id: string;
+    gameGrid: Grid;
+    reversiNextPiece: ReversiPieceType;
+  }, // id, gameGrid
   { rejectValue: string }
->('board/updateBoard', async ({ id, gameGrid }, { rejectWithValue }) => {
+>('board/updateBoard', async ({ id, gameGrid, reversiNextPiece }, { rejectWithValue }) => {
   try {
     const res = await fetch(`/api/board/update/${id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ gameGrid }),
+      body: JSON.stringify({ gameGrid, reversiNextPiece }),
     });
 
     if (!res.ok) {
@@ -140,6 +152,7 @@ const initialState: BoardStateType = {
   owner: '',
   selectedGame: '',
   gameGrid: [],
+  reversiNextPiece: 'two',
   selectedSqr: [null, null],
   phaseTwo: false,
   loading: false, //pending
@@ -161,13 +174,52 @@ const boardSlice = createSlice({
     selectGame: (state, action: PayloadAction<SelectedGame>) => {
       // const newGrid = buildGameGrid(action.payload);
       state.selectedGame = action.payload;
+      state.reversiNextPiece = 'two';
       // state.gameGrid = newGrid;
     },
     buildSyncGrid: (state) => {
       const grid = buildGameGrid(state.selectedGame);
       state.gameGrid = grid;
+      state.reversiNextPiece = 'two';
     },
     selectPiece: (state, action: PayloadAction<string>) => {
+      if (state.selectedGame === 'reversi') {
+        const [row, col] = action.payload
+          .replace('sqr', '')
+          .split('-')
+          .map((n) => Number(n));
+        const square = state.gameGrid[row - 2]?.[col];
+
+        if (!square) return;
+
+        state.gameGrid.forEach((gridRow) =>
+          gridRow.forEach((gridSquare) => {
+            if (gridSquare !== square) {
+              gridSquare.reversiFlipped = false;
+            }
+          }),
+        );
+
+        if (square.piece === '') {
+          square.piece = 'checker';
+          square.pieceType = state.reversiNextPiece;
+          square.reversiFlipped = false;
+          state.reversiNextPiece =
+            state.reversiNextPiece === 'one' ? 'two' : 'one';
+        } else if (!square.reversiFlipped) {
+          square.pieceType = square.pieceType === 'one' ? 'two' : 'one';
+          square.reversiFlipped = true;
+        } else {
+          square.piece = '';
+          square.pieceType = '';
+          square.reversiFlipped = false;
+        }
+        square.selected = false;
+        state.selectedSqr = [null, null];
+        state.phaseTwo = false;
+        return;
+      }
+
       const [row, col] = action.payload
         .replace('sqr', '')
         .split('-')
@@ -221,6 +273,7 @@ const boardSlice = createSlice({
       state.selectedGame = '';
       state.id = '';
       state.gameGrid = [];
+      state.reversiNextPiece = 'two';
       state.selectedSqr = [null, null];
       state.phaseTwo = false;
       state.loading = false;
@@ -248,6 +301,13 @@ const boardSlice = createSlice({
     },
     setGameGrid: (state, action: PayloadAction<Grid>) => {
       state.gameGrid = action.payload;
+      state.reversiNextPiece = getNextReversiPiece(action.payload);
+    },
+    setReversiNextPiece: (
+      state,
+      action: PayloadAction<ReversiPieceType>,
+    ) => {
+      state.reversiNextPiece = action.payload;
     },
     setChangeFromSocket: (state, action: PayloadAction<boolean>) => {
       state.changeFromSocket = action.payload;
@@ -270,6 +330,9 @@ const boardSlice = createSlice({
         state.owner = action.payload.owner;
         state.selectedGame = action.payload.selectedGame;
         state.gameGrid = action.payload.gameGrid;
+        state.reversiNextPiece =
+          action.payload.reversiNextPiece ??
+          getNextReversiPiece(action.payload.gameGrid);
         state.createdAt = action.payload.createdAt;
         state.updatedAt = action.payload.updatedAt;
         state.loading = false;
@@ -287,6 +350,7 @@ const boardSlice = createSlice({
         state.owner = action.payload.owner;
         state.createdAt = action.payload.createdAt;
         state.updatedAt = action.payload.updatedAt;
+        state.reversiNextPiece = action.payload.reversiNextPiece;
         state.saving = false;
       })
       .addCase(addBoard.rejected, (state, action) => {
@@ -329,6 +393,7 @@ export const {
   setSocketHost,
   setSocketGuest,
   setGameGrid,
+  setReversiNextPiece,
   setChangeFromSocket,
   setPhaseTwo,
   setSelectedSqr,

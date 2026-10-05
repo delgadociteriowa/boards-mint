@@ -31,6 +31,12 @@ export const useOctoboard = () => {
   }, [queryParamId, id]);
 
   const handleClickSqr = (cell: Square) => {
+    if (selectedGame === 'reversi') {
+      dispatch(selectPiece(cell.id));
+      dispatch(setChangeFromSocket(false));
+      return;
+    }
+
     if (!phaseTwo) {
       if(!cell.piece) return
       dispatch(selectPiece(cell.id));

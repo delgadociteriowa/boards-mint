@@ -39,6 +39,7 @@ const SaveBoard = ({
     phaseTwo,
     gameGrid,
     selectedGame,
+    reversiNextPiece,
     updatedAt,
     socketActive,
     shareDelay,
@@ -64,6 +65,7 @@ const SaveBoard = ({
           updateBoard({
             id: boardId,
             gameGrid,
+            reversiNextPiece,
           }),
         ).unwrap();
 
@@ -80,7 +82,7 @@ const SaveBoard = ({
     return () => {
       clearInterval(interval);
     };
-  }, [boardId, socketActive]);
+  }, [boardId, socketActive, gameGrid, reversiNextPiece]);
 
   const handleSave = async () => {
     setActiveToast(true);
@@ -93,8 +95,12 @@ const SaveBoard = ({
           toast.dismiss(toastId);
 
           const promise = !boardId
-            ? dispatch(addBoard({ gameGrid, selectedGame })).unwrap()
-            : dispatch(updateBoard({ id: boardId, gameGrid })).unwrap();
+            ? dispatch(
+                addBoard({ gameGrid, selectedGame, reversiNextPiece }),
+              ).unwrap()
+            : dispatch(
+                updateBoard({ id: boardId, gameGrid, reversiNextPiece }),
+              ).unwrap();
 
           await toast.promise(promise, {
             loading: 'Saving game...',

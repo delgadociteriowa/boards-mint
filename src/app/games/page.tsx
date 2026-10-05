@@ -39,7 +39,7 @@ const Games = () => {
       background: 'bg-game-reversi',
       title: 'reversi',
       paragraph: 'Flip your opponent pieces with strategy and logic.',
-      gameLink: 'soon',
+      gameLink: 'reversi',
     },
     {
       background: 'bg-game-tic',

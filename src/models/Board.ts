@@ -1,10 +1,11 @@
 import { Schema, model, models, Document, Model } from 'mongoose';
-import { SelectedGame, Grid, SelectedSquare } from '@/types/board';
+import { SelectedGame, Grid, ReversiPieceType } from '@/types/board';
 
 export interface IBoard extends Document {
   owner: string;
   selectedGame: SelectedGame;
   gameGrid: Grid;
+  reversiNextPiece: ReversiPieceType;
 }
 
 const BoardSchema = new Schema<IBoard>(
@@ -20,6 +21,11 @@ const BoardSchema = new Schema<IBoard>(
     gameGrid: {
       type: [[Schema.Types.Mixed]],
       required: true,
+    },
+    reversiNextPiece: {
+      type: String,
+      enum: ['one', 'two'],
+      default: 'two',
     },
   },
   {

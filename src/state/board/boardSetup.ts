@@ -1,33 +1,44 @@
-import { SelectedGame, Grid, Piece, PieceType, SelectedSquare, Square } from "../../types/board";
+import {
+  Grid,
+  Piece,
+  PieceType,
+  SelectedGame,
+  SelectedSquare,
+  Square,
+} from '../../types/board';
 
 const buildChessGrid = (): Grid => {
   const rows = 12;
   const columns = 8;
 
-  const placePiece = (row: number, col: number): [Piece, PieceType] => { 
+  const placePiece = (row: number, col: number): [Piece, PieceType] => {
     const chessPieces: Piece[] = ['♜', '♞', '♝', '♛', '♚', '♝', '♞', '♜'];
     const chessPiece: Piece = chessPieces[col] ?? '';
-    
+
     if (row === 2) return [chessPiece, 'one'];
     if (row === 3) return ['♟', 'one'];
     if (row === 8) return ['♟', 'two'];
-    if (row === 9) return [chessPiece, 'two']; 
+    if (row === 9) return [chessPiece, 'two'];
 
     return ['', ''];
   };
 
-  return Array(rows).fill(null).map((_, rowIndex) =>
-    Array(columns).fill(null).map((_, colIndex) => {
-      const piece = placePiece(rowIndex, colIndex);
+  return Array(rows)
+    .fill(null)
+    .map((_, rowIndex) =>
+      Array(columns)
+        .fill(null)
+        .map((_, colIndex) => {
+          const piece = placePiece(rowIndex, colIndex);
 
-      return { 
-        id: `sqr${rowIndex}-${colIndex}`,
-        piece: piece[0],
-        pieceType: piece[1],
-        selected: false
-      };
-    })
-  );
+          return {
+            id: `sqr${rowIndex}-${colIndex}`,
+            piece: piece[0],
+            pieceType: piece[1],
+            selected: false,
+          };
+        }),
+    );
 };
 
 const buildCheCkersGrid = (): Grid => {
@@ -48,58 +59,112 @@ const buildCheCkersGrid = (): Grid => {
     }
 
     return ['', ''];
-  }
+  };
 
+  return Array(rows)
+    .fill(null)
+    .map((_, rowIndex) =>
+      Array(columns)
+        .fill(null)
+        .map((_, colIndex) => {
+          const piece = placePiece(rowIndex, colIndex);
 
-  return Array(rows).fill(null).map((_, rowIndex) =>
-    Array(columns).fill(null).map((_, colIndex) => {
-      const piece = placePiece(rowIndex, colIndex);
+          return {
+            id: `sqr${rowIndex}-${colIndex}`,
+            piece: piece[0],
+            pieceType: piece[1],
+            selected: false,
+          };
+        }),
+    );
+};
 
-      return { 
-        id: `sqr${rowIndex}-${colIndex}`,
-        piece: piece[0],
-        pieceType: piece[1],
-        selected: false
-      };
-    })
-  );
+const buildReversiGrid = (): Grid => {
+  const rows = 8;
+  const columns = 8;
+  const center = 3;
+
+  return Array(rows)
+    .fill(null)
+    .map((_, rowIndex) =>
+      Array(columns)
+        .fill(null)
+        .map((_, colIndex) => {
+          const isCenter = rowIndex === center || rowIndex === center + 1;
+          const isOccupied =
+            isCenter && (colIndex === center || colIndex === center + 1);
+          const isWhite =
+            (rowIndex === center && colIndex === center + 1) ||
+            (rowIndex === center + 1 && colIndex === center);
+
+          return {
+            id: `sqr${rowIndex + 2}-${colIndex}`,
+            piece: isOccupied ? 'checker' : '',
+            pieceType: isOccupied ? (isWhite ? 'one' : 'two') : '',
+            selected: false,
+            reversiFlipped: false,
+          };
+        }),
+    );
 };
 
 const buildGameGrid = (selectedGame: SelectedGame): Grid => {
-  if(selectedGame === 'chess'){
-    return buildChessGrid()
-  } 
-  if(selectedGame === 'checkers'){
-    return buildCheCkersGrid()
+  if (selectedGame === 'chess') {
+    return buildChessGrid();
   }
-  return []
+  if (selectedGame === 'checkers') {
+    return buildCheCkersGrid();
+  }
+  if (selectedGame === 'reversi') {
+    return buildReversiGrid();
+  }
+  return [];
 };
 
-const selectSqrGrid = (selectedSqr: SelectedSquare, currentGrid: Grid): Grid => {
+const getNextReversiPiece = (grid: Grid): 'one' | 'two' => {
+  const counts = grid.flat().reduce(
+    (pieces, square) => {
+      if (square.pieceType === 'one') pieces.one += 1;
+      if (square.pieceType === 'two') pieces.two += 1;
+      return pieces;
+    },
+    { one: 0, two: 0 },
+  );
+
+  return counts.two > counts.one ? 'one' : 'two';
+};
+
+const selectSqrGrid = (
+  selectedSqr: SelectedSquare,
+  currentGrid: Grid,
+): Grid => {
   console.log('selectSqrGrid');
   const [row, col] = selectedSqr;
-  return currentGrid.map((r, rIdx) => 
+  return currentGrid.map((r, rIdx) =>
     rIdx === row
-    ? r.map((c, cIdx) => 
-        cIdx === col ?  { ...c, selected: true } : c
-      )
-    : r
-  )
+      ? r.map((c, cIdx) => (cIdx === col ? { ...c, selected: true } : c))
+      : r,
+  );
 };
 
-const targetedSelfGrid = (currentSelectedSqr: SelectedSquare, currentGrid: Grid): Grid => {
+const targetedSelfGrid = (
+  currentSelectedSqr: SelectedSquare,
+  currentGrid: Grid,
+): Grid => {
   console.log('targetedSelfGrid');
   const [row, col] = currentSelectedSqr;
-  return currentGrid.map((r, rIdx) => 
+  return currentGrid.map((r, rIdx) =>
     rIdx === row
-      ? r.map((c, cIdx) => 
-          cIdx === col ?  { ...c, selected: false } : c
-        )
-      : r
-  )
+      ? r.map((c, cIdx) => (cIdx === col ? { ...c, selected: false } : c))
+      : r,
+  );
 };
 
-const targetedEmptyGrid = (selectedEmptySqr: SelectedSquare, currentSelected: SelectedSquare,  currentGrid: Grid): Grid => {
+const targetedEmptyGrid = (
+  selectedEmptySqr: SelectedSquare,
+  currentSelected: SelectedSquare,
+  currentGrid: Grid,
+): Grid => {
   const [emptyRow, emptyCell] = selectedEmptySqr;
   const [currentRow, currentCell] = currentSelected;
 
@@ -134,23 +199,34 @@ const targetedEmptyGrid = (selectedEmptySqr: SelectedSquare, currentSelected: Se
 
       return cell;
     });
-    }
-  )
+  });
 };
 
-
-
-const targetedPieceGrid = (selectedFilledSqr: SelectedSquare, currentSelected: SelectedSquare,  currentGrid: Grid): Grid  => {
+const targetedPieceGrid = (
+  selectedFilledSqr: SelectedSquare,
+  currentSelected: SelectedSquare,
+  currentGrid: Grid,
+): Grid => {
   console.log('targetedPieceGrid');
   // bench one
-  const benchOneFree = currentGrid[0].concat([...currentGrid[1], ...currentGrid[10], ...currentGrid[11]]).find(cell => cell.piece === '');
+  const benchOneFree = currentGrid[0]
+    .concat([...currentGrid[1], ...currentGrid[10], ...currentGrid[11]])
+    .find((cell) => cell.piece === '');
   if (benchOneFree === undefined) return currentGrid;
-  const [benchOneRow, benchOneCol] = benchOneFree.id.replace('sqr', '').split('-').map(Number);
+  const [benchOneRow, benchOneCol] = benchOneFree.id
+    .replace('sqr', '')
+    .split('-')
+    .map(Number);
 
   // bench two
-  const benchTwoFree = currentGrid[10].concat([...currentGrid[11], ...currentGrid[0], ...currentGrid[1]]).find(cell => cell.piece === '');
+  const benchTwoFree = currentGrid[10]
+    .concat([...currentGrid[11], ...currentGrid[0], ...currentGrid[1]])
+    .find((cell) => cell.piece === '');
   if (benchTwoFree === undefined) return currentGrid;
-  const [benchTwoRow, benchTwoCol] = benchTwoFree.id.replace('sqr', '').split('-').map(Number);
+  const [benchTwoRow, benchTwoCol] = benchTwoFree.id
+    .replace('sqr', '')
+    .split('-')
+    .map(Number);
 
   // target piece
   const [filledRow, filledCol] = selectedFilledSqr;
@@ -160,8 +236,7 @@ const targetedPieceGrid = (selectedFilledSqr: SelectedSquare, currentSelected: S
   // to-move piece
   const [currentRow, currentCol] = currentSelected;
   if (currentRow === null || currentCol === null) return currentGrid;
-  const currentPieceSelected: Square = currentGrid[currentRow][currentCol];  
-
+  const currentPieceSelected: Square = currentGrid[currentRow][currentCol];
 
   return currentGrid.map((r, rIdx) => {
     if (
@@ -169,17 +244,21 @@ const targetedPieceGrid = (selectedFilledSqr: SelectedSquare, currentSelected: S
       rIdx !== currentRow &&
       rIdx !== benchOneRow &&
       rIdx !== benchTwoRow
-    ) return r;
+    )
+      return r;
 
     return r.map((cell, cIdx) => {
-
       // discard
       if (
         pieceTargeted.pieceType === 'one' &&
         rIdx === benchOneRow &&
         cIdx === benchOneCol
       ) {
-        return { ...cell, piece: pieceTargeted.piece, pieceType: pieceTargeted.pieceType };
+        return {
+          ...cell,
+          piece: pieceTargeted.piece,
+          pieceType: pieceTargeted.pieceType,
+        };
       }
 
       if (
@@ -187,12 +266,20 @@ const targetedPieceGrid = (selectedFilledSqr: SelectedSquare, currentSelected: S
         rIdx === benchTwoRow &&
         cIdx === benchTwoCol
       ) {
-        return { ...cell, piece: pieceTargeted.piece, pieceType: pieceTargeted.pieceType };
+        return {
+          ...cell,
+          piece: pieceTargeted.piece,
+          pieceType: pieceTargeted.pieceType,
+        };
       }
 
       // move to target
       if (rIdx === filledRow && cIdx === filledCol) {
-        return { ...cell, piece: currentPieceSelected.piece, pieceType: currentPieceSelected.pieceType };
+        return {
+          ...cell,
+          piece: currentPieceSelected.piece,
+          pieceType: currentPieceSelected.pieceType,
+        };
       }
 
       // empty origin
@@ -202,23 +289,23 @@ const targetedPieceGrid = (selectedFilledSqr: SelectedSquare, currentSelected: S
 
       return cell;
     });
-    }
-  )
+  });
 };
 
 const benchesAreFilled = (grid: Grid): boolean => {
   const benchRows = [0, 1, 10, 11];
 
-  return benchRows.every(rowIndex =>
-    grid[rowIndex].every(square => square.piece !== "")
+  return benchRows.every((rowIndex) =>
+    grid[rowIndex].every((square) => square.piece !== ''),
   );
 };
 
 export {
+  benchesAreFilled,
   buildGameGrid,
+  getNextReversiPiece,
   selectSqrGrid,
-  targetedSelfGrid,
   targetedEmptyGrid,
   targetedPieceGrid,
-  benchesAreFilled
-}
+  targetedSelfGrid,
+};

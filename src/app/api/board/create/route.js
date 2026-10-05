@@ -27,12 +27,13 @@ export async function POST(req) {
     }
 
     const body = await req.json();
-    const { gameGrid, selectedGame } = body;
+    const { gameGrid, selectedGame, reversiNextPiece } = body;
 
     const newBoard = await Board.create({
       owner: userId,
       gameGrid: gameGrid ?? undefined,
       selectedGame: selectedGame ?? undefined,
+      reversiNextPiece: reversiNextPiece ?? 'two',
     });
 
     return Response.json(newBoard, { status: 201 });

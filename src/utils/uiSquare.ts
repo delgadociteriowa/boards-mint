@@ -3,16 +3,19 @@ import { Square, SelectedGame } from "@/types/board";
 interface ColorsType {
   chess: string[];
   checkers: string[];
+  reversi: string[];
 };
 
 const gameColors: ColorsType = {
   chess: ['bg-teal-900','bg-teal-700','bg-teal-500','bg-teal-300'],
-  checkers: ['bg-cyan-900','bg-cyan-700','bg-cyan-500','bg-cyan-300']
+  checkers: ['bg-cyan-900','bg-cyan-700','bg-cyan-500','bg-cyan-300'],
+  reversi: ['bg-emerald-700','bg-emerald-600','bg-emerald-700','bg-emerald-600'],
 };
 
 const gameColorsHover: ColorsType = {
   chess: ['hover:bg-teal-800','hover:bg-teal-600','hover:bg-teal-400','hover:bg-teal-200'],
-  checkers: ['hover:bg-cyan-800','hover:bg-cyan-600','hover:bg-cyan-400','hover:bg-cyan-200']
+  checkers: ['hover:bg-cyan-800','hover:bg-cyan-600','hover:bg-cyan-400','hover:bg-cyan-200'],
+  reversi: ['hover:bg-emerald-800','hover:bg-emerald-700','hover:bg-emerald-800','hover:bg-emerald-700'],
 };
 
 export const createSquareStyle = (cell: Square, game: SelectedGame, secondPhase: boolean): string => {
@@ -27,6 +30,9 @@ export const createSquareStyle = (cell: Square, game: SelectedGame, secondPhase:
 
   if(cell.selected) {
     color = 'bg-slate-400 hover:bg-slate-500'
+  } else if (game === 'reversi') {
+    const colorIndex = (Number(row) + Number(col)) % 2;
+    color = `${selectedGameSet[colorIndex]} ${selectedGameHoverSet[colorIndex]}`;
   } else {
     if (row === '0' || row === '11') {
       color = Number(col) % 2 === 0 
@@ -53,18 +59,21 @@ export const createSquareStyle = (cell: Square, game: SelectedGame, secondPhase:
     }
   }
 
-  if(!secondPhase) {
-    pointer = cell.piece ? 'cursor-pointer' : '';
-  } else {
+  if (game === 'reversi' || secondPhase) {
     pointer = 'cursor-pointer';
+  } else if(!secondPhase) {
+    pointer = cell.piece ? 'cursor-pointer' : '';
   }
 
   let squareStyle = `${color} ${pointer}`;
   return squareStyle
 };
 
-export const createPieceStyle = (cell: Square): string => {
+export const createPieceStyle = (cell: Square, game: SelectedGame): string => {
   if(cell.piece.includes('checker')) {
+    if (game === 'reversi') {
+      return `${cell.pieceType === 'one' ? 'bg-white' : 'bg-stone-950'} relative w-[70%] h-[70%] rounded-full checker-shadow`;
+    }
     return `${cell.pieceType.includes('one') ? 'bg-rose-400' : 'bg-stone-600'} relative w-[60%] h-[60%] rounded-full checker-shadow`
   }
   return `${cell.pieceType === 'one' ? 'text-stone-800' : 'text-stone-50'} piece__size select-none [text-shadow:2px_2px_4px_rgba(0,0,0,0.3)]`

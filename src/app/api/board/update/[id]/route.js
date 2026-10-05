@@ -20,7 +20,7 @@ export async function PATCH(req, { params }) {
     }
 
     const body = await req.json();
-    const { gameGrid } = body;
+    const { gameGrid, reversiNextPiece } = body;
 
     if (!gameGrid) {
       return Response.json({ error: 'gameGrid is required' }, { status: 400 });
@@ -30,6 +30,7 @@ export async function PATCH(req, { params }) {
       { _id: id, owner: userId },
       {
         gameGrid,
+        ...(reversiNextPiece ? { reversiNextPiece } : {}),
         lastSaved: new Date(),
       },
       {

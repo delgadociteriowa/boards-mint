@@ -2,6 +2,7 @@ import {
   setChangeFromSocket,
   setGameGrid,
   setPhaseTwo,
+  setReversiNextPiece,
   setSelectedSqr,
   setShareDelay,
   setSocketActive,
@@ -32,6 +33,7 @@ export const useSocket = () => {
     gameGrid,
     selectedSqr,
     phaseTwo,
+    reversiNextPiece,
     changeFromSocket,
     socketGuest,
     socketHost,
@@ -181,7 +183,13 @@ export const useSocket = () => {
       // Only received by host because .to
       socket.on('g-joined-game-room', (guestName: string) => {
         if (!roomId) toast.success('The guest player has joined the game.');
-        socket.emit('h-shares-board', id, session?.user.username, gameGrid);
+        socket.emit(
+          'h-shares-board',
+          id,
+          session?.user.username,
+          gameGrid,
+          reversiNextPiece,
+        );
       });
 
       socket.on('g-sent-user-name', (guestName: string) => {
@@ -207,20 +215,34 @@ export const useSocket = () => {
       });
 
       // Only received by guest because .to
-      socket.on('h-shared-board', (hostName: string, board: Grid) => {
-        dispatch(setSocketHost(hostName));
-        dispatch(setGameGrid(board));
-        dispatch(setSocketActive(true));
-        toast.success(`Welcome to Boards. You have joined the game room.`);
-        // ojo loading
-      });
+      socket.on(
+        'h-shared-board',
+        (
+          hostName: string,
+          board: Grid,
+          nextPiece: 'one' | 'two' | undefined,
+        ) => {
+          dispatch(setSocketHost(hostName));
+          dispatch(setGameGrid(board));
+          if (nextPiece) dispatch(setReversiNextPiece(nextPiece));
+          dispatch(setSocketActive(true));
+          toast.success(`Welcome to Boards. You have joined the game room.`);
+          // ojo loading
+        },
+      );
 
       // Only received by guest because .to
       socket.on(
         'p-sent-move',
-        (board: Grid, phase: boolean, selected: SelectedSquare) => {
+        (
+          board: Grid,
+          phase: boolean,
+          selected: SelectedSquare,
+          nextPiece: 'one' | 'two' | undefined,
+        ) => {
           dispatch(setChangeFromSocket(true));
           dispatch(setGameGrid(board));
+          if (nextPiece) dispatch(setReversiNextPiece(nextPiece));
           dispatch(setPhaseTwo(phase));
           dispatch(setSelectedSqr(selected));
         },
@@ -483,6 +505,7 @@ export const useSocket = () => {
       JSON.stringify(gameGrid),
       phaseTwo,
       JSON.stringify(selectedSqr),
+      reversiNextPiece,
     );
   };
 
