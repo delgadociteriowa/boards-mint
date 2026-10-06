@@ -98,7 +98,7 @@ const LoginForm = () => {
 
           <button
             type='button'
-            onClick={() => signIn('google', { callbackUrl: '/account' })}
+            onClick={() => signIn('google', { callbackUrl: '/user/account' })}
             disabled={loading}
             className='w-[80%] md:w-[40%] py-3 rounded-full flex items-center justify-center gap-3 text-center text-stone-600 text-xl tracking-[2px] shadow-md mx-auto bg-neutral-100 hover:bg-neutral-50 cursor-pointer border-stone-300 border'
           >
