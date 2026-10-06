@@ -1,20 +1,26 @@
-import { useEffect } from "react";
-import { signIn, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useAppSelector, useAppDispatch } from "@/state/hooks";
-import { login } from "@/state/user/userSlice";
-import { setIdentifier, setPassword, clearError } from "@/state/user/userSlice";
+import { useAppDispatch, useAppSelector } from '@/state/hooks';
+import {
+  clearError,
+  login,
+  setIdentifier,
+  setPassword,
+} from '@/state/user/userSlice';
+import { signIn, useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 export const useLogin = () => {
   const dispatch = useAppDispatch();
-  const { identifier, password, loading, error }  = useAppSelector(state => state.user);
+  const { identifier, password, loading, error } = useAppSelector(
+    (state) => state.user,
+  );
 
   const { data: session } = useSession();
   const router = useRouter();
 
   useEffect(() => {
     if (session) {
-      router.push("/account");
+      router.push('/user/account');
     }
   }, [session, router]);
 
@@ -27,14 +33,16 @@ export const useLogin = () => {
 
     return () => clearTimeout(timer);
   }, [error, dispatch]);
-  
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     const trimmedIdentifier = identifier.trim().slice(0, 50);
     const trimmedPassword = password.trim().slice(0, 50);
-    dispatch(login({identifier: trimmedIdentifier, password: trimmedPassword}));
+    dispatch(
+      login({ identifier: trimmedIdentifier, password: trimmedPassword }),
+    );
   };
-  
+
   return {
     dispatch,
     identifier,
@@ -44,6 +52,6 @@ export const useLogin = () => {
     handleLogin,
     signIn,
     setIdentifier,
-    setPassword
-  }
-}
+    setPassword,
+  };
+};
