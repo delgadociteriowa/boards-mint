@@ -49,7 +49,7 @@ const Navigation = () => {
           />
         ) : (
           <NavigationItem
-            href='/account'
+            href='/user/account'
             color='text-sky-700 hover:text-sky-500'
             text={'account'}
           />
