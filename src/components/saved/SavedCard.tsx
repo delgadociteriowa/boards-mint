@@ -35,7 +35,7 @@ const SavedCard = ({
     <h3 className='text-stone-200 text-lg'>Created at: {createdAt}</h3>
     <h3 className='text-stone-200 text-lg'>Last saved: {lastSaved}</h3>
     <Link
-      href={`/${game}?id=${gameId}`}
+      href={`/games/${game}?id=${gameId}`}
       className='lowercase block bg-stone-200/70 hover:bg-stone-200/90 py-4 rounded-full text-center no-underline text-stone-800 text-xl tracking-[3px] mt-auto cursor-pointer'
     >
       continue
