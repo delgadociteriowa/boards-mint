@@ -1,17 +1,17 @@
-import HomeHeroSection from "@/components/HomeHeroSection";
-import HomeMainSection from "@/components/HomeMainSection";
-import HomeMessageSection from "@/components/HomeMessageSection";
-import HomeGamesSection from "@/components/HomeGamesSection";
-import Footer from "@/components/Footer";
+import HomeGamesSection from '@/components/home/HomeGamesSection';
+import HomeHeroSection from '@/components/home/HomeHeroSection';
+import HomeMainSection from '@/components/home/HomeMainSection';
+import HomeMessageSection from '@/components/home/HomeMessageSection';
+import Footer from '@/components/layout/Footer';
 
-const Home = () => {;
+const Home = () => {
   return (
     <>
-      <HomeHeroSection/>
-      <HomeMainSection/>
-      <HomeMessageSection/>
-      <HomeGamesSection/>
-      <Footer/>
+      <HomeHeroSection />
+      <HomeMainSection />
+      <HomeMessageSection />
+      <HomeGamesSection />
+      <Footer />
     </>
   );
 };

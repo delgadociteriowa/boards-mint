@@ -1,7 +1,7 @@
-import Footer from '@/components/Footer';
-import GameCardList from '@/components/GameCardList';
-import Header from '@/components/Header';
-import SectionTitle from '@/components/SectionTitle';
+import GameCardList from '@/components/home/GameCardList';
+import Footer from '@/components/layout/Footer';
+import Header from '@/components/layout/Header';
+import SectionTitle from '@/components/visuals/SectionTitle';
 
 const Games = () => {
   const games = [

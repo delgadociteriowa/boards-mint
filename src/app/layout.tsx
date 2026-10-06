@@ -1,38 +1,40 @@
-import type { Metadata } from "next";
-import "./globals.css";
-import { Analytics } from "@vercel/analytics/next";
-import AuthProvider from "@/components/AuthProvider";
-import  Providers from "./providers";
+import AuthProvider from '@/components/user/AuthProvider';
+import { Analytics } from '@vercel/analytics/next';
+import type { Metadata } from 'next';
+import './globals.css';
+import Providers from './providers';
 
 export const metadata: Metadata = {
-  title: "BOARDS | Virtual board games online",
-  description: "Play classic board games now",
+  title: 'BOARDS | Virtual board games online',
+  description: 'Play classic board games now',
   icons: {
     icon: '/chess.svg',
   },
   keywords: [
-    "classic games",
-    "online chess",
-    "online checkers",
-    "virtual board games",
-    "play chess",
-    "play checkers",
-    "free board games",
-    "multiplayer chess",
-    "chess app",
-    "checkers app",
-    "chess",
-    "checkes"
+    'classic games',
+    'online chess',
+    'online checkers',
+    'virtual board games',
+    'play chess',
+    'play checkers',
+    'free board games',
+    'multiplayer chess',
+    'chess app',
+    'checkers app',
+    'chess',
+    'checkes',
   ],
-  authors: [{ name: "Carlos Delgado", url: "https://delgadociteriowa.github.io/main/" }]
+  authors: [
+    { name: 'Carlos Delgado', url: 'https://delgadociteriowa.github.io/main/' },
+  ],
 };
 
-const RootLayout = ({ children }: Readonly<{children: React.ReactNode }>) => {
+const RootLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
   return (
     <AuthProvider>
-      <html lang="en">
+      <html lang='en'>
         <Providers>
-          <body className="bg-stone-100 font-texts">
+          <body className='bg-stone-100 font-texts'>
             {children}
             <Analytics />
           </body>
@@ -40,6 +42,6 @@ const RootLayout = ({ children }: Readonly<{children: React.ReactNode }>) => {
       </html>
     </AuthProvider>
   );
-}
+};
 
 export default RootLayout;

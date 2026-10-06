@@ -2,24 +2,24 @@ import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
 import Image from 'next/image';
 import Link from 'next/link';
-import Notfound from '../assets/notfound.svg';
+import Error from '../../assets/error.svg';
 
-const NotFoundPage = () => {
+const NoToken = () => {
   return (
     <>
       <Header />
       <main className='h-200'>
         <section className='py-10 px-10 text-stone-600'>
           <h3 className='text-center text-4xl tracking-[2px] mt-10 mb-8'>
-            Not Found
+            Verification token not provided
           </h3>
           <p className='text-center text-xl mb-10'>
-            Sorry, the page you are trying to reach hasn&apos;t been found.
+            The verification token has not been found.
           </p>
           <figure className='h-40 mx-0 my-16'>
             <Image
-              src={Notfound}
-              alt='Not found 404 code image'
+              src={Error}
+              alt='Screen with error message image'
               className='block h-full mx-auto my-0'
               width={500}
               height={500}
@@ -27,9 +27,9 @@ const NotFoundPage = () => {
           </figure>
           <Link
             href='/'
-            className='block w-60 bg-stone-300 hover:bg-stone-200 py-6 rounded-full text-center no-underline text-stone-800 text-xl lowercase tracking-[3px] mx-auto my-0 shadow-lg'
+            className='block w-60 bg-sky-600 hover:bg-sky-500 py-6 rounded-full text-center no-underline text-stone-100 text-xl lowercase tracking-[3px] mx-auto my-0 shadow-lg'
           >
-            Home
+            home
           </Link>
         </section>
       </main>
@@ -37,5 +37,4 @@ const NotFoundPage = () => {
     </>
   );
 };
-
-export default NotFoundPage;
+export default NoToken;

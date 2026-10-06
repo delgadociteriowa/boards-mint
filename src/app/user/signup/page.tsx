@@ -1,15 +1,17 @@
 import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
-import LoadingComponent from '@/components/visuals/LoadingComponent';
+import SignUpSection from '@/components/user/SignUpSection';
 
-const LoadingPage = () => {
+const SignUp = () => {
   return (
     <>
       <Header />
-      <LoadingComponent />
+      <main>
+        <SignUpSection />
+      </main>
       <Footer />
     </>
   );
 };
 
-export default LoadingPage;
+export default SignUp;
