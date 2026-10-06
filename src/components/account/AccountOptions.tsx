@@ -15,7 +15,7 @@ const AccountOptions = ({
         more options
       </label>
       <Link
-        href='/saved'
+        href='/games/saved'
         className='w-[80%] max-w-75 md:w-[40%] mt-2 mx-auto md:mx-0 py-3 text-center text-xl tracking-[2px] text-stone-100 bg-sky-600 hover:bg-sky-500 rounded-full shadow-md/20 cursor-pointer'
       >
         saved games
