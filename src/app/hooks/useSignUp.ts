@@ -22,7 +22,7 @@ export const useSignUp = () => {
 
   useEffect(() => {
     if (session) {
-      router.push('/account');
+      router.push('/user/account');
     }
   }, [session, router]);
 
