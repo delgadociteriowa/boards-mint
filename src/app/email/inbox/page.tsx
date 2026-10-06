@@ -1,7 +1,7 @@
 import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
 import Image from 'next/image';
-import Mailbox from '../../assets/mailbox.svg';
+import Mailbox from '../../../assets/mailbox.svg';
 
 const Inbox = () => {
   return (
