@@ -1,16 +1,16 @@
-import { Square } from "@/types/board";
+import { Square } from '@/types/board';
 import {
-  Circle as CircleIcon,
   ChessBishop,
   ChessKing,
   ChessKnight,
   ChessPawn,
   ChessQueen,
   ChessRook,
+  Circle as CircleIcon,
   X as XIcon,
 } from 'lucide-react';
 
-interface OctoBoardSquareProps {
+interface BoardSquareProps {
   cell: Square;
   squareStyle: string;
   pieceStyle: string;
@@ -19,15 +19,16 @@ interface OctoBoardSquareProps {
   onClickPiece: (cell: Square) => void;
 }
 
-const OctoBoardSquare = ({
+const BoardSquare = ({
   cell,
   squareStyle,
   pieceStyle,
   isChess,
   isTicTacToe,
   onClickPiece,
-}: OctoBoardSquareProps) => {
-  const squareBaseStyle = 'aspect-square min-w-6 min-h-6 flex items-center justify-center';
+}: BoardSquareProps) => {
+  const squareBaseStyle =
+    'aspect-square min-w-6 min-h-6 flex items-center justify-center';
   const chessIconProps = { className: pieceStyle, strokeWidth: 1.75 };
 
   return (
@@ -73,4 +74,4 @@ const OctoBoardSquare = ({
   );
 };
 
-export default OctoBoardSquare;
+export default BoardSquare;

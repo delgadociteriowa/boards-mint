@@ -1,5 +1,5 @@
 'use client';
-import Octoboard from '@/components/board/Octoboard';
+import Board from '@/components/board/Board';
 import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
 import { closeGame, selectGame } from '@/state/board/boardSlice';
@@ -19,7 +19,7 @@ const Checkers = () => {
   return (
     <>
       <Header />
-      <Octoboard />
+      <Board />
       <Footer />
     </>
   );

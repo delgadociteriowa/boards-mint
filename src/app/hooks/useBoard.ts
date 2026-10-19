@@ -1,15 +1,21 @@
 'use client';
-import { useEffect, useRef } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { useAppSelector, useAppDispatch } from "@/state/hooks";
-import { buildSyncGrid, selectPiece, getBoard, setChangeFromSocket } from "@/state/board/boardSlice";
-import { Square } from "@/types/board";
+import {
+  buildSyncGrid,
+  getBoard,
+  selectPiece,
+  setChangeFromSocket,
+} from '@/state/board/boardSlice';
+import { useAppDispatch, useAppSelector } from '@/state/hooks';
+import { Square } from '@/types/board';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useRef } from 'react';
 
-export const useOctoboard = () => {
+export const useBoard = () => {
   const searchParams = useSearchParams();
-  const queryParamId = useRef(searchParams.get("id") || '').current;
+  const queryParamId = useRef(searchParams.get('id') || '').current;
   const router = useRouter();
-  const { id, selectedGame, gameGrid, phaseTwo, loading, error }  = useAppSelector(state => state.board);
+  const { id, selectedGame, gameGrid, phaseTwo, loading, error } =
+    useAppSelector((state) => state.board);
   const dispatch = useAppDispatch();
 
   // Si no hay qpid hacer un board normal, cuando si hay lo pide.
@@ -18,14 +24,14 @@ export const useOctoboard = () => {
       dispatch(buildSyncGrid());
     } else {
       dispatch(getBoard(queryParamId));
-    } 
+    }
   }, [queryParamId, selectedGame, dispatch]);
 
   // genera el queryparamid y lo coloca en el url
   useEffect(() => {
-    if(!queryParamId && id) {
+    if (!queryParamId && id) {
       const params = new URLSearchParams(searchParams.toString());
-      params.set("id", id);
+      params.set('id', id);
       router.replace(`?${params.toString()}`);
     }
   }, [queryParamId, id]);
@@ -38,10 +44,10 @@ export const useOctoboard = () => {
     }
 
     if (!phaseTwo) {
-      if(!cell.piece) return
+      if (!cell.piece) return;
       dispatch(selectPiece(cell.id));
       dispatch(setChangeFromSocket(false));
-      return
+      return;
     }
     dispatch(selectPiece(cell.id));
     dispatch(setChangeFromSocket(false));
@@ -54,6 +60,6 @@ export const useOctoboard = () => {
     phaseTwo,
     loading,
     error,
-    handleClickSqr
-  }
+    handleClickSqr,
+  };
 };
