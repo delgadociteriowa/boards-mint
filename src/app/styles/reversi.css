@@ -1,0 +1,12 @@
+.board-areas-reversi {
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  grid-template-areas: none;
+  grid-auto-flow: row;
+  width: min(90vw, 64vh);
+  max-width: 100%;
+  aspect-ratio: 1;
+}
+
+.board-areas-reversi > div {
+  grid-area: auto;
+}

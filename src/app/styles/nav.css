@@ -1,0 +1,47 @@
+.nav {
+  --close: none;
+  --hamburguer: block;
+  --transform: translate(-100%);
+  grid-template-areas: 'logo active';
+}
+
+.nav:target {
+  --close: block;
+  --hamburguer: none;
+  --transform: translate(0);
+}
+
+.nav__links {
+  place-content: center start;
+  transform: var(--transform);
+  transition: transform 0.4s;
+}
+
+.nav__hamburguer,
+.nav__close {
+  grid-area: active;
+}
+
+.nav__hamburguer {
+  display: var(--hamburguer);
+}
+
+.nav__close {
+  display: var(--close);
+}
+
+@media (min-width: 768px) {
+  .nav {
+    --hamburguer: none;
+  }
+
+  .nav:target {
+    --close: none;
+    --hamburguer: none;
+  }
+
+  .nav__links {
+    transform: unset;
+    place-content: center start;
+  }
+}

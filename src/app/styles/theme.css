@@ -1,0 +1,34 @@
+@theme inline {
+  --font-brand: 'Georgia', 'Times New Roman', serif;
+  --font-texts: 'Arial', 'Tahoma', sans-serif;
+
+  --background-image-hero-chess:
+    linear-gradient(180deg, #c4c4c488 0%, #00000081 100%),
+    url('../../assets/hero__chess.jpg');
+  --background-image-game-chess:
+    linear-gradient(180deg, #535353c1 0%, #0000005f 100%),
+    url('../../assets/game_chess.jpg');
+  --background-image-game-checkers:
+    linear-gradient(180deg, #535353c1 0%, #0000005f 100%),
+    url('../../assets/game_checkers.jpg');
+  --background-image-game-shogi:
+    linear-gradient(180deg, #535353c1 0%, #0000005f 100%),
+    url('../../assets/game_shogi.jpg');
+  --background-image-game-go:
+    linear-gradient(180deg, #535353c1 0%, #0000005f 100%),
+    url('../../assets/game_go.jpg');
+  --background-image-game-backgammon:
+    linear-gradient(180deg, #535353c1 0%, #0000005f 100%),
+    url('../../assets/game_backgammon.jpg');
+  --background-image-game-reversi:
+    linear-gradient(180deg, #535353c1 0%, #0000005f 100%),
+    url('../../assets/game_reversi.jpg');
+  --background-image-game-tic-tac-toe:
+    linear-gradient(180deg, #535353c1 0%, #0000005f 100%),
+    url('../../assets/game_tic-tac-toe.jpg');
+  --background-image-game-mills:
+    linear-gradient(180deg, #535353c1 0%, #0000005f 100%),
+    url('../../assets/game_mills.jpg');
+
+  --board-cols: repeat(8, minmax(1.5rem, 1fr));
+}

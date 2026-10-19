@@ -19,7 +19,11 @@ const Board = ({
 }: BoardProps) => {
   return (
     <div
-      className={`grid w-[90%] rounded-2xl board-areas ${selectedGame === 'reversi' ? 'board-areas-reversi' : ''} ${selectedGame === 'tic-tac-toe' ? 'board-areas-tictactoe' : ''} overflow-hidden mt-2 mb-4 mx-auto landscape:w-[75%] shadow-md`}
+      className={`
+        board__ui
+        board-areas
+        ${selectedGame === 'reversi' ? 'board-areas-reversi' : ''}
+        ${selectedGame === 'tic-tac-toe' ? 'board-areas-tictactoe' : ''} `}
     >
       {gameGrid.map((row) =>
         row.map((cell) => {
