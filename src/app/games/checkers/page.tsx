@@ -1,5 +1,5 @@
 'use client';
-import Board from '@/components/board/Board';
+import GameSet from '@/components/board/GameSet';
 import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
 import { closeGame, selectGame } from '@/state/board/boardSlice';
@@ -19,7 +19,7 @@ const Checkers = () => {
   return (
     <>
       <Header />
-      <Board />
+      <GameSet />
       <Footer />
     </>
   );
