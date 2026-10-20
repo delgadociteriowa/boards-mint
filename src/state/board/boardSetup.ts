@@ -1,7 +1,7 @@
 import {
   Grid,
   Piece,
-  PieceType,
+  PieceByType,
   SelectedGame,
   SelectedSquare,
   Square,
@@ -11,16 +11,22 @@ const buildChessGrid = (): Grid => {
   const rows = 12;
   const columns = 8;
 
-  const placePiece = (row: number, col: number): [Piece, PieceType] => {
+  const placePiece = (row: number, col: number): PieceByType => {
     const chessPieces: Piece[] = ['♜', '♞', '♝', '♛', '♚', '♝', '♞', '♜'];
-    const chessPiece: Piece = chessPieces[col] ?? '';
+    const chessPiece: Piece = chessPieces[col];
 
-    if (row === 2) return [chessPiece, 'one'];
-    if (row === 3) return ['♟', 'one'];
-    if (row === 8) return ['♟', 'two'];
-    if (row === 9) return [chessPiece, 'two'];
-
-    return ['', ''];
+    switch (row) {
+      case 2:
+        return { piece: chessPiece, type: 'one' };
+      case 3:
+        return { piece: '♟', type: 'one' };
+      case 8:
+        return { piece: '♟', type: 'two' };
+      case 9:
+        return { piece: chessPiece, type: 'two' };
+      default:
+        return { piece: '', type: '' };
+    }
   };
 
   return Array(rows)
@@ -29,12 +35,12 @@ const buildChessGrid = (): Grid => {
       Array(columns)
         .fill(null)
         .map((_, colIndex) => {
-          const piece = placePiece(rowIndex, colIndex);
+          const playerPiece = placePiece(rowIndex, colIndex);
 
           return {
             id: `sqr${rowIndex}-${colIndex}`,
-            piece: piece[0],
-            pieceType: piece[1],
+            piece: playerPiece.piece,
+            pieceType: playerPiece.type,
             selected: false,
           };
         }),
@@ -45,20 +51,24 @@ const buildCheCkersGrid = (): Grid => {
   const rows = 12;
   const columns = 8;
 
-  const placePiece = (row: number, col: number): [Piece, PieceType] => {
+  const placePiece = (row: number, col: number): PieceByType => {
     const isEvenCol = (col + 1) % 2 === 0;
 
     if ([2, 3, 4].includes(row)) {
       const valid = row === 3 ? !isEvenCol : isEvenCol;
-      return valid ? ['checker', 'one'] : ['', ''];
+      return valid
+        ? { piece: 'checker', type: 'one' }
+        : { piece: '', type: '' };
     }
 
     if ([7, 8, 9].includes(row)) {
       const valid = row === 8 ? isEvenCol : !isEvenCol;
-      return valid ? ['checker', 'two'] : ['', ''];
+      return valid
+        ? { piece: 'checker', type: 'two' }
+        : { piece: '', type: '' };
     }
 
-    return ['', ''];
+    return { piece: '', type: '' };
   };
 
   return Array(rows)
@@ -67,12 +77,12 @@ const buildCheCkersGrid = (): Grid => {
       Array(columns)
         .fill(null)
         .map((_, colIndex) => {
-          const piece = placePiece(rowIndex, colIndex);
+          const playerPiece = placePiece(rowIndex, colIndex);
 
           return {
             id: `sqr${rowIndex}-${colIndex}`,
-            piece: piece[0],
-            pieceType: piece[1],
+            piece: playerPiece.piece,
+            pieceType: playerPiece.type,
             selected: false,
           };
         }),

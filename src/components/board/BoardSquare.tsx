@@ -27,14 +27,13 @@ const BoardSquare = ({
   isTicTacToe,
   onClickPiece,
 }: BoardSquareProps) => {
-  const squareBaseStyle =
-    'aspect-square min-w-6 min-h-6 flex items-center justify-center';
   const chessIconProps = { className: pieceStyle, strokeWidth: 1.75 };
 
   return (
     <div
       data-testid={cell.id}
-      className={`${cell.id} ${squareBaseStyle} ${squareStyle}`}
+      className={`square-base ${squareStyle}`}
+      style={{ gridArea: cell.id }}
       onClick={() => onClickPiece(cell)}
     >
       {isTicTacToe && cell.piece === 'tic-x' && (

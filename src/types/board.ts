@@ -11,6 +11,11 @@ export type Piece =
   | 'tic-x'
   | 'tic-circle'
   | '';
+export interface PieceByType {
+  piece: Piece;
+  type: PieceType;
+}
+
 export type SelectedGame =
   | 'chess'
   | 'checkers'
@@ -20,13 +25,13 @@ export type SelectedGame =
 export type Grid = Square[][];
 export type SelectedSquare = [number, number] | [null, null];
 
-export interface Square { 
+export interface Square {
   id: string;
   piece: Piece;
   pieceType: PieceType;
   selected: boolean;
   reversiFlipped?: boolean;
-};
+}
 
 export interface BoardStateType {
   id: string;
@@ -46,6 +51,6 @@ export interface BoardStateType {
   socketHost: string;
   socketGuest: string;
   changeFromSocket: boolean;
-};
+}
 
 // activar/desactivar save sin depender de saveEnabled:boolean
