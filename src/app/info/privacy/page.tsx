@@ -2,7 +2,7 @@ import SectionTitle from '@/components/visuals/SectionTitle';
 
 const Privacy = () => {
   return (
-    <section className='mx-auto max-w-300 flex flex-wrap mb-10 mt-4'>
+    <section className='mx-auto max-w-300 flex flex-wrap mb-10 mt-4 pb-60'>
       <SectionTitle title='privacy policy' />
       <p className='text-left text-stone-600 leading-relaxed w-full mt-10 mx-6'>
         This site uses{' '}

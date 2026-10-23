@@ -16,7 +16,11 @@ const TicTacToe = () => {
     };
   }, [dispatch]);
 
-  return <GameSet />;
+  return (
+    <div className='pb-30'>
+      <GameSet />
+    </div>
+  );
 };
 
 export default TicTacToe;

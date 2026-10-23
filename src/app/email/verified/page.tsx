@@ -4,7 +4,7 @@ import VerifiedImg from '../../../assets/verified.svg';
 
 const Verified = () => {
   return (
-    <section className='py-10 px-10 text-stone-600'>
+    <section className='pt-10 pb-70 px-10 text-stone-600'>
       <h3 className='text-center text-4xl tracking-[2px] mt-10 mb-8'>
         Account Verified
       </h3>

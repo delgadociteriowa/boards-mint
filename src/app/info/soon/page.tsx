@@ -4,7 +4,7 @@ import Construction from '../../../assets/construction.svg';
 
 const Soon = () => {
   return (
-    <section className='py-10 px-10 text-stone-600'>
+    <section className='py-10 pt-10 pb-60 text-stone-600'>
       <h3 className='text-center text-4xl tracking-[2px] mt-10 mb-8'>
         Coming Soon
       </h3>

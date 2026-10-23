@@ -16,7 +16,11 @@ const Reversi = () => {
     };
   }, [dispatch]);
 
-  return <GameSet />;
+  return (
+    <div className='pb-20'>
+      <GameSet />
+    </div>
+  );
 };
 
 export default Reversi;

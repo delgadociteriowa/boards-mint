@@ -14,7 +14,7 @@ const Saved = () => {
         <LoadingComponent />
       ) : (
         <>
-          <section className='w-[90%] mx-auto max-w-300 py-14 text-stone-600'>
+          <section className='w-[90%] mx-auto max-w-300 pt-14 pb-20 md:pb-80 text-stone-600'>
             <SectionTitle title='saved games' />
             <SavedList
               loading={loading}
