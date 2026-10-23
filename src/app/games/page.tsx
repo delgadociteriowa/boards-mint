@@ -1,6 +1,4 @@
 import GameCardList from '@/components/home/GameCardList';
-import Footer from '@/components/layout/Footer';
-import Header from '@/components/layout/Header';
 import SectionTitle from '@/components/visuals/SectionTitle';
 
 const Games = () => {
@@ -56,16 +54,10 @@ const Games = () => {
     },
   ];
   return (
-    <>
-      <Header />
-      <main className='min-h-200'>
-        <section className='w-[90%] mx-auto max-w-300 py-14 text-stone-600'>
-          <SectionTitle title='games' />
-          <GameCardList list={games} />
-        </section>
-      </main>
-      <Footer />
-    </>
+    <section className='w-[90%] mx-auto max-w-300 py-14 text-stone-600'>
+      <SectionTitle title='games' />
+      <GameCardList list={games} />
+    </section>
   );
 };
 export default Games;

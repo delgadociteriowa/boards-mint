@@ -1,3 +1,5 @@
+import Footer from '@/components/layout/Footer';
+import Header from '@/components/layout/Header';
 import AuthProvider from '@/components/user/AuthProvider';
 import { Analytics } from '@vercel/analytics/next';
 import type { Metadata } from 'next';
@@ -35,8 +37,12 @@ const RootLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
       <html lang='en'>
         <Providers>
           <body className='bg-stone-100 font-texts'>
-            {children}
-            <Analytics />
+            <Header />
+            <main>
+              {children}
+              <Analytics />
+            </main>
+            <Footer />
           </body>
         </Providers>
       </html>

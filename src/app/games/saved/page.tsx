@@ -1,7 +1,5 @@
 'use client';
 
-import Footer from '@/components/layout/Footer';
-import Header from '@/components/layout/Header';
 import SavedList from '@/components/saved/SavedList';
 import LoadingComponent from '@/components/visuals/LoadingComponent';
 import SectionTitle from '@/components/visuals/SectionTitle';
@@ -12,11 +10,10 @@ const Saved = () => {
   const { boards, loading, error, status, handleDelete } = useSavedBoards();
   return (
     <>
-      <Header />
       {status === 'loading' ? (
         <LoadingComponent />
       ) : (
-        <main className='min-h-200'>
+        <>
           <section className='w-[90%] mx-auto max-w-300 py-14 text-stone-600'>
             <SectionTitle title='saved games' />
             <SavedList
@@ -39,9 +36,8 @@ const Saved = () => {
             }}
             richColors
           />
-        </main>
+        </>
       )}
-      <Footer />
     </>
   );
 };

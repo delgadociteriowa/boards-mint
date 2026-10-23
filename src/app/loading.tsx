@@ -1,15 +1,7 @@
-import Footer from '@/components/layout/Footer';
-import Header from '@/components/layout/Header';
 import LoadingComponent from '@/components/visuals/LoadingComponent';
 
 const LoadingPage = () => {
-  return (
-    <>
-      <Header />
-      <LoadingComponent />
-      <Footer />
-    </>
-  );
+  return <LoadingComponent />;
 };
 
 export default LoadingPage;

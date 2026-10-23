@@ -1,9 +1,5 @@
 import HomeFeatures from './HomeFeatures';
 
-const HomeMainSection = () => (
-  <main>
-    <HomeFeatures />
-  </main>
-);
+const HomeMainSection = () => <HomeFeatures />;
 
 export default HomeMainSection;
