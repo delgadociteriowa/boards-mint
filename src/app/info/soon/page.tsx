@@ -1,5 +1,5 @@
+import InfoPageButton from '@/components/visuals/InfoPageButton';
 import Image from 'next/image';
-import Link from 'next/link';
 import Construction from '../../../assets/construction.svg';
 
 const Soon = () => {
@@ -20,12 +20,7 @@ const Soon = () => {
           height={500}
         />
       </figure>
-      <Link
-        href='/games'
-        className='block w-60 bg-stone-300 hover:bg-stone-200 py-6 rounded-full text-center no-underline text-stone-800 text-xl lowercase tracking-[3px] mx-auto my-0 shadow-lg'
-      >
-        games
-      </Link>
+      <InfoPageButton link='/games' text='games' />
     </section>
   );
 };

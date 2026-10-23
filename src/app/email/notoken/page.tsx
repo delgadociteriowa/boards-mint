@@ -1,5 +1,5 @@
+import InfoPageButton from '@/components/visuals/InfoPageButton';
 import Image from 'next/image';
-import Link from 'next/link';
 import Error from '../../../assets/error.svg';
 
 const NoToken = () => {
@@ -20,12 +20,7 @@ const NoToken = () => {
           height={500}
         />
       </figure>
-      <Link
-        href='/'
-        className='block w-60 bg-sky-600 hover:bg-sky-500 py-6 rounded-full text-center no-underline text-stone-100 text-xl lowercase tracking-[3px] mx-auto my-0 shadow-lg'
-      >
-        home
-      </Link>
+      <InfoPageButton link='/' text='home' />
     </section>
   );
 };
