@@ -1,23 +1,13 @@
+'use client';
+
+import { useSavedBoards } from '@/app/hooks/useSavedBoards';
 import SavedCard from '@/components/saved/SavedCard';
 import Spinner from '@/components/visuals/Spinner';
-import { SavedBoard } from '@/types/savedBoards';
 import formatDate from '@/utils/formatDate';
 
-interface SavedListProps {
-  loading: boolean;
-  error: string | null;
-  boards: SavedBoard[];
-  status: string;
-  handleDelete: (id: string) => void;
-}
+const SavedList = () => {
+  const { boards, loading, error, status, handleDelete } = useSavedBoards();
 
-const SavedList = ({
-  loading,
-  error,
-  boards,
-  status,
-  handleDelete,
-}: SavedListProps) => {
   return (
     <div className='py-10 flex flex-wrap gap-10 w-full mb-8'>
       {loading && <Spinner />}
