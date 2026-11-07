@@ -1,9 +1,0 @@
-app/ OK
-app/email OK
-app/info OK
-app/user OK
-app/games OK ojo saved y otros
-
-
-mudar props de board a board
-
