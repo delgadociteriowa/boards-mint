@@ -2,6 +2,7 @@
 
 import { useBoard } from '@/app/hooks/useBoard';
 import { useSocket } from '@/app/hooks/useSocket';
+import { SelectedGame } from '@/types/board';
 
 import ErrorComponent from '../visuals/ErrorComponent';
 import Spinner from '../visuals/Spinner';
@@ -9,9 +10,13 @@ import Board from './Board';
 import OnlinePlayers from './OnlinePlayers';
 import ToolsBar from './ToolsBar';
 
-const GameSet = () => {
-  const { selectedGame, gameGrid, phaseTwo, loading, error, handleClickSqr } =
-    useBoard();
+interface GameSetProps {
+  selectedGame: SelectedGame;
+}
+
+const GameSet = ({ selectedGame }: GameSetProps) => {
+  const { gameGrid, phaseTwo, loading, error, handleClickSqr } =
+    useBoard(selectedGame);
   const { hCreatesGameRoom, hDeletesGameRoom, gLeavesGameRoom } = useSocket();
 
   return (
