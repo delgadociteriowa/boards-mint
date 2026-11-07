@@ -1,14 +1,10 @@
+'use client';
+import { useAccount } from '@/app/hooks/useAccount';
 import Link from 'next/link';
 
-interface AccountOptionsProps {
-  handleLogout: () => void;
-  handleDeleteUser: () => void;
-}
+const AccountOptions = () => {
+  const { handleLogout, handleDeleteUser } = useAccount();
 
-const AccountOptions = ({
-  handleLogout,
-  handleDeleteUser,
-}: AccountOptionsProps) => {
   return (
     <div className='flex flex-col gap-5'>
       <label className='text-stone-600 tracking-[1px] text-sm'>

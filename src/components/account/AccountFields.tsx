@@ -1,60 +1,60 @@
+'use client';
+
+import { useAccount } from '@/app/hooks/useAccount';
+import { useSession } from 'next-auth/react';
 import Line from '../visuals/Line';
+import Spinner from '../visuals/Spinner';
 import AccountEditableField from './AccountEditableField';
 import AccountField from './AccountField';
 
-interface AccountFieldsProps {
-  userName: string;
-  email: string;
-  firstname: string;
-  lastname: string;
-  isEditingFirst: boolean;
-  isEditingLast: boolean;
-  updateFirstname: (value: string) => void;
-  updateLastname: (value: string) => void;
-  startEditing: (value: 'firstname' | 'lastname') => void;
-  stopEditing: () => void;
-  handleSave: (value: 'firstname' | 'lastname') => void;
-}
-
-const AccountFields = ({
-  userName,
-  email,
-  firstname,
-  lastname,
-  isEditingFirst,
-  isEditingLast,
-  updateFirstname,
-  updateLastname,
-  startEditing,
-  stopEditing,
-  handleSave,
-}: AccountFieldsProps) => {
+const AccountFields = () => {
+  const { status } = useSession();
+  const {
+    userName,
+    email,
+    firstname,
+    lastname,
+    editingField,
+    updateFirstname,
+    updateLastname,
+    startEditing,
+    stopEditing,
+    handleSave,
+  } = useAccount();
+  const isEditingFirst = editingField === 'firstname';
+  const isEditingLast = editingField === 'lastname';
   return (
     <>
-      <AccountField label='user name' value={userName ?? '-'} />
-      <Line />
-      <AccountField label='email' value={email ?? '-'} />
-      <Line />
-      <AccountEditableField
-        label='first name'
-        value={firstname ?? '-'}
-        editing={isEditingFirst}
-        onChange={(value) => updateFirstname(value)}
-        onEdit={() => startEditing('firstname')}
-        onSave={() => handleSave('firstname')}
-        onCancel={() => stopEditing()}
-      />
-      <Line />
-      <AccountEditableField
-        label='last name'
-        value={lastname ?? '-'}
-        editing={isEditingLast}
-        onChange={(value) => updateLastname(value)}
-        onEdit={() => startEditing('lastname')}
-        onSave={() => handleSave('lastname')}
-        onCancel={() => stopEditing()}
-      />
-      <Line />
+      {status === 'loading' ? (
+        <Spinner />
+      ) : (
+        <>
+          <AccountField label='user name' value={userName ?? '-'} />
+          <Line />
+          <AccountField label='email' value={email ?? '-'} />
+          <Line />
+          <AccountEditableField
+            label='first name'
+            value={firstname ?? '-'}
+            editing={isEditingFirst}
+            onChange={(value) => updateFirstname(value)}
+            onEdit={() => startEditing('firstname')}
+            onSave={() => handleSave('firstname')}
+            onCancel={() => stopEditing()}
+          />
+          <Line />
+          <AccountEditableField
+            label='last name'
+            value={lastname ?? '-'}
+            editing={isEditingLast}
+            onChange={(value) => updateLastname(value)}
+            onEdit={() => startEditing('lastname')}
+            onSave={() => handleSave('lastname')}
+            onCancel={() => stopEditing()}
+          />
+          <Line />
+        </>
+      )}
     </>
   );
 };

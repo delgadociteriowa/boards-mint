@@ -1,12 +1,11 @@
-import { UpdateUserPassword } from '@/types/user';
+'use client';
+
+import { useAccount } from '@/app/hooks/useAccount';
 import { Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
 
-interface AccountPasswordProps {
-  handleUpdatePassword: (value: UpdateUserPassword) => void;
-}
-
-const AccountPassword = ({ handleUpdatePassword }: AccountPasswordProps) => {
+const AccountPassword = () => {
+  const { handleUpdatePassword } = useAccount();
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
