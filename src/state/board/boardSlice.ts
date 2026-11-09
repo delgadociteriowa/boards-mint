@@ -158,9 +158,9 @@ const initialState: BoardStateType = {
   owner: '',
   selectedGame: '',
   gameGrid: [],
-  reversiNextPiece: 'two',
   selectedSqr: [null, null],
   phaseTwo: false,
+  reversiNextPiece: 'two',
   loading: false, //pending
   saving: false,
   error: null,
@@ -283,6 +283,34 @@ const boardSlice = createSlice({
         return;
       }
     },
+    setSelectedSqr: (state, action: PayloadAction<SelectedSquare>) => {
+      state.selectedSqr = action.payload;
+    },
+    setGameGrid: (state, action: PayloadAction<Grid>) => {
+      state.gameGrid = action.payload;
+      state.reversiNextPiece = getNextReversiPiece(action.payload);
+    },
+    setPhaseTwo: (state, action: PayloadAction<boolean>) => {
+      state.phaseTwo = action.payload;
+    },
+    setReversiNextPiece: (state, action: PayloadAction<ReversiPieceType>) => {
+      state.reversiNextPiece = action.payload;
+    },
+    setSocketActive: (state, action: PayloadAction<boolean>) => {
+      state.socketActive = action.payload;
+    },
+    setShareDelay: (state, action: PayloadAction<boolean>) => {
+      state.shareDelay = action.payload;
+    },
+    setSocketHost: (state, action: PayloadAction<string>) => {
+      state.socketHost = action.payload;
+    },
+    setSocketGuest: (state, action: PayloadAction<string>) => {
+      state.socketGuest = action.payload;
+    },
+    setChangeFromSocket: (state, action: PayloadAction<boolean>) => {
+      state.changeFromSocket = action.payload;
+    },
     closeGame: (state) => {
       state.selectedGame = '';
       state.id = '';
@@ -300,34 +328,6 @@ const boardSlice = createSlice({
       state.socketHost = '';
       state.socketGuest = '';
       state.changeFromSocket = false;
-    },
-    setSocketActive: (state, action: PayloadAction<boolean>) => {
-      state.socketActive = action.payload;
-    },
-    setShareDelay: (state, action: PayloadAction<boolean>) => {
-      state.shareDelay = action.payload;
-    },
-    setSocketHost: (state, action: PayloadAction<string>) => {
-      state.socketHost = action.payload;
-    },
-    setSocketGuest: (state, action: PayloadAction<string>) => {
-      state.socketGuest = action.payload;
-    },
-    setGameGrid: (state, action: PayloadAction<Grid>) => {
-      state.gameGrid = action.payload;
-      state.reversiNextPiece = getNextReversiPiece(action.payload);
-    },
-    setReversiNextPiece: (state, action: PayloadAction<ReversiPieceType>) => {
-      state.reversiNextPiece = action.payload;
-    },
-    setChangeFromSocket: (state, action: PayloadAction<boolean>) => {
-      state.changeFromSocket = action.payload;
-    },
-    setPhaseTwo: (state, action: PayloadAction<boolean>) => {
-      state.phaseTwo = action.payload;
-    },
-    setSelectedSqr: (state, action: PayloadAction<SelectedSquare>) => {
-      state.selectedSqr = action.payload;
     },
   },
   extraReducers: (builder) => {

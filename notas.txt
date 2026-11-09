@@ -1,0 +1,7 @@
+- ojo, marcar reinas en damas con dblclick
+- ojo, detalles específicos de tablero en help.
+
+Hay juegos de move piece
+Hay juegos de flip piece
+
+Ver bien como funciona en chess y reversi
