@@ -129,7 +129,7 @@ const buildReversiGrid = (): Grid => {
             (rowIndex === center + 1 && colIndex === center);
 
           return {
-            id: `sqr${rowIndex + 2}-${colIndex}`,
+            id: `sqr${rowIndex}-${colIndex}`,
             piece: isOccupied ? 'checker' : '',
             pieceType: isOccupied ? (isWhite ? 'one' : 'two') : '',
             selected: false,

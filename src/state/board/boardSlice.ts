@@ -185,6 +185,7 @@ const boardSlice = createSlice({
       state.gameGrid = grid;
     },
     selectPiece: (state, action: PayloadAction<string>) => {
+      // flip pieces
       if (
         state.selectedGame === 'reversi' ||
         state.selectedGame === 'tic-tac-toe'
@@ -193,18 +194,8 @@ const boardSlice = createSlice({
           .replace('sqr', '')
           .split('-')
           .map((n) => Number(n));
-        const gridRow = state.selectedGame === 'reversi' ? row - 2 : row;
-        const square = state.gameGrid[gridRow]?.[col];
-
-        if (!square) return;
-
-        state.gameGrid.forEach((gridRow) =>
-          gridRow.forEach((gridSquare) => {
-            if (gridSquare !== square) {
-              gridSquare.reversiFlipped = false;
-            }
-          }),
-        );
+        const square = state.gameGrid[row]?.[col];
+        console.log('desde flip: ', square.piece || 'no es nada');
 
         if (square.piece === '') {
           square.piece =
@@ -234,11 +225,14 @@ const boardSlice = createSlice({
         return;
       }
 
+      // move pieces
+
       const [row, col] = action.payload
         .replace('sqr', '')
         .split('-')
         .map((n) => Number(n));
       const selectedPiece: SelectedSquare = [row, col];
+      console.log('desde move: ', selectedPiece);
       const isSameSqr =
         row === state.selectedSqr[0] && col === state.selectedSqr[1];
       const emptySqr: SelectedSquare = [null, null];
