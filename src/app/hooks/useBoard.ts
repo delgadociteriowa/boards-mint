@@ -45,16 +45,17 @@ export const useBoard = (selectedGame: SelectedGame) => {
   }, [queryParamId, id]);
 
   const handleClickSqr = (cell: Square) => {
-    if (!phaseTwo) {
-      if (!cell.piece) return;
-      dispatch(selectPiece(cell.id));
-      dispatch(setChangeFromSocket(false));
+    if (
+      selectedGame !== 'reversi' &&
+      selectedGame !== 'tic-tac-toe' &&
+      !phaseTwo &&
+      !cell.piece
+    ) {
       return;
     }
 
     dispatch(selectPiece(cell.id));
     dispatch(setChangeFromSocket(false));
-    return;
   };
 
   return {
