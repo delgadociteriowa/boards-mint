@@ -7,6 +7,27 @@ import {
   Square,
 } from '../../types/board';
 
+// Builders
+
+const buildGameGrid = (selectedGame: SelectedGame): Grid => {
+  switch (selectedGame) {
+    case 'chess':
+      return buildChessGrid();
+
+    case 'checkers':
+      return buildCheCkersGrid();
+
+    case 'reversi':
+      return buildReversiGrid();
+
+    case 'tic-tac-toe':
+      return buildTicTacToeGrid();
+
+    default:
+      return [];
+  }
+};
+
 const buildChessGrid = (): Grid => {
   const rows = 12;
   const columns = 8;
@@ -133,34 +154,7 @@ const buildTicTacToeGrid = (): Grid =>
         })),
     );
 
-const buildGameGrid = (selectedGame: SelectedGame): Grid => {
-  if (selectedGame === 'chess') {
-    return buildChessGrid();
-  }
-  if (selectedGame === 'checkers') {
-    return buildCheCkersGrid();
-  }
-  if (selectedGame === 'reversi') {
-    return buildReversiGrid();
-  }
-  if (selectedGame === 'tic-tac-toe') {
-    return buildTicTacToeGrid();
-  }
-  return [];
-};
-
-const getNextReversiPiece = (grid: Grid): 'one' | 'two' => {
-  const counts = grid.flat().reduce(
-    (pieces, square) => {
-      if (square.pieceType === 'one') pieces.one += 1;
-      if (square.pieceType === 'two') pieces.two += 1;
-      return pieces;
-    },
-    { one: 0, two: 0 },
-  );
-
-  return counts.two > counts.one ? 'one' : 'two';
-};
+// step-one chess-like move
 
 const selectSqrGrid = (
   selectedSqr: SelectedSquare,
@@ -175,6 +169,7 @@ const selectSqrGrid = (
   );
 };
 
+// step-two chess-like move
 const targetedSelfGrid = (
   currentSelectedSqr: SelectedSquare,
   currentGrid: Grid,
@@ -319,6 +314,23 @@ const targetedPieceGrid = (
     });
   });
 };
+
+// Reversi-like flip
+
+const getNextReversiPiece = (grid: Grid): 'one' | 'two' => {
+  const counts = grid.flat().reduce(
+    (pieces, square) => {
+      if (square.pieceType === 'one') pieces.one += 1;
+      if (square.pieceType === 'two') pieces.two += 1;
+      return pieces;
+    },
+    { one: 0, two: 0 },
+  );
+
+  return counts.two > counts.one ? 'one' : 'two';
+};
+
+// Exceptions
 
 const benchesAreFilled = (grid: Grid): boolean => {
   const benchRows = [0, 1, 10, 11];
