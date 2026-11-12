@@ -25,6 +25,7 @@ export type SelectedGame =
 export type Grid = Square[][];
 export type SelectedSquare = [number, number] | [null, null];
 
+// TODO: empty: boolean
 export interface Square {
   id: string;
   piece: Piece;

@@ -5,3 +5,17 @@ Hay juegos de move piece
 Hay juegos de flip piece
 
 Ver bien como funciona en chess y reversi
+
+
+square.piece: define el tipo de pieza y sirve para:
+  - definir en el state board el square.
+  - definir si hay o no pieza.
+  * si define si hay o no pieza es una responsablidad que no debería tener.
+  * debería ser algo como empty boolean.
+  * el flip capaz debería definirse por pieceType y no por flipped o reversiflipped
+  * capaz ni empty se necesita, solo pieceType que es 'one', 'two', ''
+  * y ni debería llamarse pieceType, sino piecePlayer. 'one', 'two', 'none'
+
+boardSetup.ts: setea los boards y define los movimientos
+boardSlice > selectPiece: define los movimientos del jugador
+utils/uiSquare: define como se pinta
