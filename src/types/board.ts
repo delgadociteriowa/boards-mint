@@ -7,7 +7,7 @@ export type Piece =
   | '♝'
   | '♛'
   | '♚'
-  | 'checker'
+  | 'circlePiece'
   | 'tic-x'
   | 'tic-circle'
   | '';

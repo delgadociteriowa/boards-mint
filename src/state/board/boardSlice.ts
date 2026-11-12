@@ -203,7 +203,7 @@ const boardSlice = createSlice({
               ? state.reversiNextPiece === 'one'
                 ? 'tic-x'
                 : 'tic-circle'
-              : 'checker';
+              : 'circlePiece';
           square.pieceType = state.reversiNextPiece;
           square.reversiFlipped = false;
           state.reversiNextPiece =

@@ -78,14 +78,14 @@ const buildCheCkersGrid = (): Grid => {
     if ([2, 3, 4].includes(row)) {
       const valid = row === 3 ? !isEvenCol : isEvenCol;
       return valid
-        ? { piece: 'checker', type: 'one' }
+        ? { piece: 'circlePiece', type: 'one' }
         : { piece: '', type: '' };
     }
 
     if ([7, 8, 9].includes(row)) {
       const valid = row === 8 ? isEvenCol : !isEvenCol;
       return valid
-        ? { piece: 'checker', type: 'two' }
+        ? { piece: 'circlePiece', type: 'two' }
         : { piece: '', type: '' };
     }
 
@@ -130,7 +130,7 @@ const buildReversiGrid = (): Grid => {
 
           return {
             id: `sqr${rowIndex}-${colIndex}`,
-            piece: isOccupied ? 'checker' : '',
+            piece: isOccupied ? 'circlePiece' : '',
             pieceType: isOccupied ? (isWhite ? 'one' : 'two') : '',
             selected: false,
             reversiFlipped: false,
