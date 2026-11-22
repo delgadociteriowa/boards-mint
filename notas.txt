@@ -37,3 +37,7 @@ Cómo se pinta el chess?
 8 - se coloca en el estado grid
 9 - Se le pasa al componente Board
 10 - board lo pinta gracias a todo lo visul en el componente Board
+
+
+|fix-useclient
+- Gameset toolsbar prop cleaned

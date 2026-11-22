@@ -1,7 +1,6 @@
 'use client';
 
 import { useBoard } from '@/app/hooks/useBoard';
-import { useSocket } from '@/app/hooks/useSocket';
 import { SelectedGame } from '@/types/board';
 
 import ErrorComponent from '../visuals/ErrorComponent';
@@ -17,7 +16,6 @@ interface GameSetProps {
 const GameSet = ({ selectedGame }: GameSetProps) => {
   const { gameGrid, phaseTwo, loading, error, handleClickSqr } =
     useBoard(selectedGame);
-  const { hCreatesGameRoom, hDeletesGameRoom, gLeavesGameRoom } = useSocket();
 
   return (
     <>
@@ -34,11 +32,7 @@ const GameSet = ({ selectedGame }: GameSetProps) => {
             phaseTwo={phaseTwo}
             handleClickSqr={handleClickSqr}
           />
-          <ToolsBar
-            hCreatesGameRoom={hCreatesGameRoom}
-            hDeletesGameRoom={hDeletesGameRoom}
-            gLeavesGameRoom={gLeavesGameRoom}
-          />
+          <ToolsBar />
         </main>
       )}
     </>

@@ -1,4 +1,5 @@
 'use client';
+import { useSocket } from '@/app/hooks/useSocket';
 import {
   addBoard,
   buildSyncGrid,
@@ -23,17 +24,7 @@ import Dialog from '../dialog/Dialog';
 import DialogHowto from '../dialog/DialogHowto';
 import DialogQr from '../dialog/DialogQr';
 
-interface SaveBoardProps {
-  hCreatesGameRoom: (setToastState: (value: boolean) => void) => void;
-  hDeletesGameRoom: (setToastState: (value: boolean) => void) => void;
-  gLeavesGameRoom: (setToastState: (value: boolean) => void) => void;
-}
-
-const SaveBoard = ({
-  hCreatesGameRoom,
-  hDeletesGameRoom,
-  gLeavesGameRoom,
-}: SaveBoardProps) => {
+const SaveBoard = () => {
   const { data: session } = useSession();
   const {
     phaseTwo,
@@ -55,6 +46,8 @@ const SaveBoard = ({
   const dialogQrRef = useRef<HTMLDialogElement | null>(null);
 
   const [activeToast, setActiveToast] = useState(false);
+
+  const { hCreatesGameRoom, hDeletesGameRoom, gLeavesGameRoom } = useSocket();
 
   useEffect(() => {
     if (!boardId || !socketActive) return;
