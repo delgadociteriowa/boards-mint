@@ -1,12 +1,21 @@
 'use client';
+
+//deendencias
+// por iniciar conexión socket
 import { useSocket } from '@/app/hooks/useSocket';
+
+// del estado board
 import {
   addBoard,
   buildSyncGrid,
   setChangeFromSocket,
   updateBoard,
 } from '@/state/board/boardSlice';
+
+// usar y despachar estado
 import { useAppDispatch, useAppSelector } from '@/state/hooks';
+
+// iconos de botones
 import {
   CircleHelp,
   Globe,
@@ -16,16 +25,31 @@ import {
   RotateCcw,
   Save,
 } from 'lucide-react';
+
+// sesion de usuario
 import { useSession } from 'next-auth/react';
+
+// codigo del board
 import { useSearchParams } from 'next/navigation';
+
+// hooks clásicos react
 import { useEffect, useRef, useState } from 'react';
+
+// toas de mensajes
 import { Toaster, toast } from 'sonner';
+
+//modals
 import Dialog from '../dialog/Dialog';
 import DialogHowto from '../dialog/DialogHowto';
 import DialogQr from '../dialog/DialogQr';
 
 const SaveBoard = () => {
+  // previo a return
+
+  // sesión de usuario
   const { data: session } = useSession();
+
+  // estado de slice board
   const {
     phaseTwo,
     gameGrid,
@@ -37,18 +61,25 @@ const SaveBoard = () => {
     saving,
   } = useAppSelector((state) => state.board);
 
+  // despachador de acciones
   const dispatch = useAppDispatch();
+
+  // id de juego y room
   const searchParams = useSearchParams();
   const boardId = searchParams.get('id');
   const roomId = searchParams.get('room');
 
+  // relacionado a modal
   const dialogHowToRef = useRef<HTMLDialogElement | null>(null);
   const dialogQrRef = useRef<HTMLDialogElement | null>(null);
 
+  // relacionado al toast
   const [activeToast, setActiveToast] = useState(false);
 
+  // relacionado a creación de room
   const { hCreatesGameRoom, hDeletesGameRoom, gLeavesGameRoom } = useSocket();
 
+  //useEffect de que sucede en determinados cambios
   useEffect(() => {
     if (!boardId || !socketActive) return;
 
@@ -77,6 +108,7 @@ const SaveBoard = () => {
     };
   }, [boardId, socketActive, gameGrid, reversiNextPiece]);
 
+  // función para manejar el guardado
   const handleSave = async () => {
     setActiveToast(true);
     const toastId = toast('Save board', {
@@ -114,24 +146,7 @@ const SaveBoard = () => {
     });
   };
 
-  const handleShare = async () => {
-    setActiveToast(true);
-    const currentUrl = window.location.href;
-    const roomUrl = currentUrl.replace('id=', 'room=');
-    try {
-      await navigator.clipboard.writeText(roomUrl);
-      toast.success('Link copied', {
-        description:
-          'The game room link has been copied to your clipboard! Share it to start playing online.',
-      });
-      setActiveToast(false);
-    } catch (error) {
-      toast.error('Could not copy the link');
-      console.error(error);
-      setActiveToast(false);
-    }
-  };
-
+  // función para abrir el how to
   const openHowToModal = () => {
     const dialog = dialogHowToRef.current;
     if (!dialog) return;
@@ -140,6 +155,7 @@ const SaveBoard = () => {
     dialog.scrollTop = 0;
   };
 
+  // función para abrir el qr
   const openQrModal = () => {
     const dialog = dialogQrRef.current;
     if (!dialog) return;
@@ -148,6 +164,7 @@ const SaveBoard = () => {
     dialog.scrollTop = 0;
   };
 
+  // función para manejar el reseteo
   const handleRestart = async () => {
     setActiveToast(true);
     const toastId = toast('Restart board', {
@@ -173,14 +190,15 @@ const SaveBoard = () => {
     dispatch(setChangeFromSocket(false));
   };
 
+  // return de visualización
   return (
     <>
-      <div className='flex flex-wrap justify-center md:justify-start md:flex-nowrap gap-4 md:gap-2 w-[90%] mb-14 landscape:w-[75%] mx-auto'>
+      <div className='toolsbar-main'>
         {session && !roomId && (
           <>
             <button
               title='Save game'
-              className='flex-none flex items-center justify-center text-stone-200 p-1 rounded-full w-7.75 h-7.75 bg-sky-600 hover:bg-sky-500 cursor-pointer shadow-md'
+              className='toolsbar-btn'
               onClick={handleSave}
               disabled={activeToast}
             >
@@ -189,7 +207,7 @@ const SaveBoard = () => {
 
             <button
               title={socketActive ? 'Go offline' : 'Online game'}
-              className='flex-none flex items-center justify-center text-stone-200 p-1 rounded-full w-7.75 h-7.75 bg-sky-600 hover:bg-sky-500 cursor-pointer shadow-md'
+              className='toolsbar-btn'
               onClick={() =>
                 !socketActive
                   ? hCreatesGameRoom(setActiveToast)
@@ -203,10 +221,11 @@ const SaveBoard = () => {
                 <Globe className='w-5 h-5' />
               )}
             </button>
+
             {socketActive && (
               <button
                 title='Share game'
-                className='flex-none flex items-center justify-center text-stone-200 p-1 rounded-full w-7.75 h-7.75 bg-sky-600 hover:bg-sky-500 cursor-pointer shadow-md'
+                className='toolsbar-btn'
                 onClick={openQrModal}
                 disabled={activeToast}
               >
@@ -215,26 +234,28 @@ const SaveBoard = () => {
             )}
 
             {updatedAt && (
-              <span className='w-full order-last md:w-auto text-center mt-3 md:mt-0 md:ml-auto md:mr-2 text-sm font-texts text-stone-500'>
+              <span className='toolsbar-saved-status'>
                 {saving ? 'Saving...' : `Last Saved: ${updatedAt}`}
               </span>
             )}
           </>
         )}
+
         {!roomId && (
           <button
             title='Restart game'
-            className='flex-none flex items-center justify-center text-stone-200 p-1 rounded-full w-7.75 h-7.75 bg-sky-600 hover:bg-sky-500 cursor-pointer shadow-md'
+            className='toolsbar-btn'
             disabled={activeToast}
             onClick={handleRestart}
           >
             <RotateCcw className='w-5 h-5' />
           </button>
         )}
+
         {roomId && (
           <button
             title='Leave game'
-            className='flex-none flex items-center justify-center text-stone-200 px-1 py-1 rounded-full w-7.75 h-7.75 bg-sky-600 hover:bg-sky-500 cursor-pointer shadow-md'
+            className='toolsbar-btn'
             onClick={() => gLeavesGameRoom(setActiveToast)}
             disabled={activeToast}
           >
@@ -244,7 +265,7 @@ const SaveBoard = () => {
 
         <button
           title='Help'
-          className='flex-none flex items-center justify-center text-stone-200 px-1 py-1 rounded-full w-7.75 h-7.75 bg-sky-600 hover:bg-sky-500 cursor-pointer shadow-md'
+          className='toolsbar-btn'
           onClick={openHowToModal}
           disabled={activeToast}
         >

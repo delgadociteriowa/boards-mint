@@ -41,3 +41,23 @@ Cómo se pinta el chess?
 
 |fix-useclient
 - Gameset toolsbar prop cleaned
+
+|fix-toolsbar
+función eliminada de ToolsBar:
+  const handleShare = async () => {
+    setActiveToast(true);
+    const currentUrl = window.location.href;
+    const roomUrl = currentUrl.replace('id=', 'room=');
+    try {
+      await navigator.clipboard.writeText(roomUrl);
+      toast.success('Link copied', {
+        description:
+          'The game room link has been copied to your clipboard! Share it to start playing online.',
+      });
+      setActiveToast(false);
+    } catch (error) {
+      toast.error('Could not copy the link');
+      console.error(error);
+      setActiveToast(false);
+    }
+  };

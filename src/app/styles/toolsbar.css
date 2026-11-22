@@ -1,0 +1,11 @@
+.toolsbar-main {
+  @apply flex flex-wrap justify-center md:justify-start md:flex-nowrap gap-4 md:gap-2 w-[90%] mb-14 landscape:w-[75%] mx-auto;
+}
+
+.toolsbar-btn {
+  @apply flex-none flex items-center justify-center text-stone-200 p-1 rounded-full w-7.75 h-7.75 bg-sky-600 hover:bg-sky-500 cursor-pointer shadow-md;
+}
+
+.toolsbar-saved-status {
+  @apply w-full order-last md:w-auto text-center mt-3 md:mt-0 md:ml-auto md:mr-2 text-sm font-texts text-stone-500;
+}
