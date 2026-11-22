@@ -19,3 +19,21 @@ square.piece: define el tipo de pieza y sirve para:
 boardSetup.ts: setea los boards y define los movimientos
 boardSlice > selectPiece: define los movimientos del jugador
 utils/uiSquare: define como se pinta
+
+
+define-movegame
+  - ver como funciona chess y checkers
+  - definir los movimientos como move.
+  - hacer mejoras.
+
+Cómo se pinta el chess?
+1 - el usuario va a games/chess y se setea a selectedGame como chess
+2 - Gameset con chess
+3 - Se ejecuta useBoard
+4 - Se ejecuta del estado buildSyncGrid()
+5 - Es un reducer que modifica el estado y lo hace llamando a buildGameGrid con el juego seleccionado
+6 - Lo llama de board boardSetup
+7 - Se arma el tablero como objeto, no visualmente
+8 - se coloca en el estado grid
+9 - Se le pasa al componente Board
+10 - board lo pinta gracias a todo lo visul en el componente Board
