@@ -2,9 +2,10 @@
 import {
   buildSyncGrid,
   closeGame,
+  flipPiece,
   getBoard,
+  movePiece,
   selectGame,
-  selectPiece,
   setChangeFromSocket,
 } from '@/state/board/boardSlice';
 import { useAppDispatch, useAppSelector } from '@/state/hooks';
@@ -20,6 +21,7 @@ export const useBoard = (selectedGame: SelectedGame) => {
     (state) => state.board,
   );
   const dispatch = useAppDispatch();
+  const isMoveLike = selectedGame === 'chess' || selectedGame === 'checkers';
 
   // Si no hay qpid hacer un board normal, cuando si hay lo pide.
   useEffect(() => {
@@ -45,16 +47,15 @@ export const useBoard = (selectedGame: SelectedGame) => {
   }, [queryParamId, id]);
 
   const handleClickSqr = (cell: Square) => {
-    if (
-      selectedGame !== 'reversi' &&
-      selectedGame !== 'tic-tac-toe' &&
-      !phaseTwo &&
-      !cell.piece
-    ) {
-      return;
+    if (isMoveLike) {
+      if (!phaseTwo && !cell.piece) {
+        return;
+      }
+      dispatch(movePiece(cell.id));
+    } else {
+      dispatch(flipPiece(cell.id));
     }
 
-    dispatch(selectPiece(cell.id));
     dispatch(setChangeFromSocket(false));
   };
 

@@ -184,60 +184,56 @@ const boardSlice = createSlice({
       const grid = buildGameGrid(state.selectedGame);
       state.gameGrid = grid;
     },
-    selectPiece: (state, action: PayloadAction<string>) => {
-      // flip pieces
-      if (
-        state.selectedGame === 'reversi' ||
-        state.selectedGame === 'tic-tac-toe'
-      ) {
-        const [row, col] = action.payload
-          .replace('sqr', '')
-          .split('-')
-          .map((n) => Number(n));
-        const square = state.gameGrid[row]?.[col];
-        console.log('desde flip: ', square.piece || 'no es nada');
-
-        if (square.piece === '') {
-          square.piece =
-            state.selectedGame === 'tic-tac-toe'
-              ? state.reversiNextPiece === 'one'
-                ? 'tic-x'
-                : 'tic-circle'
-              : 'circlePiece';
-          square.pieceType = state.reversiNextPiece;
-          square.reversiFlipped = false;
-          state.reversiNextPiece =
-            state.reversiNextPiece === 'one' ? 'two' : 'one';
-        } else if (!square.reversiFlipped) {
-          square.pieceType = square.pieceType === 'one' ? 'two' : 'one';
-          if (state.selectedGame === 'tic-tac-toe') {
-            square.piece = square.pieceType === 'one' ? 'tic-x' : 'tic-circle';
-          }
-          square.reversiFlipped = true;
-        } else {
-          square.piece = '';
-          square.pieceType = '';
-          square.reversiFlipped = false;
-        }
-        square.selected = false;
-        state.selectedSqr = [null, null];
-        state.phaseTwo = false;
-        return;
-      }
-
-      // move pieces
-
+    flipPiece: (state, action: PayloadAction<string>) => {
       const [row, col] = action.payload
         .replace('sqr', '')
         .split('-')
         .map((n) => Number(n));
+      const square = state.gameGrid[row]?.[col];
+      console.log('desde flip: ', square.piece || 'no es nada');
+
+      if (square.piece === '') {
+        square.piece =
+          state.selectedGame === 'tic-tac-toe'
+            ? state.reversiNextPiece === 'one'
+              ? 'tic-x'
+              : 'tic-circle'
+            : 'circlePiece';
+        square.pieceType = state.reversiNextPiece;
+        square.reversiFlipped = false;
+        state.reversiNextPiece =
+          state.reversiNextPiece === 'one' ? 'two' : 'one';
+      } else if (!square.reversiFlipped) {
+        square.pieceType = square.pieceType === 'one' ? 'two' : 'one';
+        if (state.selectedGame === 'tic-tac-toe') {
+          square.piece = square.pieceType === 'one' ? 'tic-x' : 'tic-circle';
+        }
+        square.reversiFlipped = true;
+      } else {
+        square.piece = '';
+        square.pieceType = '';
+        square.reversiFlipped = false;
+      }
+      square.selected = false;
+      state.selectedSqr = [null, null];
+      state.phaseTwo = false;
+      return;
+    },
+    movePiece: (state, action: PayloadAction<string>) => {
+      const [row, col] = action.payload
+        .replace('sqr', '')
+        .split('-')
+        .map(Number);
+
       const selectedPiece: SelectedSquare = [row, col];
-      console.log('desde move: ', selectedPiece);
-      const isSameSqr =
-        row === state.selectedSqr[0] && col === state.selectedSqr[1];
+      const currentSqr = state.selectedSqr;
       const emptySqr: SelectedSquare = [null, null];
 
-      if (!state.phaseTwo) {
+      const isPhaseOne = !state.phaseTwo;
+      const isSameSqr = row === currentSqr[0] && col === currentSqr[1];
+      const hasPiece = state.gameGrid[row][col].piece !== '';
+
+      if (isPhaseOne) {
         state.gameGrid = selectSqrGrid(selectedPiece, state.gameGrid);
         state.selectedSqr = selectedPiece;
         state.phaseTwo = true;
@@ -245,37 +241,25 @@ const boardSlice = createSlice({
       }
 
       if (isSameSqr) {
-        state.gameGrid = targetedSelfGrid(state.selectedSqr, state.gameGrid);
-        state.selectedSqr = emptySqr;
-        state.phaseTwo = false;
-        return;
-      }
-
-      if (state.gameGrid[row][col].piece === '') {
+        state.gameGrid = targetedSelfGrid(currentSqr, state.gameGrid);
+      } else if (!hasPiece) {
         state.gameGrid = targetedEmptyGrid(
           selectedPiece,
-          state.selectedSqr,
+          currentSqr,
           state.gameGrid,
         );
-        state.selectedSqr = emptySqr;
-        state.phaseTwo = false;
-        return;
+      } else if (benchesAreFilled(state.gameGrid)) {
+        state.gameGrid = targetedSelfGrid(currentSqr, state.gameGrid);
+      } else {
+        state.gameGrid = targetedPieceGrid(
+          selectedPiece,
+          currentSqr,
+          state.gameGrid,
+        );
       }
 
-      if (state.gameGrid[row][col].piece.length) {
-        if (benchesAreFilled(state.gameGrid)) {
-          state.gameGrid = targetedSelfGrid(state.selectedSqr, state.gameGrid);
-        } else {
-          state.gameGrid = targetedPieceGrid(
-            selectedPiece,
-            state.selectedSqr,
-            state.gameGrid,
-          );
-        }
-        state.selectedSqr = emptySqr;
-        state.phaseTwo = false;
-        return;
-      }
+      state.selectedSqr = emptySqr;
+      state.phaseTwo = false;
     },
     setSelectedSqr: (state, action: PayloadAction<SelectedSquare>) => {
       state.selectedSqr = action.payload;
@@ -391,7 +375,8 @@ const boardSlice = createSlice({
 export const {
   selectGame,
   buildSyncGrid,
-  selectPiece,
+  flipPiece,
+  movePiece,
   closeGame,
   setSocketActive,
   setShareDelay,

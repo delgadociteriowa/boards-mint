@@ -21,7 +21,8 @@ const Board = ({
     <div
       className={`
         board__ui
-        board-areas
+        ${selectedGame === 'chess' ? 'board-areas' : ''}
+        ${selectedGame === 'checkers' ? 'board-areas' : ''}
         ${selectedGame === 'reversi' ? 'board-areas-reversi' : ''}
         ${selectedGame === 'tic-tac-toe' ? 'board-areas-tictactoe' : ''} `}
     >

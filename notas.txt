@@ -1,63 +1,40 @@
-- ojo, marcar reinas en damas con dblclick
-- ojo, detalles específicos de tablero en help.
-
-Hay juegos de move piece
-Hay juegos de flip piece
-
-Ver bien como funciona en chess y reversi
+- definir diferencia entre juegos en los qué:
+  - Se mueven las piezas.
+    - ej: ajedréz y checkers.
+  - Se flipean las piezas interpoladamente entre los jugadores.
+    - ej: reversi y la vieja.
 
 
-square.piece: define el tipo de pieza y sirve para:
-  - definir en el state board el square.
-  - definir si hay o no pieza.
-  * si define si hay o no pieza es una responsablidad que no debería tener.
-  * debería ser algo como empty boolean.
-  * el flip capaz debería definirse por pieceType y no por flipped o reversiflipped
-  * capaz ni empty se necesita, solo pieceType que es 'one', 'two', ''
-  * y ni debería llamarse pieceType, sino piecePlayer. 'one', 'two', 'none'
+1. Cómo funciona chess? y es mejorable?
 
-boardSetup.ts: setea los boards y define los movimientos
-boardSlice > selectPiece: define los movimientos del jugador
-utils/uiSquare: define como se pinta
+  1.1 Cómo se muestra al usuario?
 
+    1. Usuario va a games/chess
+    2. Se ejecuta Gameset con Chess
+    3. Se le coloca chess al contecto con useBoard
+    4. Board recibe el selectedGame, gameGrid (data, no visual, si phaseTwo o phase target, el manejo de acción del click a la pieza)
+    5. desde el contexto se arma el gameGrid data por el llamado de useBoard.
+    6. Se arma buildGameGrid gracias a board setup en la parte de los builders.
+    7. Se define la data de grid y se coloca en el state.
+    8. se pinta visualmente en Boards.tsx.
+      8.1 Primero la definición del grid completo dependiendo del juego
+      8.2 El color de cada square dependiendo del juego, con squareStyle y pieceStyle.
+  
+  1.2 Cómo interactúa el usuario? en chess / checkers
 
-define-movegame
-  - ver como funciona chess y checkers
-  - definir los movimientos como move.
-  - hacer mejoras.
+    1. Usuario hace click en uno de los squares
+    2. se actíva handleClickSqr del useBoard.
+    3. el cual ejecuta selectPiece del estado para hacer todo el movimiento de la pieza.
 
-Cómo se pinta el chess?
-1 - el usuario va a games/chess y se setea a selectedGame como chess
-2 - Gameset con chess
-3 - Se ejecuta useBoard
-4 - Se ejecuta del estado buildSyncGrid()
-5 - Es un reducer que modifica el estado y lo hace llamando a buildGameGrid con el juego seleccionado
-6 - Lo llama de board boardSetup
-7 - Se arma el tablero como objeto, no visualmente
-8 - se coloca en el estado grid
-9 - Se le pasa al componente Board
-10 - board lo pinta gracias a todo lo visul en el componente Board
+    - a todo select piece para que esté mas eficiente, mas ordenado y mas entendible. Separar entre movePiece y flipPiece
 
 
-|fix-useclient
-- Gameset toolsbar prop cleaned
 
-|fix-toolsbar
-función eliminada de ToolsBar:
-  const handleShare = async () => {
-    setActiveToast(true);
-    const currentUrl = window.location.href;
-    const roomUrl = currentUrl.replace('id=', 'room=');
-    try {
-      await navigator.clipboard.writeText(roomUrl);
-      toast.success('Link copied', {
-        description:
-          'The game room link has been copied to your clipboard! Share it to start playing online.',
-      });
-      setActiveToast(false);
-    } catch (error) {
-      toast.error('Could not copy the link');
-      console.error(error);
-      setActiveToast(false);
-    }
-  };
+
+
+
+
+
+- mejoras vsuales.
+  - ojo tic-tac-toe mobile
+  - ojo orden de descartadas
