@@ -36,10 +36,10 @@ const BoardSquare = ({
       style={{ gridArea: cell.id }}
       onClick={() => onClickPiece(cell)}
     >
-      {isTicTacToe && cell.piece === 'tic-x' && (
+      {isTicTacToe && cell.pieceType === 'one' && (
         <XIcon aria-label='X' className={pieceStyle} strokeWidth={2.5} />
       )}
-      {isTicTacToe && cell.piece === 'tic-circle' && (
+      {isTicTacToe && cell.pieceType === 'two' && (
         <CircleIcon
           aria-label='Circle'
           className={pieceStyle}

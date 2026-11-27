@@ -190,34 +190,24 @@ const boardSlice = createSlice({
         .split('-')
         .map((n) => Number(n));
       const square = state.gameGrid[row]?.[col];
-      console.log('desde flip: ', square.piece || 'no es nada');
 
       if (square.piece === '') {
-        square.piece =
-          state.selectedGame === 'tic-tac-toe'
-            ? state.reversiNextPiece === 'one'
-              ? 'tic-x'
-              : 'tic-circle'
-            : 'circlePiece';
+        square.piece = 'genericPiece';
+
         square.pieceType = state.reversiNextPiece;
+
         square.reversiFlipped = false;
+
         state.reversiNextPiece =
           state.reversiNextPiece === 'one' ? 'two' : 'one';
       } else if (!square.reversiFlipped) {
         square.pieceType = square.pieceType === 'one' ? 'two' : 'one';
-        if (state.selectedGame === 'tic-tac-toe') {
-          square.piece = square.pieceType === 'one' ? 'tic-x' : 'tic-circle';
-        }
         square.reversiFlipped = true;
       } else {
         square.piece = '';
         square.pieceType = '';
         square.reversiFlipped = false;
       }
-      square.selected = false;
-      state.selectedSqr = [null, null];
-      state.phaseTwo = false;
-      return;
     },
     movePiece: (state, action: PayloadAction<string>) => {
       const [row, col] = action.payload

@@ -119,11 +119,11 @@ export const createPieceStyle = (cell: Square, game: SelectedGame): string => {
 
   if (game === 'tic-tac-toe') {
     return `w-[70%] h-[70%] ${
-      cell.piece === 'tic-x' ? 'text-rose-600' : 'text-cyan-600'
+      cell.pieceType === 'one' ? 'text-rose-600' : 'text-cyan-600'
     }`;
   }
 
-  if (cell.piece.includes('circlePiece')) {
+  if (cell.piece.includes('genericPiece')) {
     if (game === 'reversi') {
       return `${cell.pieceType === 'one' ? 'bg-white' : 'bg-stone-950'} relative w-[70%] h-[70%] rounded-full checker-shadow`;
     }

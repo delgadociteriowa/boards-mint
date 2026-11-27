@@ -1,16 +1,6 @@
 export type PieceType = 'one' | 'two' | '';
 export type ReversiPieceType = Exclude<PieceType, ''>;
-export type Piece =
-  | '♟'
-  | '♜'
-  | '♞'
-  | '♝'
-  | '♛'
-  | '♚'
-  | 'circlePiece'
-  | 'tic-x'
-  | 'tic-circle'
-  | '';
+export type Piece = '♟' | '♜' | '♞' | '♝' | '♛' | '♚' | 'genericPiece' | '';
 export interface PieceByType {
   piece: Piece;
   type: PieceType;
