@@ -7,7 +7,7 @@ import ErrorComponent from '../visuals/ErrorComponent';
 import Spinner from '../visuals/Spinner';
 import Board from './Board';
 import OnlinePlayers from './OnlinePlayers';
-import ToolsBar from './ToolsBar';
+import Toolbar from './Toolbar';
 
 interface GameSetProps {
   selectedGame: SelectedGame;
@@ -32,7 +32,7 @@ const GameSet = ({ selectedGame }: GameSetProps) => {
             phaseTwo={phaseTwo}
             handleClickSqr={handleClickSqr}
           />
-          <ToolsBar />
+          <Toolbar />
         </main>
       )}
     </>
