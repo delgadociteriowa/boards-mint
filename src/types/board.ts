@@ -1,5 +1,4 @@
 export type PieceType = 'one' | 'two' | '';
-export type ReversiPieceType = Exclude<PieceType, ''>;
 export type Piece = '♟' | '♜' | '♞' | '♝' | '♛' | '♚' | 'genericPiece' | '';
 export interface PieceByType {
   piece: Piece;
@@ -21,7 +20,7 @@ export interface Square {
   piece: Piece;
   pieceType: PieceType;
   selected: boolean;
-  reversiFlipped?: boolean;
+  flipped?: boolean;
 }
 
 export interface BoardStateType {
@@ -29,7 +28,6 @@ export interface BoardStateType {
   owner: string;
   selectedGame: SelectedGame;
   gameGrid: Grid;
-  reversiNextPiece: ReversiPieceType;
   selectedSqr: SelectedSquare;
   phaseTwo: boolean;
   loading: boolean;
