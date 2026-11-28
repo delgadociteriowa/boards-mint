@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { toast } from 'sonner';
 
-import { updateBoard } from '@/state/board/boardSlice';
+import { updateBoard } from '@/state/board/boardThunks';
 import { useAppDispatch } from '@/state/hooks';
 import { Grid } from '@/types/board';
 

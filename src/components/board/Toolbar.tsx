@@ -2,12 +2,8 @@
 
 import useBoardAutoSave from '@/app/hooks/useBoardAutoSave';
 import { useSocket } from '@/app/hooks/useSocket';
-import {
-  addBoard,
-  buildSyncGrid,
-  setChangeFromSocket,
-  updateBoard,
-} from '@/state/board/boardSlice';
+import { buildSyncGrid, setChangeFromSocket } from '@/state/board/boardSlice';
+import { addBoard, updateBoard } from '@/state/board/boardThunks';
 import { useAppDispatch, useAppSelector } from '@/state/hooks';
 import { useSession } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';

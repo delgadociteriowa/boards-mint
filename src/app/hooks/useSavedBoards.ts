@@ -1,4 +1,4 @@
-import { deleteBoard } from '@/state/board/boardSlice';
+import { deleteBoard } from '@/state/board/boardThunks';
 import { useAppDispatch, useAppSelector } from '@/state/hooks';
 import { fetchSavedBoards } from '@/state/savedBoards/savedBoardsSlice';
 import { useSession } from 'next-auth/react';

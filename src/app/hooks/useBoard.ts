@@ -3,11 +3,11 @@ import {
   buildSyncGrid,
   closeGame,
   flipPiece,
-  getBoard,
   movePiece,
   selectGame,
   setChangeFromSocket,
 } from '@/state/board/boardSlice';
+import { getBoard } from '@/state/board/boardThunks';
 import { useAppDispatch, useAppSelector } from '@/state/hooks';
 import { SelectedGame, Square } from '@/types/board';
 import { useRouter, useSearchParams } from 'next/navigation';

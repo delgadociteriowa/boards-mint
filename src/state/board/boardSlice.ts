@@ -1,9 +1,7 @@
-import formatDate from '@/utils/formatDate';
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   BoardStateType,
   Grid,
-  ReversiPieceType,
   SelectedGame,
   SelectedSquare,
 } from '../../types/board';
@@ -16,137 +14,7 @@ import {
   targetedSelfGrid,
 } from './boardSetup';
 
-export const addBoard = createAsyncThunk<
-  {
-    id: string;
-    owner: string;
-    createdAt: string;
-    updatedAt: string;
-  }, //returned
-  {
-    gameGrid?: Grid;
-    selectedGame: SelectedGame;
-    reversiNextPiece?: ReversiPieceType;
-  }, // received
-  { rejectValue: string }
->(
-  'board/addBoard',
-  async ({ gameGrid, selectedGame, reversiNextPiece }, { rejectWithValue }) => {
-    try {
-      const res = await fetch(`/api/board/create`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          gameGrid,
-          selectedGame,
-          reversiNextPiece,
-        }),
-      });
-
-      if (!res.ok) {
-        throw new Error('Failed to create board');
-      }
-
-      const data = await res.json();
-
-      return {
-        id: data._id,
-        owner: data.owner,
-        createdAt: formatDate(data.createdAt),
-        updatedAt: formatDate(data.updatedAt),
-      };
-    } catch (error) {
-      return rejectWithValue(`${error}`);
-    }
-  },
-);
-
-export const getBoard = createAsyncThunk<
-  BoardStateType, // returnsboard
-  string, // id
-  { rejectValue: string }
->('board/getBoard', async (id, { rejectWithValue }) => {
-  try {
-    const res = await fetch(`/api/board/get/${id}`);
-
-    if (!res.ok) {
-      console.log(`Error. Response status: ${res.status}`);
-      throw new Error(`Failed to fetch the selected board`);
-    }
-
-    const data = await res.json();
-    console.log('RAW API DATA:', data);
-    return {
-      ...data,
-      id: data._id,
-      owner: data.owner,
-      selectedGame: data.selectedGame,
-      gameGrid: data.gameGrid,
-      createdAt: formatDate(data.createdAt),
-      updatedAt: formatDate(data.updatedAt),
-    };
-  } catch (error) {
-    return rejectWithValue(`${error}`);
-  }
-});
-
-export const updateBoard = createAsyncThunk<
-  { updatedAt: string }, // return updated date
-  {
-    id: string;
-    gameGrid: Grid;
-    reversiNextPiece?: ReversiPieceType;
-  }, // id, gameGrid
-  { rejectValue: string }
->(
-  'board/updateBoard',
-  async ({ id, gameGrid, reversiNextPiece }, { rejectWithValue }) => {
-    try {
-      const res = await fetch(`/api/board/update/${id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ gameGrid, reversiNextPiece }),
-      });
-
-      if (!res.ok) {
-        throw new Error('Failed to update board');
-      }
-
-      const data = await res.json();
-
-      return {
-        updatedAt: formatDate(data.updatedAt),
-      };
-    } catch (error) {
-      return rejectWithValue(`${error}`);
-    }
-  },
-);
-
-export const deleteBoard = createAsyncThunk<
-  string, // deleted id
-  string, // gets id
-  { rejectValue: string }
->('board/deleteBoard', async (id, { rejectWithValue }) => {
-  try {
-    const res = await fetch(`/api/board/delete/${id}`, {
-      method: 'DELETE',
-    });
-
-    if (!res.ok) {
-      console.log(`Error. Response status: ${res.status}`);
-      throw new Error('Failed to delete the board');
-    }
-
-    return id;
-  } catch (error) {
-    return rejectWithValue(`${error}`);
-  }
-});
+import { addBoard, deleteBoard, getBoard, updateBoard } from './boardThunks';
 
 const initialState: BoardStateType = {
   id: '',
