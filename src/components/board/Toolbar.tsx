@@ -25,7 +25,6 @@ const Toolbar = () => {
     phaseTwo,
     gameGrid,
     selectedGame,
-    reversiNextPiece,
     updatedAt,
     socketActive,
     shareDelay,
@@ -43,7 +42,6 @@ const Toolbar = () => {
     boardId,
     socketActive,
     gameGrid,
-    reversiNextPiece,
   });
 
   const confirmAction = (
@@ -90,14 +88,12 @@ const Toolbar = () => {
               addBoard({
                 gameGrid,
                 selectedGame,
-                reversiNextPiece,
               }),
             ).unwrap()
           : dispatch(
               updateBoard({
                 id: boardId,
                 gameGrid,
-                reversiNextPiece,
               }),
             ).unwrap();
 

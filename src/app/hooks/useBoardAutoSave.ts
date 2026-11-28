@@ -3,20 +3,18 @@ import { toast } from 'sonner';
 
 import { updateBoard } from '@/state/board/boardSlice';
 import { useAppDispatch } from '@/state/hooks';
-import { Grid, ReversiPieceType } from '@/types/board';
+import { Grid } from '@/types/board';
 
 interface UseBoardAutoSaveProps {
   boardId: string | null;
   socketActive: boolean;
   gameGrid: Grid;
-  reversiNextPiece: ReversiPieceType;
 }
 
 const useBoardAutoSave = ({
   boardId,
   socketActive,
   gameGrid,
-  reversiNextPiece,
 }: UseBoardAutoSaveProps) => {
   const dispatch = useAppDispatch();
 
@@ -29,7 +27,6 @@ const useBoardAutoSave = ({
           updateBoard({
             id: boardId,
             gameGrid,
-            reversiNextPiece,
           }),
         ).unwrap();
 
@@ -46,7 +43,7 @@ const useBoardAutoSave = ({
     return () => {
       clearInterval(interval);
     };
-  }, [boardId, socketActive, gameGrid, reversiNextPiece, dispatch]);
+  }, [boardId, socketActive, gameGrid, dispatch]);
 };
 
 export default useBoardAutoSave;

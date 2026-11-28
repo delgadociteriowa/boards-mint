@@ -183,6 +183,7 @@ const selectSqrGrid = (
 };
 
 // step-two chess-like move
+
 const targetedSelfGrid = (
   currentSelectedSqr: SelectedSquare,
   currentGrid: Grid,
