@@ -5,6 +5,7 @@ interface ColorsType {
   checkers: string[];
   reversi: string[];
   'tic-tac-toe': string[];
+  go: string[];
 }
 
 const gameColors: ColorsType = {
@@ -22,6 +23,7 @@ const gameColors: ColorsType = {
     'bg-stone-200',
     'bg-stone-300',
   ],
+  go: ['bg-amber-200'],
 };
 
 const gameColorsHover: ColorsType = {
@@ -49,6 +51,7 @@ const gameColorsHover: ColorsType = {
     'hover:bg-stone-300',
     'hover:bg-stone-400',
   ],
+  go: ['hover:bg-amber-300'],
 };
 
 export const createSquareStyle = (
@@ -67,6 +70,8 @@ export const createSquareStyle = (
 
   if (cell.selected) {
     color = 'bg-slate-400 hover:bg-slate-500';
+  } else if (game === 'go') {
+    color = `${selectedGameSet[0]} ${selectedGameHoverSet[0]}`;
   } else if (game === 'reversi' || game === 'tic-tac-toe') {
     const colorIndex = (Number(row) + Number(col)) % 2;
     color = `${selectedGameSet[colorIndex]} ${selectedGameHoverSet[colorIndex]}`;
@@ -100,7 +105,12 @@ export const createSquareStyle = (
     }
   }
 
-  if (game === 'reversi' || game === 'tic-tac-toe' || secondPhase) {
+  if (
+    game === 'reversi' ||
+    game === 'tic-tac-toe' ||
+    game === 'go' ||
+    secondPhase
+  ) {
     pointer = 'cursor-pointer';
   } else if (!secondPhase) {
     pointer = cell.piece ? 'cursor-pointer' : '';
@@ -126,6 +136,9 @@ export const createPieceStyle = (cell: Square, game: SelectedGame): string => {
   if (cell.piece.includes('genericPiece')) {
     if (game === 'reversi') {
       return `${cell.pieceType === 'one' ? 'bg-white' : 'bg-stone-950'} relative w-[70%] h-[70%] rounded-full checker-shadow`;
+    }
+    if (game === 'go') {
+      return `${cell.pieceType === 'one' ? 'bg-stone-950' : 'bg-stone-50'} relative z-10 w-[78%] h-[78%] rounded-full checker-shadow`;
     }
     return `${cell.pieceType.includes('one') ? 'bg-rose-400' : 'bg-stone-600'} relative w-[60%] h-[60%] rounded-full checker-shadow`;
   }

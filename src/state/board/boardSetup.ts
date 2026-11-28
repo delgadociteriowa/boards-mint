@@ -23,6 +23,9 @@ const buildGameGrid = (selectedGame: SelectedGame): Grid => {
     case 'tic-tac-toe':
       return buildTicTacToeGrid();
 
+    case 'go':
+      return buildGoGrid();
+
     default:
       return [];
   }
@@ -153,6 +156,16 @@ const buildTicTacToeGrid = (): Grid =>
           reversiFlipped: false,
         })),
     );
+
+const buildGoGrid = (): Grid =>
+  Array.from({ length: 19 }, (_, rowIndex) =>
+    Array.from({ length: 19 }, (_, colIndex) => ({
+      id: `sqr${rowIndex}-${colIndex}`,
+      piece: '',
+      pieceType: '',
+      selected: false,
+    })),
+  );
 
 // step-one chess-like move
 

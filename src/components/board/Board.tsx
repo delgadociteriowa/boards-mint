@@ -24,7 +24,8 @@ const Board = ({
         ${selectedGame === 'chess' ? 'board-areas' : ''}
         ${selectedGame === 'checkers' ? 'board-areas' : ''}
         ${selectedGame === 'reversi' ? 'board-areas-reversi' : ''}
-        ${selectedGame === 'tic-tac-toe' ? 'board-areas-tictactoe' : ''} `}
+        ${selectedGame === 'tic-tac-toe' ? 'board-areas-tictactoe' : ''}
+        ${selectedGame === 'go' ? 'board-areas-go' : ''} `}
     >
       {gameGrid.map((row) =>
         row.map((cell) => {

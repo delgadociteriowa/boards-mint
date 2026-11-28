@@ -4,6 +4,7 @@
 @import './styles/board.css';
 @import './styles/reversi.css';
 @import './styles/tictactoe.css';
+@import './styles/go.css';
 @import './styles/animations.css';
 @import './styles/extras.css';
 @import './styles/toolsbar.css';

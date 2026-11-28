@@ -28,15 +28,15 @@ const Games = () => {
       gameLink: 'tic-tac-toe',
     },
     {
-      background: 'bg-game-shogi',
-      title: 'shōgi',
-      paragraph: 'Command armies of pieces to capture your opponent ones.',
-      gameLink: 'soon',
-    },
-    {
       background: 'bg-game-go',
       title: 'go',
       paragraph: 'Place stones to control the largest area on the board.',
+      gameLink: 'go',
+    },
+    {
+      background: 'bg-game-shogi',
+      title: 'shōgi',
+      paragraph: 'Command armies of pieces to capture your opponent ones.',
       gameLink: 'soon',
     },
     {

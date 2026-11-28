@@ -1,0 +1,55 @@
+.board-areas-go {
+  grid-template-columns: repeat(19, minmax(0, 1fr));
+  grid-template-areas: none;
+  grid-auto-flow: row;
+  width: min(94vw, 72vh, 48rem);
+  max-width: 100%;
+  aspect-ratio: 1;
+}
+
+.board-areas-go > .square-base {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  grid-area: auto !important;
+}
+
+.board-areas-go > .square-base::before,
+.board-areas-go > .square-base::after {
+  position: absolute;
+  z-index: 0;
+  display: block;
+  content: '';
+  background-color: var(--color-amber-900);
+  pointer-events: none;
+}
+
+.board-areas-go > .square-base::before {
+  top: 50%;
+  right: 0;
+  left: 0;
+  height: 1px;
+}
+
+.board-areas-go > .square-base::after {
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+}
+
+.board-areas-go > .square-base:nth-child(19n + 1)::before {
+  left: 50%;
+}
+
+.board-areas-go > .square-base:nth-child(19n)::before {
+  right: 50%;
+}
+
+.board-areas-go > .square-base:nth-child(-n + 19)::after {
+  top: 50%;
+}
+
+.board-areas-go > .square-base:nth-child(n + 343)::after {
+  bottom: 50%;
+}

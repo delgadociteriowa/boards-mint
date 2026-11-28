@@ -3,6 +3,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   BoardStateType,
   Grid,
+  ReversiPieceType,
   SelectedGame,
   SelectedSquare,
 } from '../../types/board';
@@ -26,9 +27,13 @@ export const addBoard = createAsyncThunk<
   {
     gameGrid?: Grid;
     selectedGame: SelectedGame;
+    reversiNextPiece?: ReversiPieceType;
   }, // received
   { rejectValue: string }
->('board/addBoard', async ({ gameGrid, selectedGame }, { rejectWithValue }) => {
+>('board/addBoard', async (
+  { gameGrid, selectedGame, reversiNextPiece },
+  { rejectWithValue },
+) => {
   try {
     const res = await fetch(`/api/board/create`, {
       method: 'POST',
@@ -38,6 +43,7 @@ export const addBoard = createAsyncThunk<
       body: JSON.stringify({
         gameGrid,
         selectedGame,
+        reversiNextPiece,
       }),
     });
 
@@ -94,16 +100,20 @@ export const updateBoard = createAsyncThunk<
   {
     id: string;
     gameGrid: Grid;
+    reversiNextPiece?: ReversiPieceType;
   }, // id, gameGrid
   { rejectValue: string }
->('board/updateBoard', async ({ id, gameGrid }, { rejectWithValue }) => {
+>('board/updateBoard', async (
+  { id, gameGrid, reversiNextPiece },
+  { rejectWithValue },
+) => {
   try {
     const res = await fetch(`/api/board/update/${id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ gameGrid }),
+      body: JSON.stringify({ gameGrid, reversiNextPiece }),
     });
 
     if (!res.ok) {
@@ -145,6 +155,7 @@ const initialState: BoardStateType = {
   id: '',
   owner: '',
   selectedGame: '',
+  reversiNextPiece: 'two',
   gameGrid: [],
   selectedSqr: [null, null],
   phaseTwo: false,
@@ -170,6 +181,7 @@ const boardSlice = createSlice({
     buildSyncGrid: (state) => {
       const grid = buildGameGrid(state.selectedGame);
       state.gameGrid = grid;
+      state.reversiNextPiece = 'two';
     },
     flipPiece: (state, action: PayloadAction<string>) => {
       const [row, col] = action.payload
@@ -192,6 +204,7 @@ const boardSlice = createSlice({
         square.flipped = false;
         state.phaseTwo = false;
       }
+      state.reversiNextPiece = getNextReversiPiece(state.gameGrid);
     },
     movePiece: (state, action: PayloadAction<string>) => {
       const [row, col] = action.payload
@@ -261,6 +274,7 @@ const boardSlice = createSlice({
     },
     closeGame: (state) => {
       state.selectedGame = '';
+      state.reversiNextPiece = 'two';
       state.id = '';
       state.gameGrid = [];
       state.selectedSqr = [null, null];
@@ -287,6 +301,7 @@ const boardSlice = createSlice({
         state.id = action.payload.id;
         state.owner = action.payload.owner;
         state.selectedGame = action.payload.selectedGame;
+        state.reversiNextPiece = action.payload.reversiNextPiece;
         state.gameGrid = action.payload.gameGrid;
         state.createdAt = action.payload.createdAt;
         state.updatedAt = action.payload.updatedAt;
