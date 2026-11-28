@@ -328,21 +328,6 @@ const targetedPieceGrid = (
   });
 };
 
-// Reversi-like flip
-
-const getNextReversiPiece = (grid: Grid): 'one' | 'two' => {
-  const counts = grid.flat().reduce(
-    (pieces, square) => {
-      if (square.pieceType === 'one') pieces.one += 1;
-      if (square.pieceType === 'two') pieces.two += 1;
-      return pieces;
-    },
-    { one: 0, two: 0 },
-  );
-
-  return counts.two > counts.one ? 'one' : 'two';
-};
-
 // Exceptions
 
 const benchesAreFilled = (grid: Grid): boolean => {
@@ -356,7 +341,6 @@ const benchesAreFilled = (grid: Grid): boolean => {
 export {
   benchesAreFilled,
   buildGameGrid,
-  getNextReversiPiece,
   selectSqrGrid,
   targetedEmptyGrid,
   targetedPieceGrid,

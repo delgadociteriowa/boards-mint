@@ -10,7 +10,6 @@ import {
 import {
   benchesAreFilled,
   buildGameGrid,
-  getNextReversiPiece,
   selectSqrGrid,
   targetedEmptyGrid,
   targetedPieceGrid,
@@ -30,39 +29,39 @@ export const addBoard = createAsyncThunk<
     reversiNextPiece?: ReversiPieceType;
   }, // received
   { rejectValue: string }
->('board/addBoard', async (
-  { gameGrid, selectedGame, reversiNextPiece },
-  { rejectWithValue },
-) => {
-  try {
-    const res = await fetch(`/api/board/create`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        gameGrid,
-        selectedGame,
-        reversiNextPiece,
-      }),
-    });
+>(
+  'board/addBoard',
+  async ({ gameGrid, selectedGame, reversiNextPiece }, { rejectWithValue }) => {
+    try {
+      const res = await fetch(`/api/board/create`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          gameGrid,
+          selectedGame,
+          reversiNextPiece,
+        }),
+      });
 
-    if (!res.ok) {
-      throw new Error('Failed to create board');
+      if (!res.ok) {
+        throw new Error('Failed to create board');
+      }
+
+      const data = await res.json();
+
+      return {
+        id: data._id,
+        owner: data.owner,
+        createdAt: formatDate(data.createdAt),
+        updatedAt: formatDate(data.updatedAt),
+      };
+    } catch (error) {
+      return rejectWithValue(`${error}`);
     }
-
-    const data = await res.json();
-
-    return {
-      id: data._id,
-      owner: data.owner,
-      createdAt: formatDate(data.createdAt),
-      updatedAt: formatDate(data.updatedAt),
-    };
-  } catch (error) {
-    return rejectWithValue(`${error}`);
-  }
-});
+  },
+);
 
 export const getBoard = createAsyncThunk<
   BoardStateType, // returnsboard
@@ -87,8 +86,6 @@ export const getBoard = createAsyncThunk<
       gameGrid: data.gameGrid,
       createdAt: formatDate(data.createdAt),
       updatedAt: formatDate(data.updatedAt),
-      reversiNextPiece:
-        data.reversiNextPiece ?? getNextReversiPiece(data.gameGrid),
     };
   } catch (error) {
     return rejectWithValue(`${error}`);
@@ -103,32 +100,32 @@ export const updateBoard = createAsyncThunk<
     reversiNextPiece?: ReversiPieceType;
   }, // id, gameGrid
   { rejectValue: string }
->('board/updateBoard', async (
-  { id, gameGrid, reversiNextPiece },
-  { rejectWithValue },
-) => {
-  try {
-    const res = await fetch(`/api/board/update/${id}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ gameGrid, reversiNextPiece }),
-    });
+>(
+  'board/updateBoard',
+  async ({ id, gameGrid, reversiNextPiece }, { rejectWithValue }) => {
+    try {
+      const res = await fetch(`/api/board/update/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ gameGrid, reversiNextPiece }),
+      });
 
-    if (!res.ok) {
-      throw new Error('Failed to update board');
+      if (!res.ok) {
+        throw new Error('Failed to update board');
+      }
+
+      const data = await res.json();
+
+      return {
+        updatedAt: formatDate(data.updatedAt),
+      };
+    } catch (error) {
+      return rejectWithValue(`${error}`);
     }
-
-    const data = await res.json();
-
-    return {
-      updatedAt: formatDate(data.updatedAt),
-    };
-  } catch (error) {
-    return rejectWithValue(`${error}`);
-  }
-});
+  },
+);
 
 export const deleteBoard = createAsyncThunk<
   string, // deleted id
@@ -155,7 +152,6 @@ const initialState: BoardStateType = {
   id: '',
   owner: '',
   selectedGame: '',
-  reversiNextPiece: 'two',
   gameGrid: [],
   selectedSqr: [null, null],
   phaseTwo: false,
@@ -181,7 +177,6 @@ const boardSlice = createSlice({
     buildSyncGrid: (state) => {
       const grid = buildGameGrid(state.selectedGame);
       state.gameGrid = grid;
-      state.reversiNextPiece = 'two';
     },
     flipPiece: (state, action: PayloadAction<string>) => {
       const [row, col] = action.payload
@@ -204,7 +199,6 @@ const boardSlice = createSlice({
         square.flipped = false;
         state.phaseTwo = false;
       }
-      state.reversiNextPiece = getNextReversiPiece(state.gameGrid);
     },
     movePiece: (state, action: PayloadAction<string>) => {
       const [row, col] = action.payload
@@ -274,7 +268,6 @@ const boardSlice = createSlice({
     },
     closeGame: (state) => {
       state.selectedGame = '';
-      state.reversiNextPiece = 'two';
       state.id = '';
       state.gameGrid = [];
       state.selectedSqr = [null, null];
@@ -301,7 +294,6 @@ const boardSlice = createSlice({
         state.id = action.payload.id;
         state.owner = action.payload.owner;
         state.selectedGame = action.payload.selectedGame;
-        state.reversiNextPiece = action.payload.reversiNextPiece;
         state.gameGrid = action.payload.gameGrid;
         state.createdAt = action.payload.createdAt;
         state.updatedAt = action.payload.updatedAt;

@@ -29,7 +29,6 @@ export interface BoardStateType {
   id: string;
   owner: string;
   selectedGame: SelectedGame;
-  reversiNextPiece: ReversiPieceType;
   gameGrid: Grid;
   selectedSqr: SelectedSquare;
   phaseTwo: boolean;
